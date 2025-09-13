@@ -1,0 +1,187 @@
+# Advanced Enterprise Storage Account Example Configuration
+# Copy this file to terraform.tfvars and modify the values as needed
+# This example demonstrates enterprise-grade configuration with enhanced security
+
+# Note: This advanced example creates supporting infrastructure (VNet, Key Vault, etc.)
+# Most variables are configured in the main.tf file for demonstration purposes
+# Customize these values for your specific enterprise environment
+
+# Storage account configuration
+# name = "myenterprisestorage"
+# environment = "prod"
+
+# Storage tier and replication
+# account_tier     = "Standard"     # Standard supports more features than Premium
+# replication_type = "ZRS"          # Zone-redundant for high availability
+# account_kind     = "StorageV2"    # Latest version with all features
+# access_tier      = "Hot"          # Hot tier for frequently accessed data
+
+# Enhanced security settings
+# enable_https_traffic_only         = true
+# min_tls_version                  = "TLS1_2"
+# allow_public_access              = false   # No public blob access
+# enable_infrastructure_encryption = true    # Double encryption
+# enable_shared_access_key         = false   # Use Azure AD only
+
+# Network access control
+# enable_network_rules    = true
+# network_default_action  = "Deny"           # Deny by default
+# network_bypass         = ["AzureServices", "Logging", "Metrics"]
+# allowed_ip_ranges      = ["203.0.113.0/24", "198.51.100.0/24"]
+# allowed_subnet_ids     = ["/subscriptions/.../subnets/app-subnet"]
+
+# Private endpoints (requires VNet infrastructure)
+# enable_private_endpoints           = true
+# private_endpoint_subnet_id         = "/subscriptions/.../subnets/pe-subnet"
+# private_endpoint_subresource_names = ["blob", "file", "queue", "table"]
+# private_dns_zone_blob_id          = "/subscriptions/.../privateDnsZones/privatelink.blob.core.windows.net"
+# private_dns_zone_file_id          = "/subscriptions/.../privateDnsZones/privatelink.file.core.windows.net"
+
+# Advanced blob protection
+# enable_blob_properties        = true
+# blob_versioning_enabled       = true
+# blob_change_feed_enabled      = true
+# blob_change_feed_retention_days = 30
+# blob_last_access_time_enabled = true
+# blob_delete_retention_days    = 30
+# blob_restore_days            = 7
+# container_delete_retention_days = 30
+
+# Customer-managed encryption (requires Key Vault and Identity)
+# customer_managed_key_vault_key_id              = "/subscriptions/.../keys/storage-key"
+# customer_managed_key_user_assigned_identity_id = "/subscriptions/.../identities/storage-identity"
+# identity_type = "UserAssigned"
+# identity_ids  = ["/subscriptions/.../identities/storage-identity"]
+
+# Queue service enterprise features
+# enable_queue_properties    = true
+# enable_queue_logging       = true
+# queue_logging_delete       = true
+# queue_logging_read         = true
+# queue_logging_write        = true
+# queue_logging_retention_days = 30
+# enable_queue_metrics       = true
+# queue_metrics_include_apis = true
+# queue_metrics_retention_days = 30
+
+# File share enterprise features
+# enable_share_properties = true
+# share_retention_days   = 30
+# enable_smb_settings    = true
+# smb_versions          = ["SMB3.0", "SMB3.1.1"]
+# smb_authentication_types = ["Kerberos"]
+
+# Lifecycle management for cost optimization
+# enable_lifecycle_management = true
+# lifecycle_rules = [
+#   {
+#     name    = "production_lifecycle"
+#     enabled = true
+#     filters = {
+#       prefix_match = ["production/"]
+#       blob_types   = ["blockBlob"]
+#     }
+#     actions = {
+#       base_blob = {
+#         tier_to_cool_after_days    = 30
+#         tier_to_archive_after_days = 90
+#         delete_after_days          = 2555
+#       }
+#     }
+#   }
+# ]
+
+# Enterprise storage containers
+# containers = [
+#   {
+#     name        = "sensitive-data"
+#     access_type = "private"
+#     metadata = {
+#       classification = "confidential"
+#       retention     = "7-years"
+#       owner         = "data-team"
+#     }
+#   }
+# ]
+
+# Enterprise file shares
+# file_shares = [
+#   {
+#     name        = "corporate-files"
+#     quota_gb    = 5120
+#     access_tier = "Premium"
+#     protocol    = "SMB"
+#     metadata = {
+#       department = "finance"
+#       compliance = "sox"
+#     }
+#     acl = [
+#       {
+#         id = "finance-team-access"
+#         access_policy = [
+#           {
+#             permissions = "rwdl"
+#             start       = "2025-01-01T00:00:00.0000000Z"
+#             expiry      = "2025-12-31T23:59:59.0000000Z"
+#           }
+#         ]
+#       }
+#     ]
+#   }
+# ]
+
+# Enterprise message queues
+# queues = [
+#   {
+#     name = "critical-alerts"
+#     metadata = {
+#       priority    = "high"
+#       team        = "platform"
+#       monitoring  = "24x7"
+#     }
+#   }
+# ]
+
+# Enterprise NoSQL tables
+# tables = [
+#   {
+#     name = "UserAuditLog"
+#     acl = [
+#       {
+#         id = "audit-readers"
+#         access_policy = [
+#           {
+#             permissions = "r"
+#             start       = "2025-01-01T00:00:00.0000000Z"
+#             expiry      = "2025-12-31T23:59:59.0000000Z"
+#           }
+#         ]
+#       }
+#     ]
+#   }
+# ]
+
+# Naming convention
+# use_naming_convention = true
+# location_short       = "eus"
+
+# Enterprise tagging strategy
+# common_tags = {
+#   Environment     = "prod"
+#   Project         = "enterprise-platform"
+#   Owner           = "platform-team"
+#   CostCenter      = "technology"
+#   Criticality     = "high"
+#   DataClass       = "confidential"
+#   Compliance      = "sox-required"
+#   BackupRequired  = "yes"
+#   MonitoringLevel = "enhanced"
+# }
+
+# storage_account_tags = {
+#   Purpose         = "enterprise-data-storage"
+#   Tier           = "production"
+#   EncryptionType = "customer-managed"
+#   AccessLevel    = "private-only"
+#   DataRetention  = "7-years"
+# }

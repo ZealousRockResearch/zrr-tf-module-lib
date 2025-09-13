@@ -1,0 +1,79 @@
+# Basic Storage Account Example Configuration
+# Copy this file to terraform.tfvars and modify the values as needed
+
+# Note: Most variables have sensible defaults in the example
+# You may want to customize these values for your specific use case
+
+# Storage account name (will be part of the final name with naming convention)
+# name = "mystorageaccount"
+
+# Resource group (the example creates its own, but you can use existing)
+# resource_group_name = "rg-existing-resource-group"
+
+# Environment
+# environment = "dev"
+
+# Storage configuration
+# account_tier     = "Standard"
+# replication_type = "LRS"
+# account_kind     = "StorageV2"
+# access_tier      = "Hot"
+
+# Security settings
+# enable_https_traffic_only     = true
+# min_tls_version              = "TLS1_2"
+# allow_public_access          = false
+# enable_shared_access_key     = true
+# enable_public_network_access = true
+
+# Data protection
+# blob_delete_retention_days      = 7
+# container_delete_retention_days = 7
+
+# Naming convention
+# use_naming_convention = true
+# location_short       = "eus"
+
+# Additional containers (beyond the defaults in the example)
+# containers = [
+#   {
+#     name        = "custom-container"
+#     access_type = "private"
+#     metadata = {
+#       purpose = "custom-storage"
+#     }
+#   }
+# ]
+
+# Additional file shares
+# file_shares = [
+#   {
+#     name        = "custom-share"
+#     quota_gb    = 50
+#     access_tier = "TransactionOptimized"
+#     protocol    = "SMB"
+#   }
+# ]
+
+# Additional queues
+# queues = [
+#   {
+#     name = "custom-queue"
+#     metadata = {
+#       purpose = "custom-processing"
+#     }
+#   }
+# ]
+
+# Custom tags
+# common_tags = {
+#   Environment = "dev"
+#   Project     = "my-project"
+#   Owner       = "my-team"
+#   CostCenter  = "my-cost-center"
+# }
+
+# storage_account_tags = {
+#   Purpose = "my-purpose"
+#   Tier    = "development"
+# }

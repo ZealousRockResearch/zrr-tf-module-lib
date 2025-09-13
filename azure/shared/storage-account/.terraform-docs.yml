@@ -1,0 +1,218 @@
+formatter: "markdown table"
+
+header-from: "README.md"
+
+content: |-
+  # Azure Storage Account Module
+
+  This module creates and manages Azure Storage Accounts with comprehensive enterprise features including advanced security, monitoring, and data protection capabilities.
+
+  ## Features
+
+  - **Enterprise Security**: HTTPS-only traffic, minimum TLS version, infrastructure encryption
+  - **Network Access Control**: Network rules, private endpoints, service endpoints
+  - **Data Protection**: Blob versioning, change feed, point-in-time restore, soft delete
+  - **Lifecycle Management**: Automated tiering and deletion policies
+  - **Multiple Storage Services**: Blob, File, Queue, Table storage with advanced configurations
+  - **Monitoring & Analytics**: Integration with Azure Monitor and Log Analytics
+  - **Identity & Access**: Support for managed identities and customer-managed keys
+  - **Static Website Hosting**: Built-in support for static website hosting
+  - **Compliance**: Enterprise tagging, standardized naming conventions
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "storage_account" {
+    source = "path/to/azure/shared/storage-account"
+
+    name                = "mystorageaccount"
+    resource_group_name = "rg-storage"
+    environment         = "prod"
+    
+    # Basic configuration
+    account_tier         = "Standard"
+    replication_type     = "LRS"
+    account_kind         = "StorageV2"
+    access_tier          = "Hot"
+
+    # Create some containers
+    containers = [
+      {
+        name        = "data"
+        access_type = "private"
+      },
+      {
+        name        = "logs"
+        access_type = "private"
+      }
+    ]
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "myproject"
+    }
+  }
+  ```
+
+  ### Advanced Example with Enterprise Features
+
+  ```hcl
+  module "enterprise_storage_account" {
+    source = "path/to/azure/shared/storage-account"
+
+    name                = "enterprisestorage"
+    resource_group_name = "rg-enterprise"
+    environment         = "prod"
+    
+    # Premium tier with zone-redundant storage
+    account_tier         = "Premium"
+    replication_type     = "ZRS"
+    account_kind         = "StorageV2"
+    access_tier          = "Hot"
+
+    # Enhanced security
+    enable_https_traffic_only         = true
+    min_tls_version                  = "TLS1_2"
+    allow_public_access              = false
+    enable_infrastructure_encryption = true
+    enable_shared_access_key         = false
+
+    # Network security
+    enable_network_rules    = true
+    network_default_action  = "Deny"
+    allowed_ip_ranges      = ["203.0.113.0/24"]
+    allowed_subnet_ids     = ["/subscriptions/.../subnets/private-subnet"]
+
+    # Private endpoints
+    enable_private_endpoints           = true
+    private_endpoint_subnet_id         = "/subscriptions/.../subnets/private-endpoint-subnet"
+    private_endpoint_subresource_names = ["blob", "file"]
+    private_dns_zone_blob_id          = "/subscriptions/.../privateDnsZones/privatelink.blob.core.windows.net"
+    private_dns_zone_file_id          = "/subscriptions/.../privateDnsZones/privatelink.file.core.windows.net"
+
+    # Blob advanced features
+    enable_blob_properties        = true
+    blob_versioning_enabled       = true
+    blob_change_feed_enabled      = true
+    blob_last_access_time_enabled = true
+    blob_delete_retention_days    = 30
+    blob_restore_days            = 7
+    container_delete_retention_days = 30
+
+    # Customer-managed encryption
+    customer_managed_key_vault_key_id              = "/subscriptions/.../keys/storage-key"
+    customer_managed_key_user_assigned_identity_id = "/subscriptions/.../identities/storage-identity"
+
+    # Managed identity
+    identity_type = "UserAssigned"
+    identity_ids  = ["/subscriptions/.../identities/storage-identity"]
+
+    # Lifecycle management
+    enable_lifecycle_management = true
+    lifecycle_rules = [
+      {
+        name    = "default_lifecycle"
+        enabled = true
+        filters = {
+          blob_types = ["blockBlob"]
+        }
+        actions = {
+          base_blob = {
+            tier_to_cool_after_days    = 30
+            tier_to_archive_after_days = 90
+            delete_after_days          = 2555
+          }
+        }
+      }
+    ]
+
+    # Storage services
+    containers = [
+      {
+        name        = "production-data"
+        access_type = "private"
+        metadata = {
+          environment = "production"
+          purpose     = "application-data"
+        }
+      }
+    ]
+
+    file_shares = [
+      {
+        name        = "shared-files"
+        quota_gb    = 1024
+        access_tier = "Premium"
+        protocol    = "SMB"
+      }
+    ]
+
+    common_tags = {
+      Environment     = "prod"
+      Project         = "enterprise"
+      CostCenter      = "IT"
+      Owner           = "platform-team"
+      Criticality     = "high"
+      DataClass       = "confidential"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Modules
+
+  {{ .Modules }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: true
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
+
+sort:
+  enabled: true
+  by: name
+
+sections:
+  hide: []
+  show: []
+
+version: ""
