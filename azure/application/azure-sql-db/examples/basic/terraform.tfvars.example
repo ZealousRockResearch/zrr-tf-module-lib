@@ -1,0 +1,68 @@
+# Basic configuration example for Azure SQL Database module
+
+# Required: SQL Server configuration
+sql_server_name     = "my-sql-server"
+resource_group_name = "my-resource-group"
+
+# Performance configuration
+sku_name    = "GP_S_Gen5_1"  # General Purpose Serverless Gen5 1 vCore
+max_size_gb = 2
+
+# Security settings
+enable_threat_detection = true
+enable_auditing        = true
+
+# Backup configuration
+short_term_retention_days = 7   # Minimum retention period
+geo_backup_enabled       = true # Enable geo-redundant backups
+
+# Tags
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+  ManagedBy   = "Terraform"
+}
+
+# Database-specific tags
+azure_sql_db_tags = {
+  Purpose     = "application"
+  Backup      = "standard"
+  Monitoring  = "basic"
+  Tier        = "basic"
+}
+
+# Optional advanced settings (commented out for basic example):
+
+# Advanced performance settings:
+# zone_redundant             = false
+# read_scale                = false
+# auto_pause_delay_in_minutes = 60  # Auto-pause after 1 hour
+# min_capacity              = 0.5   # Minimum vCores for serverless
+
+# Advanced backup settings:
+# backup_interval_in_hours = 12
+# long_term_retention_policy = {
+#   weekly_retention  = "P4W"   # 4 weeks
+#   monthly_retention = "P6M"   # 6 months
+#   yearly_retention  = "P1Y"   # 1 year
+#   week_of_year     = 1       # First week of year for yearly backup
+# }
+
+# Advanced security settings:
+# transparent_data_encryption_enabled = true
+# threat_detection_email_admins       = true
+# threat_detection_email_addresses    = ["admin@company.com"]
+# threat_detection_retention_days     = 30
+
+# Advanced auditing settings:
+# auditing_retention_days         = 90
+# auditing_log_monitoring_enabled = true
+
+# Database configuration:
+# collation    = "SQL_Latin1_General_CP1_CI_AS"
+# license_type = "LicenseIncluded"
+
+# Storage settings:
+# storage_account_type = "Geo"

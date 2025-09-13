@@ -1,0 +1,157 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Application - Azure SQL Database
+
+  This module creates an Azure SQL Database with comprehensive security, monitoring, and backup features following ZRR enterprise standards.
+
+  ## Features
+
+  - **Security**: Threat detection, auditing, vulnerability assessment, and transparent data encryption
+  - **Performance**: Configurable SKUs, read scale-out, auto-pause for serverless workloads
+  - **Backup & Recovery**: Short-term and long-term retention policies, geo-redundant backups
+  - **Monitoring**: Built-in auditing and threat detection with configurable retention
+  - **Scalability**: Zone redundancy, read replicas, and flexible sizing options
+  - **Compliance**: Enterprise-grade security controls and governance features
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "azure_sql_db" {
+    source = "../../azure/application/azure-sql-db"
+
+    name                = "myapp-database"
+    sql_server_name     = "myapp-sql-server"
+    resource_group_name = "myapp-rg"
+
+    # Performance configuration
+    sku_name     = "GP_S_Gen5_1"
+    max_size_gb  = 10
+
+    # Security settings
+    enable_threat_detection = true
+    enable_auditing        = true
+
+    common_tags = {
+      Environment = "production"
+      Project     = "myapp"
+      Owner       = "platform-team"
+    }
+  }
+  ```
+
+  ### Advanced Example with All Features
+
+  ```hcl
+  module "azure_sql_db_advanced" {
+    source = "../../azure/application/azure-sql-db"
+
+    name                = "enterprise-database"
+    sql_server_name     = "enterprise-sql-server"
+    resource_group_name = "enterprise-rg"
+
+    # Performance and scaling
+    sku_name                    = "GP_Gen5_4"
+    max_size_gb                = 500
+    zone_redundant             = true
+    read_scale                 = true
+    read_replica_count         = 2
+
+    # Backup and retention
+    short_term_retention_days = 14
+    backup_interval_in_hours  = 12
+
+    long_term_retention_policy = {
+      weekly_retention  = "P4W"
+      monthly_retention = "P12M"
+      yearly_retention  = "P5Y"
+      week_of_year     = 1
+    }
+
+    # Security configuration
+    enable_threat_detection                        = true
+    threat_detection_email_admins                  = true
+    threat_detection_email_addresses              = ["security@company.com"]
+    threat_detection_retention_days               = 90
+    transparent_data_encryption_enabled           = true
+
+    # Auditing
+    enable_auditing                               = true
+    auditing_retention_days                       = 365
+    auditing_log_monitoring_enabled              = true
+
+    # Vulnerability assessment
+    enable_vulnerability_assessment = true
+
+    common_tags = {
+      Environment = "production"
+      Project     = "enterprise-app"
+      Owner       = "data-team"
+      Compliance  = "required"
+    }
+
+    azure_sql_db_tags = {
+      Backup      = "critical"
+      Monitoring  = "enhanced"
+      Encryption  = "required"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

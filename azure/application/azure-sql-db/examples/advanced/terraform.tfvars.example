@@ -1,0 +1,122 @@
+# Advanced configuration example for Azure SQL Database module
+# This example demonstrates all available features and enterprise-grade configurations
+
+# Required: Infrastructure configuration
+database_name       = "enterprise-database"
+sql_server_name     = "enterprise-sql-server"
+resource_group_name = "enterprise-rg"
+location           = "East US"
+
+# Performance and scaling configuration
+sku_name                    = "GP_Gen5_4"    # General Purpose Gen5 4 vCores
+max_size_gb                = 500            # 500 GB maximum size
+zone_redundant             = true           # Zone-redundant for high availability
+read_scale                 = true           # Enable read scale-out
+read_replica_count         = 2              # 2 read replicas
+auto_pause_delay_in_minutes = -1            # Disable auto-pause for production
+# min_capacity               = 1.0           # For serverless SKUs only
+
+# Backup and retention configuration
+short_term_retention_days = 14              # 14 days point-in-time recovery
+backup_interval_in_hours  = 12              # Backup every 12 hours
+
+# Long-term retention policy
+long_term_retention_policy = {
+  weekly_retention  = "P4W"                 # Keep weekly backups for 4 weeks
+  monthly_retention = "P12M"                # Keep monthly backups for 12 months
+  yearly_retention  = "P5Y"                 # Keep yearly backups for 5 years
+  week_of_year     = 1                      # First week of year for yearly backup
+}
+
+geo_backup_enabled    = true                # Enable geo-redundant backups
+storage_account_type  = "GeoZone"          # Geo-zone redundant storage
+
+# Security configuration
+enable_threat_detection                     = true
+threat_detection_email_admins              = true
+threat_detection_email_addresses           = ["security@company.com", "dba@company.com"]
+threat_detection_retention_days            = 90
+transparent_data_encryption_enabled        = true
+
+# Auditing configuration
+enable_auditing                            = true
+auditing_retention_days                    = 365
+auditing_log_monitoring_enabled           = true
+auditing_storage_account_access_key_is_secondary = false
+
+# Vulnerability assessment
+enable_vulnerability_assessment = true
+
+# Database configuration
+collation    = "SQL_Latin1_General_CP1_CI_AS"
+license_type = "LicenseIncluded"           # Or "BasePrice" if you have Azure Hybrid Benefit
+
+# Creation options (for new database)
+create_mode = "Default"
+
+# Advanced example features
+create_audit_storage     = true
+audit_storage_account_name = "enterprisesqlaudit001"  # Must be globally unique
+create_log_analytics    = true
+log_analytics_retention_days = 365
+enable_diagnostic_settings = true
+
+# Diagnostic configuration
+diagnostic_log_categories = [
+  "SQLInsights",
+  "AutomaticTuning",
+  "QueryStoreRuntimeStatistics",
+  "QueryStoreWaitStatistics",
+  "Errors",
+  "DatabaseWaitStatistics",
+  "Timeouts",
+  "Blocks",
+  "Deadlocks"
+]
+
+diagnostic_metrics = [
+  "Basic",
+  "InstanceAndAppAdvanced",
+  "WorkloadManagement"
+]
+
+# Tags
+common_tags = {
+  Environment = "production"
+  Project     = "enterprise-app"
+  Owner       = "data-team"
+  CostCenter  = "engineering"
+  Compliance  = "required"
+  Criticality = "high"
+  ManagedBy   = "Terraform"
+}
+
+azure_sql_db_tags = {
+  Backup           = "critical"
+  Monitoring       = "enhanced"
+  Encryption       = "required"
+  Tier            = "enterprise"
+  Replication     = "enabled"
+  SecurityLevel   = "high"
+  DataClassification = "confidential"
+}
+
+# Optional: For database restore scenarios (commented out for new database)
+# create_mode                 = "PointInTimeRestore"
+# creation_source_database_id = "/subscriptions/.../resourceGroups/.../providers/Microsoft.Sql/servers/.../databases/source-db"
+# restore_point_in_time      = "2024-01-01T12:00:00Z"
+
+# Optional: For database copy scenarios (commented out for new database)
+# create_mode                 = "Copy"
+# creation_source_database_id = "/subscriptions/.../resourceGroups/.../providers/Microsoft.Sql/servers/.../databases/source-db"
+
+# Optional: Storage configuration for threat detection and auditing
+# If you have existing storage accounts, you can provide the endpoints and keys:
+# threat_detection_storage_endpoint = "https://mystorageaccount.blob.core.windows.net/"
+# threat_detection_storage_account_access_key = "your-storage-access-key"
+# auditing_storage_endpoint = "https://mystorageaccount.blob.core.windows.net/"
+# auditing_storage_account_access_key = "your-storage-access-key"
+
+# Optional: Use existing Log Analytics workspace
+# create_log_analytics = false
+# existing_log_analytics_workspace_id = "/subscriptions/.../resourceGroups/.../providers/Microsoft.OperationalInsights/workspaces/my-workspace"
