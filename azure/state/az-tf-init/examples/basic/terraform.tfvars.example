@@ -1,0 +1,52 @@
+# Basic Terraform State Initialization Example Configuration
+# Copy this file to terraform.tfvars and modify the values as needed
+
+# Project configuration
+project_name = "myproject"
+environment  = "dev"
+
+# Azure region configuration
+location       = "East US"
+location_short = "eus"
+
+# Tags configuration
+common_tags = {
+  Environment  = "dev"
+  Project      = "myproject"
+  Owner        = "platform-team"
+  CostCenter   = "engineering"
+  ManagedBy    = "Terraform"
+  Purpose      = "terraform-state-backend"
+}
+
+# Optional: Override default module settings
+# The basic example uses sensible defaults, but you can customize:
+
+# Storage configuration (defaults are suitable for development)
+# storage_account_tier     = "Standard"
+# storage_replication_type = "LRS"
+
+# State management features
+# enable_state_locking    = true
+# enable_blob_versioning  = true
+
+# Container name (default: "tfstate")
+# container_name = "tfstate"
+
+# Data protection settings
+# blob_soft_delete_retention_days      = 7
+# container_soft_delete_retention_days = 7
+
+# Security settings (basic example uses permissive defaults)
+# enable_shared_access_key     = true
+# enable_public_network_access = true
+
+# Advanced features (disabled in basic example)
+# enable_key_vault  = false
+# enable_monitoring = false
+
+# Network restrictions (disabled in basic example)
+# enable_network_restrictions = false
+# network_default_action      = "Allow"
+# allowed_ip_ranges          = []
+# allowed_subnet_ids         = []

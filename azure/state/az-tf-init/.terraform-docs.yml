@@ -1,0 +1,189 @@
+formatter: "markdown table"
+
+header-from: "README.md"
+
+content: |-
+  # Azure State - Terraform Initialization Module
+
+  This module creates and manages Azure infrastructure required for Terraform state management, including storage accounts, containers, optional Key Vault integration, and RBAC configurations. It follows ZRR enterprise standards for state management and provides comprehensive security and monitoring capabilities.
+
+  ## Features
+
+  - **State Storage**: Secure Azure Storage Account with versioning and soft delete protection
+  - **State Locking**: Optional state locking using Azure Storage containers
+  - **Security**: HTTPS-only, TLS 1.2+, network access controls, and RBAC integration
+  - **Key Management**: Optional Azure Key Vault for encryption keys and secrets
+  - **Monitoring**: Comprehensive diagnostic settings and Log Analytics integration
+  - **Network Security**: Configurable IP and subnet-based access restrictions
+  - **Data Protection**: Blob versioning, soft delete, and backup capabilities
+  - **Enterprise Governance**: Standardized naming, tagging, and access controls
+  - **Multi-Environment**: Support for dev, test, staging, prod, and DR environments
+  - **Flexible Configuration**: Both basic and advanced deployment scenarios
+
+  ## Usage
+
+  ### Basic Example (Development)
+
+  ```hcl
+  module "terraform_state" {
+    source = "path/to/azure/state/az-tf-init"
+
+    project_name = "myproject"
+    environment  = "dev"
+    location     = "East US"
+    
+    # Basic configuration for development
+    storage_replication_type = "LRS"
+    enable_state_locking     = true
+    
+    common_tags = {
+      Environment = "dev"
+      Project     = "myproject"
+      Owner       = "devteam"
+    }
+  }
+  ```
+
+  ### Enterprise Example (Production)
+
+  ```hcl
+  module "terraform_state" {
+    source = "path/to/azure/state/az-tf-init"
+
+    project_name = "enterprise"
+    environment  = "prod"
+    location     = "East US"
+    
+    # Enterprise configuration
+    storage_replication_type = "GZRS"
+    enable_state_locking     = true
+    enable_key_vault         = true
+    enable_monitoring        = true
+    
+    # Enhanced security
+    enable_network_restrictions      = true
+    network_default_action          = "Deny"
+    allowed_ip_ranges              = ["203.0.113.0/24"]
+    
+    # Key Vault configuration
+    key_vault_sku                           = "premium"
+    enable_key_vault_purge_protection      = true
+    enable_key_vault_network_restrictions  = true
+    
+    # RBAC assignments
+    storage_contributors    = ["user-object-id-1", "user-object-id-2"]
+    key_vault_administrators = ["admin-object-id-1"]
+    
+    common_tags = {
+      Environment   = "prod"
+      Project       = "enterprise"
+      CostCenter    = "platform"
+      Compliance    = "required"
+      BusinessUnit  = "engineering"
+    }
+  }
+  ```
+
+  ## Backend Configuration
+
+  After deployment, use the generated backend configuration in your Terraform projects:
+
+  ```hcl
+  terraform {
+    backend "azurerm" {
+      resource_group_name  = "rg-myproject-prod-tfstate-eus"
+      storage_account_name = "samyprojectprodtfstateeus12345678"
+      container_name       = "tfstate"
+      key                  = "terraform.tfstate"
+    }
+  }
+  ```
+
+  ## Access Requirements
+
+  ### Storage Account Access
+  - **Contributors**: Need `Storage Blob Data Contributor` role
+  - **Readers**: Need `Storage Blob Data Reader` role
+  - **Administrators**: Need `Storage Account Contributor` role
+
+  ### Key Vault Access (if enabled)
+  - **RBAC Mode**: Use `Key Vault Administrator` or `Key Vault Secrets User` roles
+  - **Access Policies Mode**: Configure via `additional_access_policies` variable
+
+  ## Security Considerations
+
+  - Storage account uses HTTPS-only with minimum TLS 1.2
+  - Blob versioning and soft delete protect against accidental changes
+  - Network restrictions can limit access to specific IPs/subnets
+  - Key Vault provides additional encryption and secrets management
+  - RBAC provides fine-grained access control
+  - Monitoring captures all access and modifications
+
+  ## Multi-Environment Setup
+
+  Deploy separate state infrastructure for each environment:
+
+  ```bash
+  # Development
+  terraform apply -var="environment=dev" -var="project_name=myproject"
+  
+  # Production  
+  terraform apply -var="environment=prod" -var="project_name=myproject"
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Modules
+
+  {{ .Modules }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: true
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
+
+sort:
+  enabled: true
+  by: name
+
+sections:
+  hide: []
+  show: []
+
+version: ""

@@ -1,0 +1,100 @@
+# Advanced Enterprise Terraform State Initialization Example Configuration
+# Copy this file to terraform.tfvars and modify the values for your organization
+
+# Project configuration
+project_name = "myenterprise"
+environment  = "prod"
+
+# Azure region configuration
+location       = "East US"
+location_short = "eus"
+
+# Network security configuration
+# IMPORTANT: Replace these with your organization's actual IP ranges
+allowed_ip_ranges = [
+  "203.0.113.0/24",     # Example: Office network
+  "198.51.100.0/24",    # Example: VPN network
+  "192.0.2.0/24"        # Example: Build agents network
+]
+
+# RBAC assignments - Replace with actual object IDs from your Azure AD
+# To find object IDs: az ad user show --id user@domain.com --query objectId -o tsv
+# Or: az ad group show --group "GroupName" --query objectId -o tsv
+
+terraform_contributors = [
+  # "12345678-1234-1234-1234-123456789012",  # Platform Team Lead
+  # "23456789-2345-2345-2345-234567890123",  # Senior DevOps Engineer
+  # "34567890-3456-3456-3456-345678901234"   # Terraform Service Principal
+]
+
+terraform_readers = [
+  # "45678901-4567-4567-4567-456789012345",  # Development Team
+  # "56789012-5678-5678-5678-567890123456",  # QA Team
+  # "67890123-6789-6789-6789-678901234567"   # Security Team
+]
+
+terraform_admins = [
+  # "78901234-7890-7890-7890-789012345678",  # Platform Administrator
+  # "89012345-8901-8901-8901-890123456789"   # Security Administrator
+]
+
+terraform_users = [
+  # "90123456-9012-9012-9012-901234567890",  # CI/CD Service Principal
+  # "01234567-0123-0123-0123-012345678901"   # Monitoring Service
+]
+
+# Automation configuration
+create_automation_identity = true
+
+# Enterprise tagging strategy
+common_tags = {
+  Environment     = "prod"
+  Project         = "myenterprise-terraform-state"
+  Owner           = "platform-team"
+  CostCenter      = "platform-engineering"
+  BusinessUnit    = "technology"
+  ManagedBy       = "Terraform"
+  Compliance      = "sox-required"
+  DataClass       = "confidential"
+  BackupRequired  = "yes"
+  MonitoringLevel = "enhanced"
+  SecurityLevel   = "high"
+  
+  # Additional organization-specific tags
+  Department      = "engineering"
+  Contact         = "platform-team@company.com"
+  SLA             = "24x7"
+  DR_Required     = "yes"
+}
+
+# Advanced configuration options (these are set by default in the advanced example)
+# Uncomment and modify if you need different settings:
+
+# Storage configuration
+# storage_replication_type = "GZRS"  # Geo-zone-redundant storage
+
+# Security settings
+# enable_shared_access_key     = false  # Use RBAC only
+# enable_public_network_access = false  # Private access only
+
+# Network restrictions
+# enable_network_restrictions = true
+# network_default_action      = "Deny"
+
+# Data protection
+# blob_soft_delete_retention_days      = 90
+# container_soft_delete_retention_days = 90
+
+# Key Vault settings
+# enable_key_vault                        = true
+# key_vault_sku                          = "premium"
+# enable_key_vault_purge_protection     = true
+# enable_key_vault_network_restrictions = true
+# key_vault_network_default_action      = "Deny"
+
+# Monitoring settings
+# enable_monitoring                = true
+# log_analytics_retention_days     = 90
+
+# Container name (default is suitable for most cases)
+# container_name = "tfstate"
