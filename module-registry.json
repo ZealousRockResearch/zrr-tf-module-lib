@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "updated": "2025-09-11",
+  "modules": [
+    {
+      "name": "resource-group",
+      "cloud": "azure",
+      "layer": "infrastructure",
+      "path": "azure/infrastructure/resource-group",
+      "version": "1.0.0",
+      "description": "Manages Azure Resource Groups with enterprise standards and tagging",
+      "features": [
+        "Standardized naming convention",
+        "Resource locks",
+        "Budget alerts",
+        "Comprehensive tagging",
+        "Multi-environment support"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-11",
+      "updated": "2025-09-11",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "resource-group",
+        "infrastructure",
+        "governance",
+        "enterprise"
+      ]
+    }
+  ]
+}
