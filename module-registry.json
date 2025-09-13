@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2025-09-11",
+  "updated": "2025-09-12",
   "modules": [
     {
       "name": "resource-group",
@@ -75,6 +75,56 @@
         "peering",
         "hub-spoke",
         "enterprise"
+      ]
+    },
+    {
+      "name": "storage-account",
+      "cloud": "azure",
+      "layer": "shared",
+      "path": "azure/shared/storage-account",
+      "version": "1.0.0",
+      "description": "Manages Azure Storage Accounts with comprehensive enterprise features including advanced security, monitoring, and data protection",
+      "features": [
+        "Enterprise security with HTTPS-only traffic and minimum TLS version",
+        "Network access control with private endpoints and network rules",
+        "Advanced data protection with blob versioning, change feed, and point-in-time restore",
+        "Lifecycle management for automated tiering and deletion policies",
+        "Multiple storage services: blob, file, queue, table with advanced configurations",
+        "Customer-managed encryption keys and managed identity support",
+        "Static website hosting and monitoring integration",
+        "Comprehensive blob, queue, and file share properties",
+        "Enterprise tagging and standardized naming conventions",
+        "Private endpoints for secure access"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0",
+        "random": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-12",
+      "updated": "2025-09-12",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "storage-account",
+        "storage",
+        "shared",
+        "enterprise",
+        "security",
+        "encryption",
+        "private-endpoints",
+        "data-protection",
+        "lifecycle-management",
+        "blob-storage",
+        "file-storage",
+        "queue-storage",
+        "table-storage",
+        "monitoring",
+        "compliance"
       ]
     }
   ]
