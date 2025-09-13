@@ -34,6 +34,48 @@
         "governance",
         "enterprise"
       ]
+    },
+    {
+      "name": "vnet",
+      "cloud": "azure",
+      "layer": "infrastructure",
+      "path": "azure/infrastructure/vnet",
+      "version": "1.0.0",
+      "description": "Manages Azure Virtual Networks with comprehensive networking features",
+      "features": [
+        "Virtual Network with customizable address spaces",
+        "Multiple subnets with automatic address calculation",
+        "Network Security Groups with default security baselines",
+        "Route tables for custom routing",
+        "VNet peering for multi-network connectivity",
+        "DDoS protection plan integration",
+        "Network Watcher flow logs and traffic analytics",
+        "Service endpoints and delegations support",
+        "Hub-and-spoke architecture examples"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-11",
+      "updated": "2025-09-11",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "vnet",
+        "virtual-network",
+        "networking",
+        "infrastructure",
+        "subnets",
+        "nsg",
+        "peering",
+        "hub-spoke",
+        "enterprise"
+      ]
     }
   ]
 }
