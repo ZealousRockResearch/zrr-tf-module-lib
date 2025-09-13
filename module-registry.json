@@ -126,6 +126,61 @@
         "monitoring",
         "compliance"
       ]
+    },
+    {
+      "name": "key-vault",
+      "cloud": "azure",
+      "layer": "shared",
+      "path": "azure/shared/key-vault",
+      "version": "1.0.0",
+      "description": "Manages Azure Key Vault with comprehensive security features, access policies, secrets, keys, and certificates management for the shared layer",
+      "features": [
+        "Secure Key Vault creation with configurable SKU (Standard/Premium)",
+        "Support for both RBAC and access policies authorization models",
+        "Network security with configurable ACLs and private endpoint support",
+        "Secret management with expiration dates and content types",
+        "Key management supporting RSA, EC, and HSM-backed keys",
+        "Certificate contacts management for notifications",
+        "Diagnostic settings for comprehensive logging and monitoring",
+        "Security features: purge protection, soft delete, disk encryption",
+        "Private networking with DNS zone group integration",
+        "Built-in compliance features and validation rules",
+        "Comprehensive variable validation and security defaults",
+        "Enterprise tagging and governance capabilities"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-12",
+      "updated": "2025-09-12",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "key-vault",
+        "keyvault",
+        "shared",
+        "enterprise",
+        "security",
+        "secrets",
+        "keys",
+        "certificates",
+        "rbac",
+        "access-policies",
+        "private-endpoints",
+        "network-security",
+        "hsm",
+        "encryption",
+        "compliance",
+        "monitoring",
+        "diagnostics",
+        "purge-protection",
+        "soft-delete"
+      ]
     }
   ]
 }
