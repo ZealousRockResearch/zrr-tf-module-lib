@@ -1,0 +1,107 @@
+# Advanced Key Vault Configuration
+key_vault_name      = "prod-enterprise-kv-001"
+location            = "East US"
+resource_group_name = "prod-security-rg"
+environment         = "prod"
+
+# Network Configuration
+vnet_name                    = "prod-enterprise-vnet"
+vnet_resource_group_name     = "prod-network-rg"
+private_endpoint_subnet_name = "prod-private-endpoints-subnet"
+private_dns_zone_resource_group_name = "prod-dns-rg"
+
+# IP ranges allowed to access Key Vault (management networks)
+allowed_ip_ranges = [
+  "203.0.113.0/24",    # Corporate HQ network
+  "198.51.100.0/24",   # Branch office network
+  "192.0.2.100/32"     # Jump server
+]
+
+# Subnet IDs allowed to access Key Vault (application subnets)
+allowed_subnet_ids = [
+  "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/prod-network-rg/providers/Microsoft.Network/virtualNetworks/prod-enterprise-vnet/subnets/prod-app-subnet",
+  "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/prod-network-rg/providers/Microsoft.Network/virtualNetworks/prod-enterprise-vnet/subnets/prod-integration-subnet"
+]
+
+# Azure AD Object IDs for access policies
+application_object_id     = "a1b2c3d4-e5f6-7890-1234-567890abcdef"  # Production application service principal
+backup_service_object_id  = "f1e2d3c4-b5a6-9807-6543-210987654321"  # Azure Backup service principal
+
+# Secrets (handle with care - use Azure DevOps variable groups or similar for actual values)
+secrets = {
+  prod-database-connection = {
+    value           = "Server=prod-sql.database.windows.net;Database=ProductionDB;Authentication=Active Directory Integrated;"
+    content_type    = "Database Connection String"
+    expiration_date = "2025-12-31T23:59:59Z"
+    tags = {
+      Application = "ERP System"
+      Rotation    = "Quarterly"
+      Owner       = "database-team@company.com"
+    }
+  }
+
+  external-api-key = {
+    value        = "ak_live_1234567890abcdef1234567890abcdef12345678"
+    content_type = "External API Key"
+    expiration_date = "2025-06-30T23:59:59Z"
+    tags = {
+      Service     = "Payment Processor"
+      Rotation    = "Semi-Annual"
+      Owner       = "finance-team@company.com"
+    }
+  }
+
+  storage-account-key = {
+    value        = "DefaultEndpointsProtocol=https;AccountName=prodstorage;AccountKey=abcdef1234567890;EndpointSuffix=core.windows.net"
+    content_type = "Storage Account Connection String"
+    tags = {
+      Purpose     = "Application Data Storage"
+      Rotation    = "Annual"
+      Owner       = "platform-team@company.com"
+    }
+  }
+
+  service-bus-connection = {
+    value        = "Endpoint=sb://prod-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=abcdef1234567890"
+    content_type = "Service Bus Connection String"
+    tags = {
+      Purpose     = "Message Queue"
+      Rotation    = "Quarterly"
+      Owner       = "integration-team@company.com"
+    }
+  }
+}
+
+# Monitoring Configuration
+log_analytics_workspace_name         = "prod-security-logs"
+log_analytics_resource_group_name    = "prod-monitoring-rg"
+storage_account_name                 = "prodsecuritylogs001"
+storage_account_resource_group_name  = "prod-monitoring-rg"
+
+# Contact Information
+primary_admin_email   = "security-lead@company.com"
+primary_admin_phone   = "+1-555-0100"
+secondary_admin_email = "security-backup@company.com"
+secondary_admin_phone = "+1-555-0101"
+security_team_email   = "security-team@company.com"
+
+# Organizational Information
+cost_center  = "IT-Security-001"
+project_name = "Enterprise Security Infrastructure"
+
+# Comprehensive tagging strategy
+common_tags = {
+  Environment     = "prod"
+  Project         = "enterprise-security"
+  Owner           = "security-team@company.com"
+  ManagedBy       = "Terraform"
+  BusinessUnit    = "Information Technology"
+  CriticalLevel   = "Mission Critical"
+  CostCenter      = "IT-Security-001"
+  BackupSchedule  = "Daily"
+  MaintenanceWindow = "Sunday 02:00-04:00 UTC"
+  ComplianceScope   = "SOC2-Type2,PCI-DSS,ISO27001"
+  DataRetention     = "7-years"
+  SecurityReview    = "2024-Q3"
+  NextReview        = "2025-Q1"
+}

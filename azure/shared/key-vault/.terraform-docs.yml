@@ -1,0 +1,146 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Shared - Key Vault
+
+  This Terraform module creates and manages an Azure Key Vault with comprehensive security features, access policies, secrets, keys, and certificates management. The module is designed for the shared layer in the ZRR enterprise architecture.
+
+  ## Features
+
+  - **Secure Key Vault Creation**: Creates Azure Key Vault with configurable SKU (Standard/Premium)
+  - **Access Control**: Supports both RBAC and access policies for fine-grained permissions
+  - **Network Security**: Configurable network ACLs and private endpoint support
+  - **Secret Management**: Create and manage secrets with expiration dates and content types
+  - **Key Management**: Support for RSA, EC, and other key types with configurable sizes
+  - **Certificate Contacts**: Manage certificate notification contacts
+  - **Monitoring**: Diagnostic settings for logging and monitoring
+  - **Security Features**: Purge protection, soft delete, and disk encryption enablement
+  - **Private Networking**: Private endpoint with DNS zone group integration
+  - **Compliance**: Built-in security defaults and validation rules
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "key_vault" {
+    source = "../../azure/shared/key-vault"
+
+    name     = "example-kv-001"
+    location = "East US"
+
+    common_tags = {
+      Environment = "dev"
+      Project     = "example"
+    }
+  }
+  ```
+
+  ### Advanced Example with Secrets and Access Policies
+
+  ```hcl
+  module "key_vault" {
+    source = "../../azure/shared/key-vault"
+
+    name                = "example-kv-001"
+    location            = "East US"
+    resource_group_name = "example-rg"
+
+    sku_name                   = "premium"
+    purge_protection_enabled   = true
+    enable_rbac_authorization  = false
+
+    access_policies = {
+      admin = {
+        object_id               = "00000000-0000-0000-0000-000000000000"
+        key_permissions         = ["Get", "List", "Create", "Delete", "Update"]
+        secret_permissions      = ["Get", "List", "Set", "Delete"]
+        certificate_permissions = ["Get", "List", "Create", "Delete", "Update"]
+      }
+    }
+
+    secrets = {
+      database-connection-string = {
+        value        = "Server=...;Database=...;Trusted_Connection=True;"
+        content_type = "Connection String"
+      }
+    }
+
+    keys = {
+      encryption-key = {
+        key_type = "RSA"
+        key_size = 2048
+        key_opts = ["encrypt", "decrypt", "sign", "verify", "wrapKey", "unwrapKey"]
+      }
+    }
+
+    network_acls = {
+      default_action             = "Deny"
+      bypass                     = "AzureServices"
+      ip_rules                   = ["203.0.113.0/24"]
+      virtual_network_subnet_ids = ["/subscriptions/.../subnets/example"]
+    }
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "example"
+      Owner       = "security-team"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
