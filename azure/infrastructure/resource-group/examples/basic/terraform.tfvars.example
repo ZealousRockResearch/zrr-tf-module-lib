@@ -1,0 +1,37 @@
+# Basic configuration example
+location       = "eastus"
+location_short = "eus"
+environment    = "dev"
+
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+  ManagedBy   = "Terraform"
+}
+
+# Additional optional variables for the module (commented out):
+
+# use_naming_convention = true
+
+# resource_group_tags = {
+#   Purpose = "example"
+#   Backup  = "daily"
+# }
+
+# Lifecycle management
+# prevent_destroy = false
+
+# Resource lock configuration
+# enable_resource_lock = false
+# lock_level = "CanNotDelete"
+# lock_notes = "Locked to prevent accidental deletion"
+
+# Budget alert configuration
+# enable_budget_alert = false
+# budget_amount = 1000
+# budget_time_grain = "Monthly"
+# budget_start_date = "2024-01-01T00:00:00Z"
+# budget_threshold_percentage = 80
+# budget_contact_emails = ["devops@example.com", "finance@example.com"]

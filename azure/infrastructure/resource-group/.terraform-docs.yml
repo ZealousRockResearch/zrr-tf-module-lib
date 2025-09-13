@@ -1,0 +1,130 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Infrastructure - Resource Group
+  
+  This Terraform module creates and manages Azure Resource Groups with enterprise-grade features including tagging standards, resource locks, and budget alerts.
+  
+  ## Features
+  
+  - ✅ Standardized naming convention support
+  - ✅ Comprehensive tagging strategy
+  - ✅ Optional resource locks (CanNotDelete or ReadOnly)
+  - ✅ Budget alerts with configurable thresholds
+  - ✅ Lifecycle management with destroy protection
+  - ✅ Multi-environment support (dev, test, staging, prod, dr)
+  - ✅ Input validation for all variables
+  - ✅ Complete output values for integration
+  
+  ## Usage
+  
+  ### Basic Example
+  
+  ```hcl
+  module "resource_group" {
+    source = "../../azure/infrastructure/resource-group"
+    
+    name     = "my-application"
+    location = "eastus"
+    
+    common_tags = {
+      Environment = "dev"
+      Project     = "example"
+    }
+  }
+  ```
+  
+  ### Advanced Example
+  
+  ```hcl
+  module "resource_group" {
+    source = "../../azure/infrastructure/resource-group"
+    
+    name               = "critical-app"
+    location           = "westeurope"
+    environment        = "prod"
+    location_short     = "weu"
+    use_naming_convention = true
+    
+    # Enable resource protection
+    prevent_destroy      = true
+    enable_resource_lock = true
+    lock_level          = "CanNotDelete"
+    lock_notes          = "Production resource group - deletion requires approval"
+    
+    # Enable budget alerts
+    enable_budget_alert         = true
+    budget_amount              = 5000
+    budget_time_grain          = "Monthly"
+    budget_threshold_percentage = 80
+    budget_contact_emails      = ["devops@example.com", "finance@example.com"]
+    
+    common_tags = {
+      Environment = "prod"
+      Project     = "critical-app"
+      Owner       = "platform-team"
+      CostCenter  = "engineering"
+    }
+    
+    resource_group_tags = {
+      Compliance = "PCI-DSS"
+      Backup     = "enabled"
+    }
+  }
+  ```
+  
+  ## Requirements
+  
+  {{ .Requirements }}
+  
+  ## Providers
+  
+  {{ .Providers }}
+  
+  ## Resources
+  
+  {{ .Resources }}
+  
+  ## Inputs
+  
+  {{ .Inputs }}
+  
+  ## Outputs
+  
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

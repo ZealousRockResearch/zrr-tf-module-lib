@@ -1,0 +1,72 @@
+# Advanced configuration example for production environment
+
+# Primary location configuration
+location       = "eastus"
+location_short = "eus"
+
+# Disaster recovery location configuration
+dr_location       = "westus2"
+dr_location_short = "wus2"
+
+# Budget configuration
+budget_amount    = 10000  # Production monthly budget in USD
+dr_budget_amount = 3000   # DR monthly budget in USD
+
+# Budget alert contacts
+budget_contact_emails = [
+  "devops@yourcompany.com",
+  "finance@yourcompany.com",
+  "platform-team@yourcompany.com",
+  "security@yourcompany.com"
+]
+
+# Common tags for all resources
+common_tags = {
+  Environment   = "prod"
+  Project       = "critical-application"
+  Owner         = "platform-engineering"
+  ManagedBy     = "Terraform"
+  CostCenter    = "engineering-001"
+  BusinessUnit  = "product-development"
+  Contact       = "platform@yourcompany.com"
+  Documentation = "https://docs.yourcompany.com/critical-app"
+  Repository    = "https://github.com/yourcompany/critical-app"
+  Terraform     = "true"
+}
+
+# Additional tags for compliance and operations
+additional_tags = {
+  # Compliance and Security
+  Compliance          = "PCI-DSS,HIPAA,SOC2"
+  DataClassification  = "Confidential"
+  SecurityReview      = "2024-01-15"
+  PenetrationTest     = "2024-02-01"
+  
+  # Backup and Recovery
+  BackupPolicy        = "daily-7,weekly-4,monthly-12"
+  BackupRetention     = "90days"
+  DisasterRecoveryRTO = "4hours"
+  DisasterRecoveryRPO = "1hour"
+  
+  # Monitoring and Operations
+  MonitoringLevel     = "enhanced"
+  AlertingEnabled     = "true"
+  LogRetention        = "180days"
+  SLA                 = "99.99"
+  
+  # Change Management
+  ChangeWindow        = "Saturday 2-4am UTC"
+  ApprovalRequired    = "true"
+  MinApprovers        = "2"
+  
+  # Performance and Scaling
+  AutoScaling         = "enabled"
+  MaxScale            = "10x"
+  PerformanceTier     = "premium"
+  
+  # Audit and Governance
+  AuditEnabled        = "true"
+  LastAuditDate       = "2024-01-01"
+  NextAuditDate       = "2024-07-01"
+  RegulatoryScope     = "US,EU"
+}
