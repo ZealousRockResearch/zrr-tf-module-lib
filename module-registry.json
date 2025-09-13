@@ -181,6 +181,61 @@
         "purge-protection",
         "soft-delete"
       ]
+    },
+    {
+      "name": "az-tf-init",
+      "cloud": "azure",
+      "layer": "state",
+      "path": "azure/state/az-tf-init",
+      "version": "1.0.0",
+      "description": "Manages Azure infrastructure for Terraform state management including storage account, key vault, and RBAC with enterprise security features",
+      "features": [
+        "Storage Account with blob versioning and soft delete for state files",
+        "Optional Key Vault integration for encryption and secrets management",
+        "State locking containers for concurrent Terraform operations",
+        "RBAC assignments for team-based access control",
+        "Network security with IP restrictions and private endpoint support",
+        "Log Analytics workspace for monitoring and diagnostics",
+        "Comprehensive data protection and retention policies",
+        "Standardized naming conventions and enterprise tagging",
+        "Multi-environment support with flexible configuration",
+        "Advanced security features: purge protection, network ACLs",
+        "Automated backend configuration generation",
+        "Enterprise compliance and governance capabilities"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0",
+        "random": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-13",
+      "updated": "2025-09-13",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "terraform-state",
+        "state-management",
+        "backend",
+        "storage-account",
+        "key-vault",
+        "state",
+        "enterprise",
+        "security",
+        "rbac",
+        "monitoring",
+        "compliance",
+        "state-locking",
+        "blob-storage",
+        "network-security",
+        "data-protection",
+        "governance",
+        "automation",
+        "team-access"
+      ]
     }
   ]
 }
