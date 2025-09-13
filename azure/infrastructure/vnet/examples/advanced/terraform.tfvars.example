@@ -1,0 +1,88 @@
+# Advanced Hub-and-Spoke Network Configuration
+
+# Resource Groups
+hub_resource_group_name   = "rg-prod-networking-hub-weu"
+spoke_resource_group_name = "rg-prod-networking-spokes-weu"
+location_short           = "weu"
+
+# DDoS Protection (Enterprise Feature)
+ddos_protection_plan_id = "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rg-prod-security-weu/providers/Microsoft.Network/ddosProtectionPlans/ddos-prod-enterprise"
+
+# DNS Configuration for Enterprise
+hub_dns_servers = [
+  "168.63.129.16",  # Azure DNS
+  "10.0.3.4",       # Primary enterprise DNS
+  "10.0.3.5"        # Secondary enterprise DNS
+]
+
+# Network Monitoring and Logging
+network_watcher_name                = "NetworkWatcher_westeurope"
+network_watcher_resource_group_name = "NetworkWatcherRG"
+flow_log_storage_account_id         = "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rg-prod-monitoring-weu/providers/Microsoft.Storage/storageAccounts/saprodflowlogsweu001"
+
+# Traffic Analytics Configuration
+log_analytics_workspace_id          = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+log_analytics_workspace_region      = "westeurope"
+log_analytics_workspace_resource_id = "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rg-prod-monitoring-weu/providers/Microsoft.OperationalInsights/workspaces/law-prod-networking-weu"
+
+# Enterprise Tagging Strategy
+common_tags = {
+  # Core identification
+  Environment   = "prod"
+  Project       = "enterprise-networking"
+  Owner         = "network-architecture-team"
+  ManagedBy     = "Terraform"
+  
+  # Financial management
+  CostCenter    = "INFRA-001"
+  BusinessUnit  = "Information Technology"
+  BillingCode   = "NET-PROD-001"
+  
+  # Operational metadata
+  Contact       = "network-ops@yourcompany.com"
+  OnCallTeam    = "network-engineering"
+  Documentation = "https://docs.yourcompany.com/networking/hub-spoke"
+  Repository    = "https://github.com/yourcompany/infrastructure-terraform"
+  
+  # Compliance and governance
+  DataClass     = "Internal"
+  Compliance    = "SOC2,ISO27001"
+  BackupPolicy  = "network-configs-daily"
+  
+  # Architecture and design
+  Architecture  = "hub-and-spoke"
+  NetworkTier   = "enterprise"
+  Criticality   = "mission-critical"
+  
+  # Monitoring and alerting
+  Monitoring    = "enhanced"
+  Alerting      = "24x7"
+  SLA           = "99.95"
+  
+  # Change management
+  ChangeWindow  = "Saturday 2-6am CET"
+  ApprovalRequired = "true"
+  LastReview    = "2025-01-01"
+  NextReview    = "2025-07-01"
+  
+  # Security
+  SecurityReview = "2025-01-15"
+  ThreatModel    = "completed"
+  PenTestDate    = "2024-12-01"
+}
+
+# Example resource-specific overrides (commented out by default):
+
+# Custom DNS servers for specific environments
+# hub_dns_servers = ["168.63.129.16", "10.0.3.10", "10.0.3.11"]
+
+# Different DDoS protection plan for staging
+# ddos_protection_plan_id = "/subscriptions/.../ddosProtectionPlans/ddos-staging"
+
+# Alternative storage account for flow logs
+# flow_log_storage_account_id = "/subscriptions/.../storageAccounts/flowlogsstaging"
+
+# Different workspace for non-production
+# log_analytics_workspace_id = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"
+# log_analytics_workspace_region = "northeurope"
+# log_analytics_workspace_resource_id = "/subscriptions/.../workspaces/law-staging-networking"

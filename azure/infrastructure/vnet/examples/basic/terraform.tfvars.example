@@ -1,0 +1,83 @@
+# Basic VNet configuration example
+resource_group_name = "rg-dev-example-eus"
+environment         = "dev"
+location_short      = "eus"
+
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+  ManagedBy   = "Terraform"
+}
+
+# Additional optional variables for the module (commented out):
+
+# Custom DNS servers
+# dns_servers = ["168.63.129.16", "8.8.8.8"]
+
+# Use naming convention (default: true)
+# use_naming_convention = true
+
+# Auto-calculate subnet addresses
+# auto_calculate_subnets = false
+
+# DDoS protection
+# enable_ddos_protection = false
+# ddos_protection_plan_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Network/ddosProtectionPlans/xxx"
+
+# NSG configuration
+# create_default_nsg_rules = true
+
+# Flow logs configuration
+# enable_flow_logs = false
+# network_watcher_name = "NetworkWatcher_eastus"
+# network_watcher_resource_group_name = "NetworkWatcherRG"
+# flow_log_storage_account_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Storage/storageAccounts/xxx"
+# flow_log_retention_days = 30
+
+# Traffic analytics
+# enable_traffic_analytics = false
+# log_analytics_workspace_id = "xxx"
+# log_analytics_workspace_region = "eastus"
+# log_analytics_workspace_resource_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.OperationalInsights/workspaces/xxx"
+
+# VNet peering
+# vnet_peerings = {
+#   "peer-to-hub" = {
+#     remote_vnet_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Network/virtualNetworks/vnet-hub"
+#     allow_virtual_network_access = true
+#     allow_forwarded_traffic = true
+#     allow_gateway_transit = false
+#     use_remote_gateways = false
+#   }
+# }
+
+# Custom subnet configuration
+# subnets = [
+#   {
+#     name                                          = "subnet-web"
+#     address_prefixes                              = ["10.0.1.0/24"]
+#     service_endpoints                             = ["Microsoft.Storage", "Microsoft.KeyVault"]
+#     private_endpoint_network_policies            = "Disabled"
+#     private_link_service_network_policies_enabled = false
+#     create_nsg                                    = true
+#     create_route_table                           = false
+#     delegations = [
+#       {
+#         name = "webapp"
+#         service_delegation = {
+#           name = "Microsoft.Web/serverFarms"
+#           actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+#         }
+#       }
+#     ]
+#   }
+# ]
+
+# Resource-specific tags
+# vnet_tags = {
+#   Purpose = "example"
+#   Backup  = "daily"
+#   Tier    = "standard"
+# }

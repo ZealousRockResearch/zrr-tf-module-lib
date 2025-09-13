@@ -1,0 +1,166 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Infrastructure - Virtual Network
+  
+  This Terraform module creates and manages Azure Virtual Networks with comprehensive networking features including subnets, NSGs, route tables, VNet peering, and advanced monitoring capabilities.
+  
+  ## Features
+  
+  - ✅ Virtual Network with customizable address spaces
+  - ✅ Multiple subnets with automatic address calculation
+  - ✅ Network Security Groups with default security baselines
+  - ✅ Route tables for custom routing
+  - ✅ VNet peering for multi-network connectivity
+  - ✅ DDoS protection plan integration
+  - ✅ Network Watcher flow logs and traffic analytics
+  - ✅ Service endpoints and delegations support
+  - ✅ Standardized naming conventions
+  - ✅ Comprehensive tagging strategy
+  
+  ## Usage
+  
+  ### Basic Example
+  
+  ```hcl
+  module "vnet" {
+    source = "../../azure/infrastructure/vnet"
+    
+    name                = "my-application"
+    resource_group_name = "rg-dev-myapp-eus"
+    address_space       = ["10.0.0.0/16"]
+    
+    subnets = [
+      {
+        name             = "subnet-web"
+        address_prefixes = ["10.0.1.0/24"]
+      },
+      {
+        name             = "subnet-app"
+        address_prefixes = ["10.0.2.0/24"]
+      }
+    ]
+    
+    common_tags = {
+      Environment = "dev"
+      Project     = "example"
+    }
+  }
+  ```
+  
+  ### Advanced Example with Auto-calculated Subnets
+  
+  ```hcl
+  module "vnet" {
+    source = "../../azure/infrastructure/vnet"
+    
+    name                  = "enterprise-network"
+    resource_group_name   = "rg-prod-enterprise-weu"
+    address_space         = ["10.100.0.0/16"]
+    auto_calculate_subnets = true
+    
+    subnets = [
+      {
+        name    = "subnet-web"
+        newbits = 8  # Creates /24 subnet
+        service_endpoints = ["Microsoft.Storage", "Microsoft.KeyVault"]
+      },
+      {
+        name    = "subnet-app"
+        newbits = 8  # Creates /24 subnet
+        delegations = [{
+          name = "webapp"
+          service_delegation = {
+            name = "Microsoft.Web/serverFarms"
+          }
+        }]
+      },
+      {
+        name               = "subnet-data"
+        newbits           = 6  # Creates /22 subnet
+        create_route_table = true
+      }
+    ]
+    
+    # Enable advanced features
+    enable_ddos_protection = true
+    ddos_protection_plan_id = "/subscriptions/.../ddosProtectionPlans/ddos-prod"
+    
+    # Configure flow logs
+    enable_flow_logs = true
+    network_watcher_name = "NetworkWatcher_westeurope"
+    network_watcher_resource_group_name = "NetworkWatcherRG"
+    flow_log_storage_account_id = "/subscriptions/.../storageAccounts/flowlogs"
+    
+    # VNet peering
+    vnet_peerings = {
+      "peer-to-hub" = {
+        remote_vnet_id = "/subscriptions/.../virtualNetworks/vnet-hub"
+        allow_forwarded_traffic = true
+        use_remote_gateways = true
+      }
+    }
+    
+    common_tags = {
+      Environment = "prod"
+      Project     = "enterprise-network"
+      CostCenter  = "networking"
+    }
+  }
+  ```
+  
+  ## Requirements
+  
+  {{ .Requirements }}
+  
+  ## Providers
+  
+  {{ .Providers }}
+  
+  ## Resources
+  
+  {{ .Resources }}
+  
+  ## Inputs
+  
+  {{ .Inputs }}
+  
+  ## Outputs
+  
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
