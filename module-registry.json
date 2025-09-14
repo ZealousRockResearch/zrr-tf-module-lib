@@ -36,10 +36,10 @@
       ]
     },
     {
-      "name": "vnet",
+      "name": "virtual-network",
       "cloud": "azure",
       "layer": "infrastructure",
-      "path": "azure/infrastructure/vnet",
+      "path": "azure/infrastructure/virtual-network",
       "version": "1.0.0",
       "description": "Manages Azure Virtual Networks with comprehensive networking features",
       "features": [
@@ -66,7 +66,6 @@
       "author": "ZRR Platform Team",
       "tags": [
         "azure",
-        "vnet",
         "virtual-network",
         "networking",
         "infrastructure",
@@ -293,6 +292,66 @@
         "governance",
         "long-term-retention",
         "point-in-time-recovery"
+      ]
+    },
+    {
+      "name": "application-service-plan",
+      "cloud": "azure",
+      "layer": "shared",
+      "path": "azure/shared/application-service-plan",
+      "version": "1.0.0",
+      "description": "Manages Azure App Service Plan with comprehensive scaling, performance, monitoring, and alerting features following ZRR enterprise standards",
+      "features": [
+        "Performance tiers: support for all Azure App Service Plan SKUs from Free to Isolated v2",
+        "Auto-scaling: configurable auto-scaling rules based on CPU and memory metrics",
+        "Zone redundancy: high availability with zone balancing for Premium v2/v3 tiers",
+        "Monitoring: built-in diagnostic settings with Log Analytics integration",
+        "Alerting: configurable CPU and memory utilization alerts with action groups",
+        "Per-site scaling: enable independent scaling for individual web apps",
+        "Elastic scaling: support for elastic worker scaling in Premium v3 tiers",
+        "Notifications: email and webhook notifications for auto-scaling events",
+        "Comprehensive outputs: complete plan information for use by dependent App Services",
+        "Advanced example: includes Log Analytics, Application Insights, Action Groups, and NSG",
+        "Performance optimization: configurable cooldown periods and threshold management",
+        "Enterprise features: comprehensive variable validation and security defaults"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0",
+        "random": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-13",
+      "updated": "2025-09-13",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "app-service-plan",
+        "service-plan",
+        "shared",
+        "enterprise",
+        "auto-scaling",
+        "zone-redundancy",
+        "monitoring",
+        "alerting",
+        "per-site-scaling",
+        "elastic-scaling",
+        "performance",
+        "log-analytics",
+        "application-insights",
+        "action-groups",
+        "diagnostic-settings",
+        "cpu-alerts",
+        "memory-alerts",
+        "notifications",
+        "webhooks",
+        "premium-v3",
+        "linux",
+        "windows",
+        "high-availability"
       ]
     }
   ]
