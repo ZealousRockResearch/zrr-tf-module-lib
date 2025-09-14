@@ -1,0 +1,175 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Shared - Application Service Plan
+
+  This module creates an Azure App Service Plan with comprehensive scaling, performance, monitoring, and alerting features following ZRR enterprise standards.
+
+  ## Features
+
+  - **Performance Tiers**: Support for all Azure App Service Plan SKUs from Free to Isolated v2
+  - **Auto-scaling**: Configurable auto-scaling rules based on CPU and memory metrics
+  - **Zone Redundancy**: High availability with zone balancing for Premium v2/v3 tiers
+  - **Monitoring**: Built-in diagnostic settings with Log Analytics integration
+  - **Alerting**: Configurable CPU and memory utilization alerts with action groups
+  - **Per-site Scaling**: Enable independent scaling for individual web apps
+  - **Elastic Scaling**: Support for elastic worker scaling in Premium v3 tiers
+  - **Notifications**: Email and webhook notifications for auto-scaling events
+  - **Comprehensive Outputs**: Complete plan information for use by dependent App Services
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "app_service_plan" {
+    source = "../../azure/shared/application-service-plan"
+
+    name                = "myapp-service-plan"
+    resource_group_name = "myapp-rg"
+    location           = "East US"
+
+    # Performance configuration
+    os_type   = "Linux"
+    sku_name  = "B1"
+
+    common_tags = {
+      Environment = "production"
+      Project     = "myapp"
+      Owner       = "platform-team"
+    }
+  }
+  ```
+
+  ### Advanced Example with Auto-scaling and Monitoring
+
+  ```hcl
+  module "app_service_plan_advanced" {
+    source = "../../azure/shared/application-service-plan"
+
+    name                = "enterprise-service-plan"
+    resource_group_name = "enterprise-rg"
+    location           = "East US"
+
+    # Performance and scaling configuration
+    os_type                      = "Linux"
+    sku_name                    = "P1v3"
+    worker_count                = 3
+    maximum_elastic_worker_count = 10
+    zone_balancing_enabled      = true
+    per_site_scaling_enabled    = true
+
+    # Auto-scaling configuration
+    enable_autoscaling = true
+    autoscale_settings = {
+      default_instances     = 3
+      minimum_instances     = 2
+      maximum_instances     = 10
+      cpu_threshold_out     = 70
+      cpu_threshold_in      = 25
+      memory_threshold_out  = 80
+      memory_threshold_in   = 60
+      enable_memory_scaling = true
+      scale_out_cooldown    = 5
+      scale_in_cooldown     = 10
+    }
+
+    autoscale_notifications = {
+      send_to_subscription_administrator = true
+      custom_emails                     = ["ops@company.com"]
+      webhooks = [{
+        service_uri = "https://alerts.company.com/webhook"
+        properties  = { "severity": "warning" }
+      }]
+    }
+
+    # Monitoring and diagnostics
+    enable_diagnostic_settings  = true
+    log_analytics_workspace_id  = "/subscriptions/.../workspaces/my-workspace"
+
+    # Alerting
+    enable_alerts               = true
+    alert_action_group_name     = "critical-alerts"
+
+    cpu_alert_settings = {
+      enabled   = true
+      threshold = 80
+      severity  = 2
+    }
+
+    memory_alert_settings = {
+      enabled   = true
+      threshold = 85
+      severity  = 2
+    }
+
+    common_tags = {
+      Environment = "production"
+      Project     = "enterprise-app"
+      Owner       = "platform-team"
+      Criticality = "high"
+    }
+
+    application_plan_tags = {
+      Scaling     = "auto"
+      Monitoring  = "enhanced"
+      Alerts      = "enabled"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

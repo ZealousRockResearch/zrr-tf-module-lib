@@ -1,0 +1,54 @@
+# Basic configuration example for Azure App Service Plan module
+
+# Required: Resource configuration
+resource_group_name = "my-resource-group"
+location           = "East US"
+
+# App Service Plan configuration
+os_type  = "Linux"  # Options: "Linux" or "Windows"
+sku_name = "B1"     # Basic tier, single core, 1.75 GB RAM
+
+# Optional: Scaling configuration
+worker_count             = 1     # Number of instances
+per_site_scaling_enabled = false # Enable per-site scaling
+
+# Tags
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+  ManagedBy   = "Terraform"
+}
+
+# App Service Plan specific tags
+application_plan_tags = {
+  Purpose     = "web-hosting"
+  Tier        = "basic"
+  Scaling     = "manual"
+  Monitoring  = "basic"
+}
+
+# Optional advanced settings (commented out for basic example):
+
+# Different SKU options:
+# sku_name = "B2"     # Basic tier, dual core, 3.5 GB RAM
+# sku_name = "B3"     # Basic tier, quad core, 7 GB RAM
+# sku_name = "S1"     # Standard tier, single core, 1.75 GB RAM
+# sku_name = "S2"     # Standard tier, dual core, 3.5 GB RAM
+# sku_name = "S3"     # Standard tier, quad core, 7 GB RAM
+# sku_name = "P1v2"   # Premium v2 tier, single core, 3.5 GB RAM
+# sku_name = "P2v2"   # Premium v2 tier, dual core, 7 GB RAM
+# sku_name = "P3v2"   # Premium v2 tier, quad core, 14 GB RAM
+# sku_name = "P1v3"   # Premium v3 tier, single core, 4 GB RAM
+# sku_name = "P2v3"   # Premium v3 tier, dual core, 8 GB RAM
+# sku_name = "P3v3"   # Premium v3 tier, quad core, 16 GB RAM
+
+# Windows configuration:
+# os_type = "Windows"
+
+# Multiple instances (requires Standard tier or above):
+# worker_count = 3
+
+# Enable per-site scaling (requires Standard tier or above):
+# per_site_scaling_enabled = true

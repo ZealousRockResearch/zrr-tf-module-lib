@@ -1,0 +1,173 @@
+# Advanced configuration example for Azure App Service Plan module
+# This example demonstrates all available features and enterprise-grade configurations
+
+# Required: Infrastructure configuration
+service_plan_name   = "enterprise-service-plan"
+resource_group_name = "enterprise-rg"
+location           = "East US"
+
+# App Service Plan configuration
+os_type  = "Linux"     # Options: "Linux" or "Windows"
+sku_name = "P1v3"      # Premium v3 tier for high performance and elastic scaling
+
+# Performance and scaling configuration
+worker_count                = 3     # Initial number of instances
+maximum_elastic_worker_count = 10    # Maximum elastic workers (Premium v3 only)
+zone_balancing_enabled      = true  # High availability across zones
+per_site_scaling_enabled    = true  # Independent scaling per app
+
+# Auto-scaling configuration
+enable_autoscaling = true
+
+autoscale_settings = {
+  default_instances     = 3    # Default number of instances
+  minimum_instances     = 2    # Minimum instances (never scale below)
+  maximum_instances     = 10   # Maximum instances (never scale above)
+
+  # CPU-based scaling thresholds
+  cpu_threshold_out     = 70   # Scale out when CPU > 70%
+  cpu_threshold_in      = 25   # Scale in when CPU < 25%
+
+  # Memory-based scaling thresholds
+  memory_threshold_out  = 80   # Scale out when memory > 80%
+  memory_threshold_in   = 60   # Scale in when memory < 60%
+  enable_memory_scaling = true # Enable memory-based scaling
+
+  # Cooldown periods (in minutes)
+  scale_out_cooldown    = 5    # Wait 5 minutes before scaling out again
+  scale_in_cooldown     = 10   # Wait 10 minutes before scaling in again
+}
+
+# Auto-scaling notifications
+autoscale_notifications = {
+  send_to_subscription_administrator    = true
+  send_to_subscription_co_administrator = false
+  custom_emails                        = ["ops@company.com", "devops@company.com"]
+
+  webhooks = [{
+    service_uri = "https://alerts.company.com/webhook"
+    properties  = {
+      "severity": "warning",
+      "team": "platform"
+    }
+  }]
+}
+
+# Monitoring and diagnostics
+enable_diagnostic_settings  = true
+create_log_analytics        = true
+log_analytics_retention_days = 365
+
+# Log categories to capture
+diagnostic_log_categories = [
+  "AppServicePlatformLogs",
+  "AppServiceHTTPLogs",
+  "AppServiceConsoleLogs",
+  "AppServiceAppLogs",
+  "AppServiceFileAuditLogs",
+  "AppServiceAuditLogs"
+]
+
+diagnostic_metrics = [
+  "AllMetrics"
+]
+
+# Alerting configuration
+enable_alerts       = true
+create_action_group = true
+
+# Email notifications for alerts
+alert_email_receivers = [
+  {
+    name          = "ops-team"
+    email_address = "ops@company.com"
+  },
+  {
+    name          = "platform-team"
+    email_address = "platform@company.com"
+  }
+]
+
+# SMS notifications (optional)
+alert_sms_receivers = [
+  {
+    name         = "on-call-engineer"
+    country_code = "1"
+    phone_number = "5551234567"
+  }
+]
+
+# Webhook notifications (optional)
+alert_webhook_receivers = [
+  {
+    name        = "slack-webhook"
+    service_uri = "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+  }
+]
+
+# Alert thresholds
+cpu_alert_settings = {
+  enabled      = true
+  threshold    = 80     # Alert when CPU > 80%
+  severity     = 2      # Warning severity (0=Critical, 1=Error, 2=Warning, 3=Informational, 4=Verbose)
+  window_size  = 5      # Evaluate over 5 minutes
+  frequency    = 1      # Check every 1 minute
+  auto_mitigate = true  # Auto-resolve when condition clears
+}
+
+memory_alert_settings = {
+  enabled      = true
+  threshold    = 85     # Alert when memory > 85%
+  severity     = 2      # Warning severity
+  window_size  = 5      # Evaluate over 5 minutes
+  frequency    = 1      # Check every 1 minute
+  auto_mitigate = true  # Auto-resolve when condition clears
+}
+
+# Advanced features
+create_application_insights      = true
+application_insights_retention_days = 90
+
+create_diagnostics_storage         = true
+diagnostics_storage_retention_days = 30
+
+create_app_service_nsg = false  # Set to true if using VNet integration
+
+# Tags
+common_tags = {
+  Environment = "production"
+  Project     = "enterprise-app"
+  Owner       = "platform-team"
+  CostCenter  = "engineering"
+  Criticality = "high"
+  Compliance  = "required"
+  ManagedBy   = "Terraform"
+}
+
+application_plan_tags = {
+  Scaling          = "auto"
+  Monitoring       = "enhanced"
+  Alerts           = "enabled"
+  Tier            = "premium"
+  ZoneRedundant   = "enabled"
+  PerSiteScaling  = "enabled"
+  Performance     = "optimized"
+}
+
+# Optional: Use existing resources instead of creating new ones
+# create_log_analytics = false
+# existing_log_analytics_workspace_id = "/subscriptions/.../resourceGroups/.../providers/Microsoft.OperationalInsights/workspaces/my-workspace"
+
+# create_action_group = false
+# existing_action_group_name = "my-existing-action-group"
+
+# Windows App Service Plan configuration (alternative):
+# os_type = "Windows"
+# sku_name = "P1v3"  # Windows supports same Premium SKUs
+
+# Alternative SKU options for different performance needs:
+# sku_name = "P2v3"  # 2 cores, 8 GB RAM, higher performance
+# sku_name = "P3v3"  # 4 cores, 16 GB RAM, highest performance
+# sku_name = "I1"    # Isolated tier for compliance requirements
+# sku_name = "I2"    # Isolated tier, higher specs
+# sku_name = "I3"    # Isolated tier, highest specs
