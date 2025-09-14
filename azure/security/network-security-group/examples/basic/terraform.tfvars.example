@@ -1,0 +1,47 @@
+# Basic configuration example
+location            = "East US"
+resource_group_name = "my-resource-group"
+
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+}
+
+# Optional: Create additional security rules
+# security_rules = [
+#   {
+#     name                       = "allow-https"
+#     priority                   = 1003
+#     direction                  = "Inbound"
+#     access                     = "Allow"
+#     protocol                   = "Tcp"
+#     source_port_range          = "*"
+#     destination_port_range     = "443"
+#     source_address_prefix      = "*"
+#     destination_address_prefix = "*"
+#     description                = "Allow HTTPS access"
+#   }
+# ]
+
+# Optional: NSG-specific tags
+# network_security_group_tags = {
+#   Purpose = "example"
+#   Backup  = "daily"
+# }
+
+# Optional: Subnet association
+# subnet_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Network/virtualNetworks/xxx/subnets/xxx"
+
+# Optional: Network interface associations
+# network_interface_ids = [
+#   "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Network/networkInterfaces/xxx"
+# ]
+
+# Optional: Flow logging (requires storage account)
+# enable_flow_logs              = true
+# flow_log_storage_account_id   = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Storage/storageAccounts/xxx"
+# flow_log_retention_days       = 30
+# flow_log_format_type          = "JSON"
+# flow_log_format_version       = 2

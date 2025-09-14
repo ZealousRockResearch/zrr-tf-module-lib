@@ -1,0 +1,40 @@
+# Advanced configuration example
+location            = "East US"
+resource_group_name = "production-security-rg"
+
+# Network segmentation
+management_subnets = [
+  "10.0.1.0/24",  # Management subnet 1
+  "10.0.2.0/24"   # Management subnet 2
+]
+
+application_subnets = [
+  "10.0.10.0/24", # App tier subnet 1
+  "10.0.11.0/24", # App tier subnet 2
+  "10.0.12.0/24"  # App tier subnet 3
+]
+
+# Flow logging configuration
+enable_flow_logs              = true
+flow_log_storage_account_id   = "/subscriptions/12345678-1234-5678-9abc-123456789012/resourceGroups/logging-rg/providers/Microsoft.Storage/storageAccounts/flowlogsstorage"
+flow_log_retention_days       = 90
+
+# Network associations
+subnet_id = "/subscriptions/12345678-1234-5678-9abc-123456789012/resourceGroups/network-rg/providers/Microsoft.Network/virtualNetworks/prod-vnet/subnets/database-subnet"
+
+network_interface_ids = [
+  "/subscriptions/12345678-1234-5678-9abc-123456789012/resourceGroups/vm-rg/providers/Microsoft.Network/networkInterfaces/db-server-01-nic",
+  "/subscriptions/12345678-1234-5678-9abc-123456789012/resourceGroups/vm-rg/providers/Microsoft.Network/networkInterfaces/db-server-02-nic"
+]
+
+# Comprehensive tagging
+common_tags = {
+  Environment    = "production"
+  Project        = "enterprise-app"
+  Owner          = "security-team"
+  CostCenter     = "security-operations"
+  BusinessUnit   = "it-infrastructure"
+  DataClass      = "confidential"
+  BackupSchedule = "daily"
+  MaintenanceWindow = "sunday-2am"
+}
