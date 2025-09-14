@@ -1,0 +1,34 @@
+# Basic configuration example for Key Vault Secret module
+
+# Key Vault Configuration
+key_vault_name                 = "my-keyvault"
+key_vault_resource_group_name  = "security-rg"
+
+# Secret Configuration
+secret_value = "my-super-secure-password"
+
+# Tagging
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+  Department  = "platform"
+}
+
+# Optional: Additional secret-specific tags
+# Uncomment and modify as needed:
+
+# key_vault_secret_tags = {
+#   Purpose      = "database-connection"
+#   Backup       = "daily"
+#   Sensitivity  = "high"
+#   Application  = "web-app"
+# }
+
+# Optional: Content type specification
+# content_type = "application/json"
+
+# Optional: Secret lifecycle dates
+# not_before_date = "2024-01-01T00:00:00Z"
+# expiration_date = "2025-12-31T23:59:59Z"

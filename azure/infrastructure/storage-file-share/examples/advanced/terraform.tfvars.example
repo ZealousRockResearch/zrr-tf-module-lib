@@ -1,0 +1,161 @@
+# Advanced configuration example for Azure Storage File Share
+# This example demonstrates all advanced features including backup, monitoring, and private networking
+
+# Required: Name of your existing storage account
+storage_account_name = "prodstorageaccount"
+
+# Required: Name of your resource group
+resource_group_name = "production-rg"
+
+# Advanced file share configuration
+file_share_name  = "production-file-share"
+location         = "East US"
+quota_gb         = 1000
+access_tier      = "Premium"
+enabled_protocol = "SMB"
+
+# File share metadata
+metadata = {
+  department = "engineering"
+  purpose    = "production"
+  compliance = "required"
+  backup     = "enabled"
+}
+
+# Directory structure - automatically created
+directories = [
+  {
+    name = "documents"
+    metadata = {
+      purpose = "document-storage"
+      access  = "read-write"
+    }
+  },
+  {
+    name = "backups"
+    metadata = {
+      purpose = "backup-storage"
+      access  = "write-only"
+    }
+  },
+  {
+    name = "shared"
+    metadata = {
+      purpose = "shared-storage"
+      access  = "read-write"
+    }
+  },
+  {
+    name = "archive"
+    metadata = {
+      purpose = "archive-storage"
+      access  = "read-only"
+    }
+  }
+]
+
+# Access policies for controlled access
+access_policies = [
+  {
+    id = "production-policy"
+    access_policies = [
+      {
+        permissions = "rwdl"  # read, write, delete, list
+        start       = "2024-01-01T00:00:00Z"
+        expiry      = "2025-12-31T23:59:59Z"
+      }
+    ]
+  }
+]
+
+# Advanced backup configuration
+enable_backup                 = true
+backup_vault_name            = "production-backup-vault"
+backup_vault_sku             = "Standard"
+backup_soft_delete_enabled   = true
+backup_public_access_enabled = false
+
+# Comprehensive backup policy with yearly retention
+backup_policy = {
+  frequency = "Daily"
+  time      = "02:00"  # 2 AM daily backup
+
+  # Keep daily backups for 30 days
+  retention_daily = {
+    count = 30
+  }
+
+  # Keep weekly backups for 12 weeks (3 months)
+  retention_weekly = {
+    count    = 12
+    weekdays = ["Sunday"]
+  }
+
+  # Keep monthly backups for 12 months (1 year)
+  retention_monthly = {
+    count    = 12
+    weekdays = ["Sunday"]
+    weeks    = ["First"]
+  }
+
+  # Keep yearly backups for 7 years
+  retention_yearly = {
+    count    = 7
+    weekdays = ["Sunday"]
+    weeks    = ["First"]
+    months   = ["January"]
+  }
+}
+
+# Monitoring and alerting
+enable_monitoring                    = true
+alert_email_addresses               = ["admin@company.com", "devops@company.com"]
+quota_alert_threshold_percentage    = 85  # Alert at 85% quota usage
+quota_alert_severity                = 1   # High severity (0=Critical, 1=Error, 2=Warning, 3=Informational, 4=Verbose)
+
+# Private networking (uncomment and configure if needed)
+enable_private_endpoint     = false  # Set to true to enable
+# private_endpoint_subnet_id  = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/network-rg/providers/Microsoft.Network/virtualNetworks/prod-vnet/subnets/storage-subnet"
+# private_dns_zone_id        = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/dns-rg/providers/Microsoft.Network/privateDnsZones/privatelink.file.core.windows.net"
+
+# Comprehensive tagging
+common_tags = {
+  Environment = "production"
+  Project     = "enterprise-storage"
+  Owner       = "platform-team"
+  CostCenter  = "engineering"
+  Compliance  = "SOX"
+  Backup      = "required"
+  DataClass   = "confidential"
+}
+
+file_share_tags = {
+  Purpose         = "production"
+  BackupEnabled   = "true"
+  Compliance      = "required"
+  AccessTier      = "premium"
+  Protocol        = "smb"
+  MonitoringLevel = "enhanced"
+  QuotaGB         = "1000"
+}
+
+# Additional configuration options (all optional):
+
+# Alternative protocol support
+# enabled_protocol = "NFS"  # Use NFS instead of SMB (requires Premium storage account)
+
+# Custom backup vault configuration
+# backup_vault_sku = "RS0"  # Geo-redundant storage option
+
+# Monitoring customization
+# quota_alert_threshold_percentage = 90  # Alert at 90% instead of 85%
+# quota_alert_severity = 0  # Critical severity instead of Error
+
+# Alternative access tiers
+# access_tier = "Hot"                    # For frequently accessed data
+# access_tier = "Cool"                   # For infrequently accessed data
+# access_tier = "TransactionOptimized"   # For high transaction workloads
+
+# Extended quota options
+# quota_gb = 5120  # 5TB quota
+# quota_gb = 10240 # 10TB quota (requires Premium tier)

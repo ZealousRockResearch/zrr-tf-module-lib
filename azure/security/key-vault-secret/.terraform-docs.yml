@@ -1,0 +1,113 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Security - Key Vault Secret
+
+  This module manages Azure Key Vault secrets following ZRR enterprise standards and security best practices.
+
+  ## Features
+
+  - **Secure Secret Management**: Stores sensitive values in Azure Key Vault with proper encryption
+  - **Flexible Key Vault Reference**: Supports both Key Vault ID and name-based lookups
+  - **Secret Lifecycle Management**: Configurable expiration dates and not-before dates
+  - **Content Type Support**: Optional content type specification for better secret organization
+  - **Enterprise Tagging**: Automatic application of common and resource-specific tags
+  - **Validation**: Comprehensive input validation for names, values, and dates
+  - **Ignore Changes**: Lifecycle rule to prevent accidental secret value updates
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "database_password" {
+    source = "../../azure/security/key-vault-secret"
+
+    name           = "database-password"
+    value          = var.database_password
+    key_vault_id   = azurerm_key_vault.main.id
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "example"
+      Owner       = "platform-team"
+    }
+  }
+  ```
+
+  ### Using Key Vault Name Reference
+
+  ```hcl
+  module "api_key" {
+    source = "../../azure/security/key-vault-secret"
+
+    name                           = "third-party-api-key"
+    value                          = var.api_key
+    key_vault_name                 = "my-keyvault"
+    key_vault_resource_group_name  = "security-rg"
+    content_type                   = "text/plain"
+
+    expiration_date = "2025-12-31T23:59:59Z"
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "integration"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
