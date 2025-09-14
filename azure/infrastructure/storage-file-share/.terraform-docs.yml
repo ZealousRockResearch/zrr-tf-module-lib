@@ -1,0 +1,153 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Infrastructure - Storage File Share
+
+  This Terraform module creates and manages Azure Storage File Shares with comprehensive enterprise features including quotas, access control, backup, monitoring, and private networking capabilities. The module is designed for the infrastructure layer in the ZRR enterprise architecture.
+
+  ## Features
+
+  - **File Share Management**: Creates Azure File Shares with configurable quotas and access tiers
+  - **Access Control**: Support for access policies and stored access policies
+  - **Protocol Support**: SMB and NFS protocol support for different use cases
+  - **Directory Management**: Automated creation and management of directories within file shares
+  - **Backup & Recovery**: Integrated Azure Backup with configurable retention policies
+  - **Monitoring & Alerting**: Built-in monitoring with quota alerts and email notifications
+  - **Private Networking**: Optional private endpoint support for secure access
+  - **Enterprise Features**: Comprehensive tagging, metadata support, and governance capabilities
+  - **Compliance**: Built-in security defaults and validation rules
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "file_share" {
+    source = "../../azure/infrastructure/storage-file-share"
+
+    name                 = "example-share"
+    storage_account_name = "mystorageaccount"
+    resource_group_name  = "my-resource-group"
+    location            = "East US"
+    quota_gb            = 100
+
+    common_tags = {
+      Environment = "dev"
+      Project     = "example"
+    }
+  }
+  ```
+
+  ### Advanced Example with Backup and Monitoring
+
+  ```hcl
+  module "file_share_advanced" {
+    source = "../../azure/infrastructure/storage-file-share"
+
+    name                 = "production-share"
+    storage_account_name = "prodstorageaccount"
+    resource_group_name  = "production-rg"
+    location            = "East US"
+    quota_gb            = 1000
+    access_tier         = "Premium"
+
+    enable_backup = true
+    backup_policy = {
+      frequency = "Daily"
+      time      = "02:00"
+      retention_daily = {
+        count = 30
+      }
+      retention_weekly = {
+        count    = 12
+        weekdays = ["Sunday"]
+      }
+    }
+
+    enable_monitoring = true
+    alert_email_addresses = ["admin@company.com"]
+    quota_alert_threshold_percentage = 85
+
+    directories = [
+      {
+        name = "documents"
+        metadata = {
+          purpose = "document-storage"
+        }
+      },
+      {
+        name = "backups"
+        metadata = {
+          purpose = "backup-storage"
+        }
+      }
+    ]
+
+    common_tags = {
+      Environment = "production"
+      Project     = "enterprise-storage"
+      Owner       = "platform-team"
+    }
+
+    file_share_tags = {
+      BackupEnabled = "true"
+      Compliance    = "required"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

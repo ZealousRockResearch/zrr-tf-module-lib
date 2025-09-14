@@ -419,6 +419,70 @@
         "associations",
         "resource-group"
       ]
+    },
+    {
+      "name": "storage-file-share",
+      "cloud": "azure",
+      "layer": "infrastructure",
+      "path": "azure/infrastructure/storage-file-share",
+      "version": "1.0.0",
+      "description": "Manages Azure Storage File Shares with comprehensive enterprise features including quotas, access control, backup, monitoring, and private networking capabilities",
+      "features": [
+        "File Share Management with configurable quotas and access tiers",
+        "Access Control with support for access policies and stored access policies",
+        "Protocol Support for SMB and NFS for different use cases",
+        "Directory Management with automated creation and management",
+        "Backup & Recovery with integrated Azure Backup and configurable retention policies",
+        "Monitoring & Alerting with built-in monitoring and quota alerts",
+        "Private Networking with optional private endpoint support",
+        "Enterprise Features including comprehensive tagging and governance capabilities",
+        "Compliance with built-in security defaults and validation rules",
+        "Advanced access tier options: Hot, Cool, TransactionOptimized, Premium",
+        "Metadata support for file shares and directories",
+        "Email notifications for quota alerts and monitoring events",
+        "Comprehensive backup policies with daily, weekly, monthly, and yearly retention"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-14",
+      "updated": "2025-09-14",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "storage-file-share",
+        "file-share",
+        "infrastructure",
+        "enterprise",
+        "storage",
+        "backup",
+        "monitoring",
+        "private-endpoint",
+        "access-policies",
+        "quota-management",
+        "directory-management",
+        "smb",
+        "nfs",
+        "access-tiers",
+        "hot-tier",
+        "cool-tier",
+        "premium-tier",
+        "transaction-optimized",
+        "azure-backup",
+        "retention-policies",
+        "alerting",
+        "compliance",
+        "governance",
+        "tagging",
+        "metadata",
+        "azure-files",
+        "recovery-services"
+      ]
     }
   ]
 }

@@ -1,0 +1,85 @@
+# Basic configuration example for Azure Storage File Share
+
+# Required: Name of your existing storage account
+storage_account_name = "mystorageaccount"
+
+# Required: Name of your resource group
+resource_group_name = "my-resource-group"
+
+# Basic file share configuration
+file_share_name = "my-file-share"
+location        = "East US"
+quota_gb        = 100
+access_tier     = "Hot"
+
+# Backup settings
+enable_backup = true
+
+# Tags
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+}
+
+file_share_tags = {
+  Purpose = "development"
+  Backup  = "enabled"
+}
+
+# Optional variables (commented out with default values):
+
+# File share protocol
+# enabled_protocol = "SMB"  # SMB or NFS
+
+# Access tier options
+# access_tier = "Hot"  # Hot, Cool, TransactionOptimized, Premium
+
+# Quota range
+# quota_gb = 100  # 1 to 102400 GB (100 TB)
+
+# Metadata
+# metadata = {
+#   department = "engineering"
+#   purpose    = "development"
+# }
+
+# Access policies (advanced)
+# access_policies = []
+
+# Directories to create
+# directories = [
+#   {
+#     name = "documents"
+#     metadata = {
+#       purpose = "document-storage"
+#     }
+#   }
+# ]
+
+# Backup vault configuration
+# backup_vault_name = null  # Auto-generated if null
+# backup_vault_sku = "Standard"  # Standard or RS0
+# backup_soft_delete_enabled = true
+# backup_public_access_enabled = false
+
+# Backup policy customization
+# backup_policy = {
+#   frequency = "Daily"
+#   time      = "23:00"
+#   retention_daily = {
+#     count = 30
+#   }
+# }
+
+# Monitoring (set enable_monitoring = true to activate)
+# enable_monitoring = false
+# alert_email_addresses = ["admin@company.com"]
+# quota_alert_threshold_percentage = 80
+# quota_alert_severity = 2
+
+# Private endpoint (advanced networking)
+# enable_private_endpoint = false
+# private_endpoint_subnet_id = null
+# private_dns_zone_id = null
