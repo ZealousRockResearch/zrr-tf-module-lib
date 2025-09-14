@@ -619,6 +619,69 @@
         "private-dns",
         "network-security"
       ]
+    },
+    {
+      "name": "storage-container",
+      "cloud": "azure",
+      "layer": "infrastructure",
+      "path": "azure/infrastructure/storage-container",
+      "version": "1.0.0",
+      "description": "Manages Azure Storage Containers with comprehensive security features, lifecycle management, and enterprise governance capabilities following ZRR standards",
+      "features": [
+        "Container Management with full lifecycle management and configurable access levels",
+        "Flexible Storage Account Reference supporting both storage account ID and name-based lookups",
+        "Access Control with configurable container access types (private, blob, container) for security compliance",
+        "Lifecycle Management with advanced lifecycle rules for automatic blob tiering and deletion policies",
+        "Legal Hold Support with enterprise-grade legal hold capabilities for compliance and litigation requirements",
+        "Immutability Policies with time-based retention policies for regulatory compliance and data protection",
+        "Metadata Management with custom metadata support for enhanced organization and governance",
+        "Security Features including comprehensive security controls, access policies, and retention management",
+        "Enterprise Tagging with automatic application of common and resource-specific tags following ZRR standards",
+        "Validation with extensive input validation ensuring Azure naming conventions and best practices",
+        "Monitoring Ready with structured outputs for integration with monitoring and alerting systems",
+        "Compliance with built-in features for regulatory compliance including WORM (Write Once, Read Many) capabilities"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-14",
+      "updated": "2025-09-14",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "storage-container",
+        "blob-container",
+        "infrastructure",
+        "enterprise",
+        "storage",
+        "lifecycle-management",
+        "legal-hold",
+        "immutability-policies",
+        "retention-policies",
+        "worm",
+        "compliance",
+        "governance",
+        "access-control",
+        "container-access",
+        "blob-storage",
+        "tiering",
+        "archival",
+        "deletion-policies",
+        "metadata-management",
+        "security",
+        "monitoring",
+        "validation",
+        "tagging",
+        "azure-storage",
+        "data-protection",
+        "regulatory-compliance",
+        "enterprise-governance"
+      ]
     }
   ]
 }
