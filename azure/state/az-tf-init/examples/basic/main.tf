@@ -40,8 +40,9 @@ module "terraform_state" {
   container_soft_delete_retention_days = 7
 
   # Naming convention
-  use_naming_convention = true
-  location_short        = var.location_short
+  use_naming_convention = false
+  resource_group_name   = "rg-zrr-tfstate-dev"
+  storage_account_name  = "sazrrtfstatedev"
   container_name        = "tfstate"
 
   # Basic tagging
