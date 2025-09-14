@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2025-09-12",
+  "updated": "2025-09-13",
   "modules": [
     {
       "name": "resource-group",
@@ -235,6 +235,64 @@
         "governance",
         "automation",
         "team-access"
+      ]
+    },
+    {
+      "name": "azure-sql-db",
+      "cloud": "azure",
+      "layer": "application",
+      "path": "azure/application/azure-sql-db",
+      "version": "1.0.0",
+      "description": "Manages Azure SQL Database with comprehensive security, monitoring, and backup features following ZRR enterprise standards",
+      "features": [
+        "Security: threat detection, auditing, vulnerability assessment, and transparent data encryption",
+        "Performance: configurable SKUs, read scale-out, auto-pause for serverless workloads",
+        "Backup & Recovery: short-term and long-term retention policies, geo-redundant backups",
+        "Monitoring: built-in auditing and threat detection with configurable retention",
+        "Scalability: zone redundancy, read replicas, and flexible sizing options",
+        "Compliance: enterprise-grade security controls and governance features",
+        "Flexible server configuration: support for existing or referenced SQL Server",
+        "Advanced storage options: Local, Zone, Geo, and GeoZone redundancy",
+        "Comprehensive variable validation and security defaults",
+        "Multiple creation modes: Default, Copy, PointInTimeRestore, Recovery, Restore"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-13",
+      "updated": "2025-09-13",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "sql-database",
+        "database",
+        "application",
+        "enterprise",
+        "security",
+        "threat-detection",
+        "auditing",
+        "encryption",
+        "transparent-data-encryption",
+        "backup",
+        "recovery",
+        "retention",
+        "geo-redundancy",
+        "monitoring",
+        "performance",
+        "scaling",
+        "read-scale",
+        "zone-redundant",
+        "read-replicas",
+        "serverless",
+        "compliance",
+        "governance",
+        "long-term-retention",
+        "point-in-time-recovery"
       ]
     }
   ]
