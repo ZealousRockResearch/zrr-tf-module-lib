@@ -421,6 +421,62 @@
       ]
     },
     {
+      "name": "key-vault-secret",
+      "cloud": "azure",
+      "layer": "security",
+      "path": "azure/security/key-vault-secret",
+      "version": "1.0.0",
+      "description": "Manages Azure Key Vault secrets with enterprise standards compliance, flexible key vault reference, and comprehensive security features",
+      "features": [
+        "Secure Secret Management with Azure Key Vault encryption and storage",
+        "Flexible Key Vault Reference supporting both Key Vault ID and name-based lookups",
+        "Secret Lifecycle Management with configurable expiration and not-before dates",
+        "Content Type Support for better secret organization and metadata",
+        "Enterprise Tagging with automatic application of common and resource-specific tags",
+        "Comprehensive Validation with input validation for names, values, and date formats",
+        "Lifecycle Protection with ignore changes rule to prevent accidental secret updates",
+        "Security Best Practices following ZRR enterprise standards and compliance",
+        "Multiple Authentication Methods supporting various Key Vault access patterns",
+        "Sensitive Value Handling with proper Terraform sensitive value management",
+        "Date Format Validation ensuring RFC3339 compliance for all date inputs",
+        "Secret Name Validation with Azure Key Vault naming convention compliance"
+      ],
+      "examples": [
+        "basic"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-14",
+      "updated": "2025-09-14",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "key-vault-secret",
+        "keyvault-secret",
+        "secret",
+        "security",
+        "enterprise",
+        "sensitive-data",
+        "encryption",
+        "secret-management",
+        "lifecycle-management",
+        "expiration",
+        "content-type",
+        "validation",
+        "compliance",
+        "governance",
+        "tagging",
+        "azure-keyvault",
+        "security-layer",
+        "enterprise-standards",
+        "date-validation",
+        "name-validation",
+        "sensitive-values"
+      ]
+    },
+    {
       "name": "storage-file-share",
       "cloud": "azure",
       "layer": "infrastructure",
