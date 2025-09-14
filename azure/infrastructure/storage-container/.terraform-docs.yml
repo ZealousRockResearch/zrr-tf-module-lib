@@ -1,0 +1,162 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Infrastructure - Storage Container
+
+  This module manages Azure Storage Containers with comprehensive security features, lifecycle management, and enterprise governance capabilities following ZRR standards.
+
+  ## Features
+
+  - **Container Management**: Full lifecycle management of Azure Storage containers with configurable access levels
+  - **Flexible Storage Account Reference**: Supports both storage account ID and name-based lookups
+  - **Access Control**: Configurable container access types (private, blob, container) for security compliance
+  - **Lifecycle Management**: Advanced lifecycle rules for automatic blob tiering and deletion policies
+  - **Legal Hold Support**: Enterprise-grade legal hold capabilities for compliance and litigation requirements
+  - **Immutability Policies**: Time-based retention policies for regulatory compliance and data protection
+  - **Metadata Management**: Custom metadata support for enhanced organization and governance
+  - **Security Features**: Comprehensive security controls including access policies and retention management
+  - **Enterprise Tagging**: Automatic application of common and resource-specific tags following ZRR standards
+  - **Validation**: Extensive input validation ensuring Azure naming conventions and best practices
+  - **Monitoring Ready**: Structured outputs for integration with monitoring and alerting systems
+  - **Compliance**: Built-in features for regulatory compliance including WORM (Write Once, Read Many) capabilities
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "app_data_container" {
+    source = "../../azure/infrastructure/storage-container"
+
+    name                 = "app-data"
+    storage_account_name = "mystorageaccount"
+    storage_account_resource_group_name = "storage-rg"
+    container_access_type = "private"
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "myapp"
+      Owner       = "platform-team"
+    }
+  }
+  ```
+
+  ### Advanced Example with Lifecycle Management
+
+  ```hcl
+  module "archive_container" {
+    source = "../../azure/infrastructure/storage-container"
+
+    name                 = "long-term-archive"
+    storage_account_id   = azurerm_storage_account.main.id
+    container_access_type = "private"
+
+    metadata = {
+      environment = "production"
+      project     = "data-archive"
+      owner       = "data-team"
+      purpose     = "long-term-storage"
+    }
+
+    lifecycle_rules = [
+      {
+        name         = "archive-policy"
+        enabled      = true
+        prefix_match = ["logs/", "backups/"]
+        blob_types   = ["blockBlob"]
+        tier_to_cool_after_days    = 30
+        tier_to_archive_after_days = 90
+        delete_after_days          = 2555  # 7 years
+      }
+    ]
+
+    immutability_policy = {
+      period_in_days = 2555  # 7 years
+      locked         = true
+    }
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "compliance"
+      DataClass   = "sensitive"
+    }
+  }
+  ```
+
+  ### Legal Hold Example
+
+  ```hcl
+  module "legal_container" {
+    source = "../../azure/infrastructure/storage-container"
+
+    name                 = "legal-documents"
+    storage_account_name = "legalstorage"
+    storage_account_resource_group_name = "legal-rg"
+
+    legal_hold = {
+      tags = ["litigation-2024", "compliance-audit"]
+    }
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "legal"
+      Compliance  = "required"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

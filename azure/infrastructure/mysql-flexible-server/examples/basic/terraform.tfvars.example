@@ -1,0 +1,119 @@
+# Basic configuration example for Azure MySQL Flexible Server
+
+# Required: Name of your resource group
+resource_group_name = "my-resource-group"
+
+# Required: Administrator password (use a secure password)
+administrator_password = "SecurePassword123!"
+
+# Basic MySQL server configuration
+mysql_server_name   = "my-mysql-server"
+location           = "East US"
+administrator_login = "mysqladmin"
+
+# Server specifications
+sku_name        = "GP_Standard_D2ds_v4"  # General Purpose, 2 vCores
+mysql_version   = "8.0.21"
+storage_size_gb = 100
+
+# Backup settings
+backup_retention_days = 7
+
+# Tags
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+}
+
+mysql_tags = {
+  Purpose      = "development"
+  DatabaseType = "mysql"
+  Backup       = "enabled"
+}
+
+# Optional variables (commented out with default values):
+
+# Naming convention
+# use_naming_convention = false
+# environment = "dev"
+# location_short = "eus"
+
+# Storage configuration
+# storage_iops = null  # Auto-scaling IOPS
+# storage_auto_grow_enabled = true
+
+# Backup configuration
+# geo_redundant_backup_enabled = false
+
+# High availability (disabled by default)
+# high_availability_mode = "Disabled"
+# standby_availability_zone = null
+# availability_zone = null
+
+# Maintenance window
+# maintenance_window = {
+#   day_of_week  = 0  # Sunday
+#   start_hour   = 2
+#   start_minute = 0
+# }
+
+# Networking (public access by default for basic example)
+# public_network_access_enabled = true
+# delegated_subnet_id = null
+# private_dns_zone_id = null
+
+# Database creation
+# databases = [
+#   {
+#     name      = "app_db"
+#     charset   = "utf8mb4"
+#     collation = "utf8mb4_unicode_ci"
+#   }
+# ]
+
+# Server configurations
+# server_configurations = {
+#   "max_connections" = "100"
+#   "slow_query_log"  = "ON"
+# }
+
+# Firewall rules (allow Azure services by default)
+# firewall_rules = [
+#   {
+#     name             = "AllowAzureServices"
+#     start_ip_address = "0.0.0.0"
+#     end_ip_address   = "0.0.0.0"
+#   }
+# ]
+
+# Security features
+# identity_type = null
+# identity_ids = []
+# customer_managed_key_id = null
+
+# Azure AD administrator
+# aad_administrator = {
+#   identity_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.ManagedIdentity/userAssignedIdentities/xxx"
+#   login       = "aad_admin"
+#   object_id   = "00000000-0000-0000-0000-000000000000"
+#   tenant_id   = "00000000-0000-0000-0000-000000000000"
+# }
+
+# Private endpoint (advanced networking)
+# enable_private_endpoint = false
+# private_endpoint_subnet_id = null
+# private_endpoint_dns_zone_id = null
+
+# Monitoring and alerting
+# enable_monitoring = false
+# alert_email_addresses = ["admin@company.com"]
+# cpu_alert_threshold = 80
+# memory_alert_threshold = 80
+# connection_alert_threshold = 80
+
+# Diagnostic settings
+# enable_diagnostic_settings = false
+# log_analytics_workspace_id = null
+# diagnostic_storage_account_id = null

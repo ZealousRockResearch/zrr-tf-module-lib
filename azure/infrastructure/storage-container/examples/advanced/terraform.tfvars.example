@@ -1,0 +1,55 @@
+# Advanced configuration example for Storage Container module
+
+# Storage Account Configuration
+storage_account_name                = "enterprisestorageacct"
+storage_account_resource_group_name = "enterprise-storage-rg"
+
+# Environment Configuration
+environment = "prod"
+
+# Tagging Strategy
+common_tags = {
+  Environment = "prod"
+  Project     = "enterprise-data-platform"
+  Owner       = "platform-team"
+  CostCenter  = "infrastructure"
+  Department  = "engineering"
+  Criticality = "high"
+  Compliance  = "required"
+}
+
+# Legal Hold Configuration (for compliance scenarios)
+enable_legal_hold = true
+legal_hold_tags   = [
+  "litigation-2024",
+  "regulatory-audit",
+  "compliance-review"
+]
+
+# Immutability Policy Configuration (WORM - Write Once, Read Many)
+enable_immutability_policy  = true
+immutability_period_days    = 2555  # 7 years retention
+immutability_policy_locked  = false # Set to true to permanently lock the policy
+
+# Application Container Configuration
+app_container_access_type = "private"
+enable_app_lifecycle      = true
+
+# Optional: Advanced Configuration Examples
+# Uncomment and modify as needed:
+
+# For development environment
+# environment = "dev"
+# immutability_period_days = 365  # 1 year for dev
+# immutability_policy_locked = false
+
+# For staging environment
+# environment = "stage"
+# enable_legal_hold = false
+# enable_immutability_policy = false
+
+# For different access patterns
+# app_container_access_type = "blob"  # Allow direct blob access
+
+# Disable lifecycle management for testing
+# enable_app_lifecycle = false

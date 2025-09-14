@@ -1,0 +1,36 @@
+# Basic configuration example for Storage Container module
+
+# Storage Account Configuration
+storage_account_name                = "mystorageaccount"
+storage_account_resource_group_name = "storage-rg"
+
+# Tagging
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "team-name"
+  CostCenter  = "engineering"
+  Department  = "platform"
+}
+
+# Optional: Additional container-specific configuration
+# Uncomment and modify as needed:
+
+# Container access type (private, blob, container)
+# container_access_type = "private"
+
+# Custom metadata for the container
+# metadata = {
+#   environment = "development"
+#   project     = "my-app"
+#   owner       = "data-team"
+#   purpose     = "application-data"
+# }
+
+# Additional container-specific tags
+# storage_container_tags = {
+#   Purpose      = "application-storage"
+#   DataClass    = "general"
+#   BackupPolicy = "standard"
+#   Retention    = "7-years"
+# }

@@ -1,0 +1,191 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Infrastructure - MySQL Flexible Server
+
+  This Terraform module creates and manages Azure MySQL Flexible Server with comprehensive enterprise features including high availability, security, backup, monitoring, and networking capabilities. The module is designed for the infrastructure layer in the ZRR enterprise architecture.
+
+  ## Features
+
+  - **MySQL Flexible Server Management**: Creates MySQL servers with configurable SKUs and versions
+  - **High Availability**: Zone-redundant and same-zone high availability options
+  - **Storage Configuration**: Flexible storage sizing with auto-grow and custom IOPS
+  - **Backup & Recovery**: Configurable backup retention with geo-redundant options
+  - **Security Features**: Customer-managed encryption, Azure AD integration, firewall rules
+  - **Network Integration**: Private subnet delegation, private DNS zones, private endpoints
+  - **Database Management**: Automated database creation with custom charset and collation
+  - **Server Configuration**: Fine-tuned MySQL server parameters and settings
+  - **Monitoring & Alerting**: Built-in monitoring with CPU, memory, and connection alerts
+  - **Maintenance Windows**: Configurable maintenance scheduling
+  - **Identity Management**: System and user-assigned managed identities
+  - **Compliance**: Enterprise tagging, diagnostic settings, and governance features
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "mysql_server" {
+    source = "../../azure/infrastructure/mysql-flexible-server"
+
+    name                    = "example-mysql"
+    resource_group_name     = "my-resource-group"
+    location               = "East US"
+    administrator_login    = "mysqladmin"
+    administrator_password = "SecurePassword123!"
+
+    sku_name           = "GP_Standard_D2ds_v4"
+    mysql_version      = "8.0.21"
+    storage_size_gb    = 100
+
+    common_tags = {
+      Environment = "dev"
+      Project     = "example"
+    }
+  }
+  ```
+
+  ### Advanced Example with High Availability and Monitoring
+
+  ```hcl
+  module "mysql_server_advanced" {
+    source = "../../azure/infrastructure/mysql-flexible-server"
+
+    name                    = "production-mysql"
+    resource_group_name     = "production-rg"
+    location               = "East US"
+    administrator_login    = "mysqladmin"
+    administrator_password = var.mysql_password
+
+    # Server configuration
+    sku_name           = "MO_Standard_E4ds_v4"
+    mysql_version      = "8.0.21"
+    storage_size_gb    = 1000
+    storage_iops       = 3000
+    availability_zone  = "1"
+
+    # High availability
+    high_availability_mode    = "ZoneRedundant"
+    standby_availability_zone = "2"
+
+    # Backup configuration
+    backup_retention_days        = 35
+    geo_redundant_backup_enabled = true
+
+    # Networking
+    delegated_subnet_id         = var.mysql_subnet_id
+    private_dns_zone_id         = var.mysql_dns_zone_id
+    public_network_access_enabled = false
+
+    # Security
+    identity_type = "UserAssigned"
+    identity_ids  = [var.user_assigned_identity_id]
+
+    # Databases
+    databases = [
+      {
+        name      = "app_db"
+        charset   = "utf8mb4"
+        collation = "utf8mb4_unicode_ci"
+      },
+      {
+        name      = "analytics_db"
+        charset   = "utf8mb4"
+        collation = "utf8mb4_unicode_ci"
+      }
+    ]
+
+    # Server configurations
+    server_configurations = {
+      "innodb_buffer_pool_size" = "75"
+      "max_connections"         = "200"
+      "slow_query_log"         = "ON"
+      "long_query_time"        = "2"
+    }
+
+    # Maintenance window
+    maintenance_window = {
+      day_of_week  = 0  # Sunday
+      start_hour   = 2
+      start_minute = 0
+    }
+
+    # Monitoring
+    enable_monitoring = true
+    alert_email_addresses = ["admin@company.com", "dba@company.com"]
+    cpu_alert_threshold    = 85
+    memory_alert_threshold = 90
+
+    # Diagnostic settings
+    enable_diagnostic_settings = true
+    log_analytics_workspace_id = var.log_analytics_workspace_id
+
+    common_tags = {
+      Environment = "production"
+      Project     = "enterprise-app"
+      Owner       = "platform-team"
+    }
+
+    mysql_tags = {
+      DatabaseType = "mysql"
+      BackupEnabled = "true"
+      HAEnabled     = "true"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

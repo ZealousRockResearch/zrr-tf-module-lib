@@ -1,0 +1,200 @@
+# Advanced configuration example for Azure MySQL Flexible Server
+# This example demonstrates all enterprise features including high availability, security, and monitoring
+
+# Required: Name of your resource group
+resource_group_name = "production-rg"
+
+# Required: Administrator password (use a secure password)
+administrator_password = "VerySecurePassword123!"
+
+# Advanced MySQL server configuration
+mysql_server_name   = "production-mysql-server"
+location           = "East US"
+administrator_login = "mysqladmin"
+
+# High-performance server specifications
+sku_name        = "MO_Standard_E4ds_v4"  # Memory Optimized, 4 vCores, 32GB RAM
+mysql_version   = "8.0.21"
+storage_size_gb = 1000
+storage_iops    = 3000
+availability_zone = "1"
+
+# High availability configuration
+high_availability_mode    = "ZoneRedundant"
+standby_availability_zone = "2"
+
+# Advanced backup configuration
+backup_retention_days        = 35  # Maximum retention
+geo_redundant_backup_enabled = true
+
+# Private networking (recommended for production)
+# Uncomment and configure these for private networking:
+# delegated_subnet_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Network/virtualNetworks/xxx/subnets/mysql-subnet"
+# private_dns_zone_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com"
+public_network_access_enabled = false
+
+# Security configuration
+identity_type = "UserAssigned"
+# identity_ids = ["/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mysql-identity"]
+
+# Customer-managed encryption (optional)
+# customer_managed_key_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.KeyVault/vaults/xxx/keys/xxx"
+# primary_user_assigned_identity_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.ManagedIdentity/userAssignedIdentities/xxx"
+
+# Database creation - multiple databases for different purposes
+databases = [
+  {
+    name      = "app_db"
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+  },
+  {
+    name      = "analytics_db"
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+  },
+  {
+    name      = "logging_db"
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+  }
+]
+
+# Advanced MySQL server configurations for production
+server_configurations = {
+  # Buffer pool configuration (75% of available memory)
+  "innodb_buffer_pool_size" = "75"
+
+  # Connection settings
+  "max_connections"         = "200"
+  "max_user_connections"    = "190"
+
+  # Query performance
+  "slow_query_log"         = "ON"
+  "long_query_time"        = "2"
+  "log_slow_admin_statements" = "ON"
+
+  # InnoDB settings
+  "innodb_lock_wait_timeout" = "50"
+  "innodb_log_file_size"    = "512"
+  "innodb_flush_log_at_trx_commit" = "1"
+
+  # Timeout settings
+  "wait_timeout"           = "28800"
+  "interactive_timeout"    = "28800"
+
+  # Security
+  "sql_mode" = "STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+}
+
+# Firewall rules for secure access
+firewall_rules = [
+  {
+    name             = "AllowAzureServices"
+    start_ip_address = "0.0.0.0"
+    end_ip_address   = "0.0.0.0"
+  }
+  # Add specific IP ranges as needed:
+  # {
+  #   name             = "AllowOfficeNetwork"
+  #   start_ip_address = "203.0.113.0"
+  #   end_ip_address   = "203.0.113.255"
+  # }
+]
+
+# Azure AD administrator (recommended for production)
+# aad_administrator = {
+#   identity_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mysql-aad-admin"
+#   login       = "mysql_aad_admin"
+#   object_id   = "00000000-0000-0000-0000-000000000000"
+#   tenant_id   = "00000000-0000-0000-0000-000000000000"
+# }
+
+# Maintenance window - scheduled for Sunday 2 AM
+maintenance_window = {
+  day_of_week  = 0  # Sunday
+  start_hour   = 2
+  start_minute = 0
+}
+
+# Private endpoint configuration (recommended for production)
+enable_private_endpoint = false  # Set to true and configure subnet/DNS
+# private_endpoint_subnet_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Network/virtualNetworks/xxx/subnets/pe-subnet"
+# private_endpoint_dns_zone_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com"
+
+# Comprehensive monitoring and alerting
+enable_monitoring = true
+alert_email_addresses = ["admin@company.com", "dba@company.com", "devops@company.com"]
+
+# Alert thresholds optimized for production workloads
+cpu_alert_threshold        = 85   # Alert at 85% CPU
+memory_alert_threshold     = 90   # Alert at 90% memory
+connection_alert_threshold = 150  # Alert at 150 active connections
+
+# Diagnostic settings for comprehensive logging
+enable_diagnostic_settings = true
+# log_analytics_workspace_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.OperationalInsights/workspaces/xxx"
+# diagnostic_storage_account_id = "/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Storage/storageAccounts/xxx"
+
+# Comprehensive tagging for enterprise governance
+common_tags = {
+  Environment = "production"
+  Project     = "enterprise-mysql"
+  Owner       = "platform-team"
+  CostCenter  = "engineering"
+  Compliance  = "SOX"
+  Backup      = "required"
+  DataClass   = "confidential"
+  DR          = "enabled"
+}
+
+mysql_tags = {
+  Purpose         = "production"
+  DatabaseType    = "mysql"
+  BackupEnabled   = "true"
+  HAEnabled       = "true"
+  MonitoringLevel = "enhanced"
+  Compliance      = "required"
+  PerformanceTier = "memory-optimized"
+  StorageTier     = "premium"
+  Version         = "8.0.21"
+}
+
+# Additional advanced configuration options:
+
+# Naming convention (if enabled)
+# use_naming_convention = true
+# environment = "prod"
+# location_short = "eus"
+
+# Storage auto-grow (enabled by default)
+# storage_auto_grow_enabled = true
+
+# Additional diagnostic logs and metrics can be customized:
+# diagnostic_metrics = [
+#   {
+#     category = "AllMetrics"
+#     enabled  = true
+#     retention_policy = {
+#       enabled = true
+#       days    = 90
+#     }
+#   }
+# ]
+
+# diagnostic_logs = [
+#   {
+#     category = "MySqlSlowLogs"
+#     retention_policy = {
+#       enabled = true
+#       days    = 90
+#     }
+#   },
+#   {
+#     category = "MySqlAuditLogs"
+#     retention_policy = {
+#       enabled = true
+#       days    = 90
+#     }
+#   }
+# ]
