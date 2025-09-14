@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2025-09-13",
+  "updated": "2025-09-14",
   "modules": [
     {
       "name": "resource-group",
@@ -352,6 +352,72 @@
         "linux",
         "windows",
         "high-availability"
+      ]
+    },
+    {
+      "name": "network-security-group",
+      "cloud": "azure",
+      "layer": "security",
+      "path": "azure/security/network-security-group",
+      "version": "1.0.0",
+      "description": "Manages Azure Network Security Groups with configurable security rules, associations, and advanced features like flow logging following ZRR enterprise standards",
+      "features": [
+        "Comprehensive NSG management with custom security rules and validation",
+        "Multiple association types: subnet and network interface associations",
+        "Resource group management: optionally create or use existing resource groups",
+        "Flow logging support: configure flow logs for network traffic analysis",
+        "Advanced rule configuration: support for complex security rule definitions",
+        "Network segmentation: rules with multiple source and destination prefixes",
+        "Protocol support: TCP, UDP, ICMP, ESP, AH, and wildcard protocols",
+        "Port range flexibility: single ports, port ranges, or multiple port lists",
+        "Service tag integration: support for Azure service tags in rules",
+        "Priority management: configurable rule priorities from 100-4096",
+        "Comprehensive validation: extensive input validation for all parameters",
+        "Enterprise tagging: comprehensive tag management with common and resource-specific tags",
+        "Security best practices: default deny rules and principle of least privilege",
+        "Advanced examples: network segmentation and enterprise security patterns"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-14",
+      "updated": "2025-09-14",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "network-security-group",
+        "nsg",
+        "security",
+        "enterprise",
+        "network-security",
+        "security-rules",
+        "flow-logs",
+        "subnet-association",
+        "network-interface",
+        "network-segmentation",
+        "access-control",
+        "firewall",
+        "ingress",
+        "egress",
+        "tcp",
+        "udp",
+        "protocol",
+        "ports",
+        "service-tags",
+        "priority",
+        "validation",
+        "monitoring",
+        "traffic-analysis",
+        "compliance",
+        "governance",
+        "tagging",
+        "associations",
+        "resource-group"
       ]
     }
   ]
