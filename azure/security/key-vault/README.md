@@ -1,6 +1,6 @@
-# Azure Shared - Key Vault
+# Azure Security - Key Vault
 
-This Terraform module creates and manages an Azure Key Vault with comprehensive security features, access policies, secrets, keys, and certificates management. The module is designed for the shared layer in the ZRR enterprise architecture.
+This Terraform module creates and manages an Azure Key Vault with comprehensive security features, access policies, secrets, keys, and certificates management. The module is designed for the security layer in the ZRR enterprise architecture.
 
 ## Features
 
@@ -21,7 +21,7 @@ This Terraform module creates and manages an Azure Key Vault with comprehensive 
 
 ```hcl
 module "key_vault" {
-  source = "../../azure/shared/key-vault"
+  source = "../../azure/security/key-vault"
 
   name     = "example-kv-001"
   location = "East US"
@@ -37,7 +37,7 @@ module "key_vault" {
 
 ```hcl
 module "key_vault" {
-  source = "../../azure/shared/key-vault"
+  source = "../../azure/security/key-vault"
 
   name                = "example-kv-001"
   location            = "East US"

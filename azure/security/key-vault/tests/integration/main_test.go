@@ -227,8 +227,8 @@ func TestKeyVaultTags(t *testing.T) {
 		"Project":     "terratest",
 		"Owner":       "automation",
 		"ManagedBy":   "Terraform",
-		"Module":      "zrr-tf-module-lib/azure/shared/key-vault",
-		"Layer":       "shared",
+		"Module":      "zrr-tf-module-lib/azure/security/key-vault",
+		"Layer":       "security",
 	}
 
 	terraformOptions := &terraform.Options{

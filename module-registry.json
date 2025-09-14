@@ -129,10 +129,10 @@
     {
       "name": "key-vault",
       "cloud": "azure",
-      "layer": "shared",
-      "path": "azure/shared/key-vault",
+      "layer": "security",
+      "path": "azure/security/key-vault",
       "version": "1.0.0",
-      "description": "Manages Azure Key Vault with comprehensive security features, access policies, secrets, keys, and certificates management for the shared layer",
+      "description": "Manages Azure Key Vault with comprehensive security features, access policies, secrets, keys, and certificates management for the security layer",
       "features": [
         "Secure Key Vault creation with configurable SKU (Standard/Premium)",
         "Support for both RBAC and access policies authorization models",
@@ -162,7 +162,7 @@
         "azure",
         "key-vault",
         "keyvault",
-        "shared",
+        "security",
         "enterprise",
         "security",
         "secrets",

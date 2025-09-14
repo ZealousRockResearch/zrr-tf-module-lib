@@ -1,5 +1,5 @@
-# azure-shared-key-vault module
-# Description: Azure Key Vault module for managing secrets, keys, and certificates in a shared layer
+# azure-security-key-vault module
+# Description: Azure Key Vault module for managing secrets, keys, and certificates in a security layer
 
 # Data sources
 data "azurerm_client_config" "current" {}
@@ -11,8 +11,8 @@ locals {
     var.key_vault_tags,
     {
       "ManagedBy" = "Terraform"
-      "Module"    = "zrr-tf-module-lib/azure/shared/key-vault"
-      "Layer"     = "shared"
+      "Module"    = "zrr-tf-module-lib/azure/security/key-vault"
+      "Layer"     = "security"
     }
   )
 }
