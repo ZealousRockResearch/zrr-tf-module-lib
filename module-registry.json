@@ -79,8 +79,8 @@
     {
       "name": "storage-account",
       "cloud": "azure",
-      "layer": "shared",
-      "path": "azure/shared/storage-account",
+      "layer": "infrastructure",
+      "path": "azure/infrastructure/storage-account",
       "version": "1.0.0",
       "description": "Manages Azure Storage Accounts with comprehensive enterprise features including advanced security, monitoring, and data protection",
       "features": [
@@ -111,7 +111,7 @@
         "azure",
         "storage-account",
         "storage",
-        "shared",
+        "infrastructure",
         "enterprise",
         "security",
         "encryption",

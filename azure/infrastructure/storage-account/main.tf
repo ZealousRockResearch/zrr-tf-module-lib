@@ -1,4 +1,4 @@
-# azure-shared-storage-account module
+# azure-infrastructure-storage-account module
 # Description: Manages Azure Storage Accounts with advanced security, monitoring, and data protection features
 
 # Data sources
@@ -17,8 +17,8 @@ locals {
     var.storage_account_tags,
     {
       "ManagedBy" = "Terraform"
-      "Module"    = "zrr-tf-module-lib/azure/shared/storage-account"
-      "Layer"     = "shared"
+      "Module"    = "zrr-tf-module-lib/azure/infrastructure/storage-account"
+      "Layer"     = "infrastructure"
     }
   )
 

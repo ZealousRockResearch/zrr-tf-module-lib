@@ -25,7 +25,7 @@ content: |-
 
   ```hcl
   module "storage_account" {
-    source = "path/to/azure/shared/storage-account"
+    source = "path/to/azure/infrastructure/storage-account"
 
     name                = "mystorageaccount"
     resource_group_name = "rg-storage"
@@ -60,7 +60,7 @@ content: |-
 
   ```hcl
   module "enterprise_storage_account" {
-    source = "path/to/azure/shared/storage-account"
+    source = "path/to/azure/infrastructure/storage-account"
 
     name                = "enterprisestorage"
     resource_group_name = "rg-enterprise"
