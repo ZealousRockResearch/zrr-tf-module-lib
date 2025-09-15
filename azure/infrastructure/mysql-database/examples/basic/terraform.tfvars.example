@@ -1,0 +1,58 @@
+# Basic configuration example for Azure MySQL Database
+
+# Required: Database identification
+database_name       = "my_application_db"
+resource_group_name = "my-resource-group"
+
+# MySQL Server Configuration - Choose ONE of these options:
+
+# Option 1: Use existing MySQL Flexible Server (Recommended)
+mysql_flexible_server_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/my-resource-group/providers/Microsoft.DBforMySQL/flexibleServers/my-mysql-server"
+use_flexible_server      = true
+
+# Option 2: Use existing MySQL Single Server (Legacy)
+# mysql_server_id     = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/my-resource-group/providers/Microsoft.DBforMySQL/servers/my-mysql-server"
+# use_flexible_server = false
+
+# Option 3: Use server name (when server exists in same resource group)
+# mysql_server_name   = "my-mysql-server"
+# use_flexible_server = true
+
+# Database configuration
+charset   = "utf8mb4"
+collation = "utf8mb4_unicode_ci"
+
+# Tags
+common_tags = {
+  Environment = "development"
+  Project     = "my-application"
+  Owner       = "development-team"
+  CostCenter  = "engineering"
+  ManagedBy   = "Terraform"
+}
+
+mysql_database_tags = {
+  DatabaseType = "mysql"
+  Purpose      = "application"
+  Backup       = "enabled"
+  DataClass    = "internal"
+}
+
+# Optional configuration (commented out with default values):
+
+# Character set options (choose one):
+# charset = "utf8mb4"      # Unicode with full emoji support (recommended)
+# charset = "utf8"         # Unicode basic multilingual plane
+# charset = "latin1"       # Western European
+# charset = "ascii"        # Basic ASCII only
+
+# Collation options for utf8mb4 (choose one):
+# collation = "utf8mb4_unicode_ci"     # Unicode-aware, case-insensitive (recommended)
+# collation = "utf8mb4_general_ci"     # General purpose, case-insensitive
+# collation = "utf8mb4_bin"            # Binary collation, case-sensitive
+# collation = "utf8mb4_0900_ai_ci"     # MySQL 8.0+ accent-insensitive
+
+# Naming convention (if using ZRR standards):
+# use_naming_convention = false
+# environment = "dev"
+# location_short = "eus"

@@ -682,6 +682,77 @@
         "regulatory-compliance",
         "enterprise-governance"
       ]
+    },
+    {
+      "name": "mysql-database",
+      "cloud": "azure",
+      "layer": "infrastructure",
+      "path": "azure/infrastructure/mysql-database",
+      "version": "1.0.0",
+      "description": "Manages Azure MySQL databases with comprehensive enterprise features including database configuration, performance tuning, character sets, collation settings, user management guidance, monitoring, and security",
+      "features": [
+        "Flexible Server Support with compatibility for both MySQL Single Server and MySQL Flexible Server deployments",
+        "Database Management with primary and additional databases supporting custom character sets and collations",
+        "Character Set Support with full MySQL character set compatibility including UTF-8, Latin, ASCII, and international variants",
+        "Collation Management with configurable collation settings for internationalization and sorting requirements",
+        "Performance Optimization with configurable MySQL server parameters for production workload tuning",
+        "Enterprise Monitoring with built-in alerts for connections, storage usage, and performance metrics integration",
+        "Network Security with VNet service endpoints, private networking, and firewall rule management",
+        "Audit and Compliance with comprehensive audit logging and slow query logging for regulatory requirements",
+        "User Management Guidance with detailed documentation for database user creation and privilege management",
+        "Naming Convention Support with ZRR enterprise naming standards and environment-based naming",
+        "Comprehensive Validation with extensive input validation for database names, character sets, and configurations",
+        "Enterprise Tagging with automatic application of common and resource-specific tags following ZRR standards",
+        "Multi-Database Support with ability to create multiple databases with different character sets on the same server"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-14",
+      "updated": "2025-09-14",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "mysql-database",
+        "mysql",
+        "database",
+        "infrastructure",
+        "enterprise",
+        "character-sets",
+        "collation",
+        "utf8",
+        "utf8mb4",
+        "internationalization",
+        "performance-tuning",
+        "monitoring",
+        "alerting",
+        "audit-logging",
+        "slow-query-logging",
+        "network-security",
+        "vnet-integration",
+        "firewall-rules",
+        "compliance",
+        "governance",
+        "naming-convention",
+        "multi-database",
+        "flexible-server",
+        "single-server",
+        "server-configuration",
+        "mysql-parameters",
+        "connection-monitoring",
+        "storage-monitoring",
+        "user-management",
+        "privilege-management",
+        "security",
+        "validation",
+        "tagging",
+        "enterprise-standards"
+      ]
     }
   ]
 }

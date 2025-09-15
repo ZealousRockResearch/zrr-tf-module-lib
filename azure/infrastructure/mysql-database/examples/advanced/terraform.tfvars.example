@@ -1,0 +1,219 @@
+# Advanced configuration example for Azure MySQL Database
+# This example demonstrates enterprise features including multiple databases, user management, monitoring, and security
+
+# Required: Database identification
+database_name       = "primary_db"
+resource_group_name = "production-rg"
+
+# MySQL Server Configuration (use Single Server for full feature demonstration)
+mysql_server_name   = "production-mysql-server"
+use_flexible_server = false
+
+# Alternative: Use existing server resource ID
+# mysql_server_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/production-rg/providers/Microsoft.DBforMySQL/servers/production-mysql-server"
+
+# Primary database configuration
+charset   = "utf8mb4"
+collation = "utf8mb4_unicode_ci"
+
+# Additional databases for different purposes
+additional_databases = [
+  {
+    name      = "analytics_db"
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+  },
+  {
+    name      = "logging_db"
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+  },
+  {
+    name      = "reporting_db"
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+  },
+  {
+    name      = "staging_db"
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+  }
+]
+
+# Database users with specific privileges (Single Server only)
+database_users = [
+  {
+    username = "app_user"
+    password = "VerySecurePassword123!"
+    privileges = [
+      {
+        type     = "SELECT"
+        database = "primary_db"
+      },
+      {
+        type     = "INSERT"
+        database = "primary_db"
+      },
+      {
+        type     = "UPDATE"
+        database = "primary_db"
+      },
+      {
+        type     = "DELETE"
+        database = "primary_db"
+      }
+    ]
+  },
+  {
+    username = "analytics_user"
+    password = "AnalyticsSecure456!"
+    privileges = [
+      {
+        type     = "SELECT"
+        database = "analytics_db"
+      },
+      {
+        type     = "INSERT"
+        database = "analytics_db"
+      }
+    ]
+  },
+  {
+    username = "readonly_user"
+    password = "ReadOnlySecure789!"
+    privileges = [
+      {
+        type     = "SELECT"
+        database = "primary_db"
+      },
+      {
+        type     = "SELECT"
+        database = "analytics_db"
+      },
+      {
+        type     = "SELECT"
+        database = "reporting_db"
+      }
+    ]
+  }
+]
+
+# Advanced performance configurations for production workloads
+performance_configurations = {
+  # Memory and buffer settings
+  innodb_buffer_pool_size = "75"
+  innodb_log_file_size    = "512"
+  innodb_flush_log_at_trx_commit = "1"
+
+  # Connection settings
+  max_connections      = "200"
+  max_user_connections = "190"
+  wait_timeout         = "28800"
+  interactive_timeout  = "28800"
+
+  # Query performance
+  slow_query_log           = "ON"
+  long_query_time          = "2"
+  log_slow_admin_statements = "ON"
+  query_cache_type         = "OFF"
+  query_cache_size         = "0"
+
+  # InnoDB settings
+  innodb_lock_wait_timeout = "50"
+  innodb_thread_concurrency = "0"
+  innodb_read_io_threads   = "4"
+  innodb_write_io_threads  = "4"
+
+  # Temporary tables
+  tmp_table_size     = "64M"
+  max_heap_table_size = "64M"
+
+  # Security
+  sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+}
+
+# Comprehensive monitoring and alerting
+enable_monitoring          = true
+action_group_id           = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/monitoring-rg/providers/microsoft.insights/actionGroups/database-alerts"
+connection_alert_threshold = 150
+storage_alert_threshold    = 85
+
+# Network security with VNet integration
+subnet_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/network-rg/providers/Microsoft.Network/virtualNetworks/production-vnet/subnets/database-subnet"
+
+# Comprehensive audit and logging
+enable_audit_logging  = true
+audit_log_events     = "CONNECTION,DML,DDL,DCL"
+enable_slow_query_log = true
+slow_query_threshold  = 2
+
+# ZRR naming convention
+use_naming_convention = true
+environment          = "prod"
+location_short       = "eus"
+
+# Comprehensive enterprise tagging
+common_tags = {
+  Environment = "production"
+  Project     = "enterprise-database"
+  Owner       = "platform-team"
+  CostCenter  = "engineering"
+  Compliance  = "SOX"
+  Backup      = "required"
+  DataClass   = "confidential"
+  DR          = "enabled"
+  ManagedBy   = "Terraform"
+}
+
+mysql_database_tags = {
+  DatabaseType     = "mysql"
+  Purpose          = "production"
+  BackupEnabled    = "true"
+  HAEnabled        = "false"
+  MonitoringLevel  = "enhanced"
+  Compliance       = "required"
+  AuditEnabled     = "true"
+  PerformanceTier  = "optimized"
+  DataRetention    = "7years"
+  AccessLevel      = "restricted"
+  EncryptionLevel  = "standard"
+}
+
+# Optional advanced configuration examples:
+
+# Alternative character sets for specific use cases:
+# charset = "latin1"           # Western European
+# charset = "utf8"             # Unicode basic
+# charset = "ascii"            # ASCII only
+
+# Alternative collations for utf8mb4:
+# collation = "utf8mb4_general_ci"    # General purpose
+# collation = "utf8mb4_bin"           # Case-sensitive
+# collation = "utf8mb4_0900_ai_ci"    # Accent-insensitive (MySQL 8.0+)
+
+# Additional performance tuning options:
+# performance_configurations = {
+#   # For high-read workloads
+#   "read_buffer_size"     = "2M"
+#   "read_rnd_buffer_size" = "2M"
+#   "sort_buffer_size"     = "2M"
+#
+#   # For high-write workloads
+#   "bulk_insert_buffer_size" = "64M"
+#   "myisam_sort_buffer_size" = "128M"
+# }
+
+# Network security alternatives:
+# subnet_id = null  # Disable VNet integration for public access
+
+# Monitoring thresholds for different workloads:
+# connection_alert_threshold = 80   # Conservative for low-traffic apps
+# connection_alert_threshold = 300  # Aggressive for high-traffic apps
+# storage_alert_threshold = 70      # Early warning
+# storage_alert_threshold = 95      # Late warning
+
+# Audit logging levels:
+# audit_log_events = "CONNECTION"           # Minimal logging
+# audit_log_events = "CONNECTION,DML"       # Application activity
+# audit_log_events = "CONNECTION,DML,DDL"   # Schema changes
+# audit_log_events = "CONNECTION,DML,DDL,DCL,ADMIN"  # Complete audit trail

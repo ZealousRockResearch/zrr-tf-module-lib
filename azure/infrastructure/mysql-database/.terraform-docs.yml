@@ -1,0 +1,265 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Infrastructure - MySQL Database
+
+  This module manages Azure MySQL databases with comprehensive enterprise features including database configuration, performance tuning, character sets, collation settings, user management, monitoring, and security. It supports both Azure MySQL Single Server and MySQL Flexible Server deployments.
+
+  ## Features
+
+  - **Flexible Server Support**: Works with both MySQL Single Server (legacy) and MySQL Flexible Server
+  - **Database Management**: Creates primary and additional databases with custom character sets and collations
+  - **User Management**: Creates database users with granular privilege management (Single Server only)
+  - **Performance Tuning**: Configurable MySQL server parameters for optimization
+  - **Enterprise Monitoring**: Built-in alerts for connections, storage usage, and performance metrics
+  - **Security Features**: VNet integration, audit logging, and slow query logging
+  - **Character Set Support**: Full support for all MySQL character sets including UTF-8 variants
+  - **Collation Management**: Configurable collation settings for internationalization
+  - **Audit Logging**: Comprehensive audit trail for compliance requirements
+  - **Network Security**: VNet service endpoints and private networking support
+  - **Performance Monitoring**: Slow query logging and configurable thresholds
+  - **Enterprise Tagging**: Comprehensive tag management with ZRR standards
+
+  ## Usage
+
+  ### Basic Example (MySQL Flexible Server)
+
+  ```hcl
+  module "mysql_database" {
+    source = "../../azure/infrastructure/mysql-database"
+
+    name                       = "my_application_db"
+    resource_group_name        = "my-resource-group"
+    mysql_flexible_server_id   = "/subscriptions/.../flexibleServers/my-mysql-server"
+
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+
+    common_tags = {
+      Environment = "production"
+      Project     = "my-app"
+    }
+  }
+  ```
+
+  ### Basic Example (MySQL Single Server)
+
+  ```hcl
+  module "mysql_database" {
+    source = "../../azure/infrastructure/mysql-database"
+
+    name                  = "my_application_db"
+    resource_group_name   = "my-resource-group"
+    mysql_server_id       = "/subscriptions/.../servers/my-mysql-server"
+    use_flexible_server   = false
+
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+
+    common_tags = {
+      Environment = "production"
+      Project     = "my-app"
+    }
+  }
+  ```
+
+  ### Advanced Example with Multiple Databases and Users
+
+  ```hcl
+  module "mysql_databases" {
+    source = "../../azure/infrastructure/mysql-database"
+
+    name                    = "primary_db"
+    resource_group_name     = "production-rg"
+    mysql_server_name       = "production-mysql-server"
+    use_flexible_server     = false
+
+    # Database configuration
+    charset   = "utf8mb4"
+    collation = "utf8mb4_unicode_ci"
+
+    # Additional databases
+    additional_databases = [
+      {
+        name      = "analytics_db"
+        charset   = "utf8mb4"
+        collation = "utf8mb4_unicode_ci"
+      },
+      {
+        name      = "logging_db"
+        charset   = "utf8"
+        collation = "utf8_general_ci"
+      }
+    ]
+
+    # Database users with privileges
+    database_users = [
+      {
+        username = "app_user"
+        password = "SecurePassword123!"
+        privileges = [
+          {
+            type     = "SELECT"
+            database = "primary_db"
+          },
+          {
+            type     = "INSERT"
+            database = "primary_db"
+          },
+          {
+            type     = "UPDATE"
+            database = "primary_db"
+          }
+        ]
+      }
+    ]
+
+    # Performance configurations
+    performance_configurations = {
+      innodb_buffer_pool_size = "75"
+      max_connections         = "200"
+      slow_query_log          = "ON"
+      long_query_time         = "2"
+    }
+
+    # Monitoring and alerting
+    enable_monitoring           = true
+    action_group_id            = "/subscriptions/.../actionGroups/db-alerts"
+    connection_alert_threshold  = 150
+    storage_alert_threshold     = 85
+
+    # Audit and logging
+    enable_audit_logging = true
+    audit_log_events     = "CONNECTION,DML,DDL"
+    enable_slow_query_log = true
+    slow_query_threshold  = 2
+
+    # Network security
+    subnet_id = "/subscriptions/.../subnets/database-subnet"
+
+    # Tags
+    common_tags = {
+      Environment = "production"
+      Project     = "ecommerce"
+      Owner       = "platform-team"
+    }
+
+    mysql_database_tags = {
+      DatabaseType = "mysql"
+      Backup       = "enabled"
+      Monitoring   = "enhanced"
+    }
+  }
+  ```
+
+  ## Character Sets and Collations
+
+  This module supports all MySQL character sets:
+
+  - **UTF-8 Variants**: `utf8`, `utf8mb3`, `utf8mb4` (recommended)
+  - **Western European**: `latin1`, `latin2`, `latin5`, `latin7`
+  - **Eastern European**: `cp1250`, `cp1251`, `cp1256`, `cp1257`
+  - **Asian**: `big5`, `gb2312`, `gbk`, `gb18030`, `euckr`, `sjis`
+  - **And many more**: See variables.tf for complete list
+
+  Common collation examples:
+  - `utf8mb4_unicode_ci` - Unicode-aware, case-insensitive (recommended)
+  - `utf8mb4_general_ci` - General purpose, case-insensitive
+  - `utf8mb4_bin` - Binary collation, case-sensitive
+  - `utf8mb4_0900_ai_ci` - MySQL 8.0+ accent-insensitive
+
+  ## Server Type Support
+
+  ### MySQL Flexible Server (Recommended)
+  - Latest Azure MySQL offering
+  - Better performance and features
+  - Enhanced security and networking
+  - Supports zones and high availability
+
+  ### MySQL Single Server (Legacy)
+  - Original Azure MySQL offering
+  - Supports VNet service endpoints
+  - User and privilege management
+  - Performance parameter configuration
+
+  ## Security Considerations
+
+  - Use strong passwords for database users (8-128 characters)
+  - Enable audit logging for compliance requirements
+  - Use VNet integration for network isolation
+  - Configure appropriate firewall rules
+  - Enable slow query logging for performance monitoring
+  - Use customer-managed keys for encryption at rest
+
+  ## Performance Optimization
+
+  Key performance parameters available:
+  - `innodb_buffer_pool_size`: Memory allocation for InnoDB
+  - `max_connections`: Maximum concurrent connections
+  - `query_cache_size`: Query result caching
+  - `slow_query_log`: Enable slow query logging
+  - `long_query_time`: Threshold for slow queries
+
+  ## Monitoring and Alerting
+
+  Built-in monitoring includes:
+  - **Connection Alerts**: When active connections exceed threshold
+  - **Storage Alerts**: When storage usage exceeds percentage
+  - **Integration**: Works with Azure Monitor Action Groups
+  - **Metrics**: Supports all MySQL performance metrics
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
