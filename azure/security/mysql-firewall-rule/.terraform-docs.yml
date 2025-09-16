@@ -1,0 +1,169 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Security - MySQL Firewall Rule
+
+  This module manages Azure MySQL Firewall Rules with comprehensive security features, IP range management, and enterprise governance capabilities following ZRR standards.
+
+  ## Features
+
+  - **Dual Server Support**: Compatible with both MySQL Single Server and MySQL Flexible Server deployments
+  - **Flexible Server Reference**: Supports server identification via ID, name-based lookup, or direct flexible server reference
+  - **Comprehensive IP Management**: Support for individual IPs, IP ranges, CIDR blocks, and predefined access patterns
+  - **Azure Services Integration**: Optional access for Azure services and resources with the special 0.0.0.0-0.0.0.0 rule
+  - **Office and Developer Access**: Predefined variables for common access scenarios (office IPs, developer workstations)
+  - **Application Network Access**: Support for application subnet CIDR blocks with validation
+  - **Security Validation**: Comprehensive IP address validation and range checking
+  - **Enterprise Governance**: Compliance tags, justification requirements, and monitoring capabilities
+  - **Environment-Aware**: Environment-specific validation and rule naming conventions
+  - **Monitoring Ready**: Built-in support for monitoring and alerting on firewall rule changes
+  - **Rule Limit Management**: Configurable limits to prevent Azure service limits from being exceeded
+  - **Comprehensive Outputs**: Detailed information about created rules, security configuration, and compliance status
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "mysql_firewall_rules" {
+    source = "../../azure/security/mysql-firewall-rule"
+
+    mysql_server_name               = "my-mysql-server"
+    mysql_server_resource_group_name = "my-resource-group"
+
+    firewall_rules = [
+      {
+        name             = "AllowOfficeNetwork"
+        start_ip_address = "203.0.113.0"
+        end_ip_address   = "203.0.113.255"
+      }
+    ]
+
+    allow_azure_services = true
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "webapp"
+      Owner       = "database-team"
+    }
+  }
+  ```
+
+  ### Advanced Example with Multiple Access Patterns
+
+  ```hcl
+  module "mysql_firewall_rules_advanced" {
+    source = "../../azure/security/mysql-firewall-rule"
+
+    mysql_flexible_server_name               = "my-flexible-mysql-server"
+    mysql_flexible_server_resource_group_name = "my-resource-group"
+
+    # Custom firewall rules
+    firewall_rules = [
+      {
+        name             = "AllowDataCenter1"
+        start_ip_address = "10.0.1.0"
+        end_ip_address   = "10.0.1.255"
+      },
+      {
+        name             = "AllowDataCenter2"
+        start_ip_address = "10.0.2.0"
+        end_ip_address   = "10.0.2.255"
+      }
+    ]
+
+    # Predefined access patterns
+    allow_office_ips = [
+      "203.0.113.0/24",
+      "198.51.100.50"
+    ]
+
+    allow_developer_ips = [
+      "192.0.2.10",
+      "192.0.2.20"
+    ]
+
+    allow_application_subnets = [
+      "10.1.0.0/24",
+      "10.2.0.0/24"
+    ]
+
+    allow_azure_services = true
+
+    # Enterprise features
+    environment              = "prod"
+    enable_monitoring       = true
+    alert_on_rule_changes   = true
+    require_justification   = true
+    max_firewall_rules     = 30
+
+    compliance_tags = {
+      DataClassification = "Internal"
+      ComplianceScope   = "SOX"
+      ReviewDate        = "2024-12-31"
+    }
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "enterprise-app"
+      Owner       = "security-team"
+      CostCenter  = "IT"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

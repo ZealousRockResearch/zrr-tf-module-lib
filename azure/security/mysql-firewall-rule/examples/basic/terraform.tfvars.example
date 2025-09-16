@@ -1,0 +1,72 @@
+# Basic MySQL Firewall Rules Example Configuration
+
+# MySQL Server Configuration
+mysql_server_name               = "my-mysql-server"
+mysql_server_resource_group_name = "my-resource-group"
+
+# Basic firewall rules
+firewall_rules = [
+  {
+    name             = "AllowOfficeNetwork"
+    start_ip_address = "203.0.113.0"
+    end_ip_address   = "203.0.113.255"
+  },
+  {
+    name             = "AllowManagementNetwork"
+    start_ip_address = "198.51.100.0"
+    end_ip_address   = "198.51.100.255"
+  }
+]
+
+# Allow Azure services access (for App Services, etc.)
+allow_azure_services = true
+
+# Common tags
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "database-team"
+  CostCenter  = "engineering"
+}
+
+# Optional: MySQL Flexible Server (comment out mysql_server_* above if using)
+# mysql_flexible_server_name               = "my-flexible-mysql-server"
+# mysql_flexible_server_resource_group_name = "my-resource-group"
+
+# Optional: MySQL Server ID (comment out other server references if using)
+# mysql_server_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/my-rg/providers/Microsoft.DBforMySQL/servers/my-mysql-server"
+
+# Optional: Additional configuration
+# allow_office_ips = [
+#   "203.0.113.0/24",    # Office network CIDR
+#   "198.51.100.50"      # Specific office IP
+# ]
+
+# allow_developer_ips = [
+#   "192.0.2.10",        # Developer workstation 1
+#   "192.0.2.20"         # Developer workstation 2
+# ]
+
+# allow_application_subnets = [
+#   "10.1.0.0/24",       # App tier subnet
+#   "10.2.0.0/24"        # API tier subnet
+# ]
+
+# Security and governance settings
+# environment              = "dev"
+# enable_ip_range_validation = true
+# max_firewall_rules      = 50
+# enable_monitoring       = false
+# alert_on_rule_changes   = false
+# require_justification   = false
+
+# mysql_firewall_rule_tags = {
+#   Purpose = "database-access"
+#   Backup  = "daily"
+# }
+
+# compliance_tags = {
+#   DataClassification = "Internal"
+#   ComplianceScope   = "PCI-DSS"
+#   ReviewDate        = "2024-12-31"
+# }

@@ -1,0 +1,104 @@
+# Advanced MySQL Firewall Rules Example Configuration
+# This example demonstrates enterprise-grade features and comprehensive access management
+
+# MySQL Flexible Server Configuration
+mysql_flexible_server_name               = "enterprise-mysql-flexible-server"
+mysql_flexible_server_resource_group_name = "enterprise-database-rg"
+
+# Custom firewall rules for specific networks
+firewall_rules = [
+  {
+    name             = "AllowDataCenter1"
+    start_ip_address = "10.0.1.0"
+    end_ip_address   = "10.0.1.255"
+  },
+  {
+    name             = "AllowDataCenter2"
+    start_ip_address = "10.0.2.0"
+    end_ip_address   = "10.0.2.255"
+  },
+  {
+    name             = "AllowPartnerNetwork"
+    start_ip_address = "172.16.0.0"
+    end_ip_address   = "172.16.255.255"
+  },
+  {
+    name             = "AllowBackupServices"
+    start_ip_address = "10.100.0.0"
+    end_ip_address   = "10.100.0.255"
+  }
+]
+
+# Office IP addresses and networks
+allow_office_ips = [
+  "203.0.113.0/24",      # Main office network
+  "198.51.100.0/25",     # Branch office 1
+  "192.0.2.0/26",        # Branch office 2
+  "198.51.100.150"       # VPN gateway
+]
+
+# Developer workstation access (for development/testing)
+allow_developer_ips = [
+  "192.0.2.10",          # Lead developer workstation
+  "192.0.2.20",          # Database administrator workstation
+  "192.0.2.30",          # DevOps engineer workstation
+  "192.0.2.40"           # Security analyst workstation
+]
+
+# Application subnet access
+allow_application_subnets = [
+  "10.1.0.0/24",         # Web tier subnet
+  "10.2.0.0/24",         # API tier subnet
+  "10.3.0.0/24",         # Background services subnet
+  "10.4.0.0/24"          # Integration services subnet
+]
+
+# Azure services access (for App Services, Logic Apps, etc.)
+allow_azure_services = true
+
+# Enterprise security settings
+environment              = "prod"
+enable_monitoring       = true
+alert_on_rule_changes   = true
+require_justification   = true
+max_firewall_rules     = 30
+enable_ip_range_validation = true
+
+# Compliance and governance tags
+compliance_tags = {
+  DataClassification = "Internal"
+  ComplianceScope   = "SOX,PCI-DSS"
+  ReviewDate        = "2024-12-31"
+  SecurityReview    = "Approved"
+  AuditTrail        = "Enabled"
+  DataRetention     = "7years"
+  EncryptionLevel   = "AES256"
+}
+
+# Common enterprise tags
+common_tags = {
+  Environment = "prod"
+  Project     = "enterprise-erp"
+  Owner       = "security-team"
+  CostCenter  = "IT-Infrastructure"
+  Criticality = "High"
+  SLA         = "99.9"
+  Support     = "24x7"
+}
+
+# MySQL firewall rule specific tags
+mysql_firewall_rule_tags = {
+  Purpose           = "database-security"
+  SecurityLevel     = "high"
+  ReviewCycle       = "quarterly"
+  MaintenanceWindow = "sunday-2am"
+  ChangeControl     = "required"
+  MonitoringLevel   = "enhanced"
+}
+
+# Alternative: Using MySQL Single Server (comment out flexible server config above)
+# mysql_server_name               = "enterprise-mysql-server"
+# mysql_server_resource_group_name = "enterprise-database-rg"
+
+# Alternative: Using MySQL Server ID (comment out other server references)
+# mysql_server_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/enterprise-database-rg/providers/Microsoft.DBforMySQL/flexibleServers/enterprise-mysql-flexible-server"
