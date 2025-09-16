@@ -1,0 +1,240 @@
+# Advanced DNS Zone Configuration Example
+# Copy this file to terraform.tfvars and modify the values as needed
+
+# DNS Zone Configuration
+zone_name           = "advanced-example.com"
+resource_group_name = "dns-advanced-rg"
+
+# Complete A Records Configuration
+a_records = [
+  {
+    name    = "www"
+    ttl     = 3600
+    records = ["1.2.3.4", "5.6.7.8"]  # Load balanced web servers
+  },
+  {
+    name    = "api"
+    ttl     = 300
+    records = ["10.0.1.100"]  # API server with short TTL for failover
+  },
+  {
+    name    = "app"
+    ttl     = 600
+    records = ["192.168.1.10", "192.168.1.11"]  # Application servers
+  },
+  {
+    name    = "cdn"
+    ttl     = 86400
+    records = ["203.0.113.1"]  # CDN endpoint with long TTL
+  }
+]
+
+# IPv6 AAAA Records Configuration
+aaaa_records = [
+  {
+    name    = "www"
+    ttl     = 3600
+    records = ["2001:db8::1", "2001:db8::2"]
+  },
+  {
+    name    = "api"
+    ttl     = 300
+    records = ["2001:db8:100::1"]
+  }
+]
+
+# CNAME Records Configuration
+cname_records = [
+  {
+    name   = "blog"
+    ttl    = 3600
+    record = "www.advanced-example.com"
+  },
+  {
+    name   = "docs"
+    ttl    = 1800
+    record = "app.advanced-example.com"
+  },
+  {
+    name   = "ftp"
+    ttl    = 7200
+    record = "files.advanced-example.com"
+  }
+]
+
+# Mail Exchange (MX) Records Configuration
+mx_records = [
+  {
+    name = "@"  # Root domain
+    ttl  = 3600
+    records = [
+      {
+        preference = 10
+        exchange   = "mail1.advanced-example.com"
+      },
+      {
+        preference = 20
+        exchange   = "mail2.advanced-example.com"
+      },
+      {
+        preference = 30
+        exchange   = "backup-mail.partner.com"
+      }
+    ]
+  }
+]
+
+# Text (TXT) Records Configuration
+txt_records = [
+  {
+    name = "@"
+    ttl  = 3600
+    records = [
+      "v=spf1 include:_spf.google.com include:mailgun.org include:_spf.partner.com ~all",
+      "google-site-verification=ABC123DEF456GHI789JKL012",
+      "MS=ms12345678"
+    ]
+  },
+  {
+    name = "_dmarc"
+    ttl  = 3600
+    records = [
+      "v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@advanced-example.com; ruf=mailto:dmarc-failures@advanced-example.com; fo=1"
+    ]
+  },
+  {
+    name = "selector1._domainkey"
+    ttl  = 3600
+    records = [
+      "k=rsa; t=s; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC..."
+    ]
+  },
+  {
+    name = "_github-challenge-organization"
+    ttl  = 300
+    records = ["abc123def456"]
+  }
+]
+
+# Service (SRV) Records Configuration
+srv_records = [
+  {
+    name = "_sip._tcp"
+    ttl  = 3600
+    records = [
+      {
+        priority = 10
+        weight   = 5
+        port     = 5060
+        target   = "sip1.advanced-example.com"
+      },
+      {
+        priority = 10
+        weight   = 5
+        port     = 5060
+        target   = "sip2.advanced-example.com"
+      }
+    ]
+  },
+  {
+    name = "_xmpp-server._tcp"
+    ttl  = 3600
+    records = [
+      {
+        priority = 5
+        weight   = 0
+        port     = 5269
+        target   = "xmpp.advanced-example.com"
+      }
+    ]
+  },
+  {
+    name = "_caldavs._tcp"
+    ttl  = 3600
+    records = [
+      {
+        priority = 0
+        weight   = 1
+        port     = 8443
+        target   = "calendar.advanced-example.com"
+      }
+    ]
+  }
+]
+
+# Pointer (PTR) Records Configuration for Reverse DNS
+ptr_records = [
+  {
+    name    = "4.3.2.1"
+    ttl     = 3600
+    records = ["www.advanced-example.com"]
+  },
+  {
+    name    = "100.1.0.10"
+    ttl     = 300
+    records = ["api.advanced-example.com"]
+  }
+]
+
+# DNS Delegation Configuration
+enable_delegation = true
+parent_zone_name  = "example.com"
+delegation_ttl    = 172800  # 48 hours
+verify_delegation = true
+
+# Virtual Network Integration (for Private DNS)
+# virtual_network_id       = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/network-rg/providers/Microsoft.Network/virtualNetworks/main-vnet"
+# enable_auto_registration = true
+
+# Monitoring and Alerting Configuration
+enable_monitoring            = true
+# action_group_id            = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/monitoring-rg/providers/microsoft.insights/actionGroups/dns-alerts"
+query_volume_threshold       = 10000
+record_set_count_threshold   = 5000
+
+# Naming Convention (ZRR Standard)
+use_naming_convention = false  # Set to true to use: name.environment.domain_suffix
+environment          = "prod"
+domain_suffix        = "internal"
+
+# Security Features
+enable_zone_signing                   = true   # Requires Azure DNS Premium
+zone_signing_key_rollover_frequency  = 30     # Days
+
+# Advanced SOA Record Configuration
+soa_record = {
+  email         = "admin.advanced-example.com"
+  expire_time   = 2419200  # 4 weeks
+  minimum_ttl   = 300      # 5 minutes
+  refresh_time  = 3600     # 1 hour
+  retry_time    = 300      # 5 minutes
+  serial_number = 1
+  ttl           = 3600     # 1 hour
+}
+
+# Comprehensive Tagging Strategy
+common_tags = {
+  Environment = "production"
+  Project     = "enterprise-dns"
+  Owner       = "platform-team"
+  CostCenter  = "engineering"
+  Compliance  = "SOX"
+  DataClass   = "public"
+  Backup      = "enabled"
+  Monitoring  = "enhanced"
+  ManagedBy   = "Terraform"
+}
+
+dns_zone_tags = {
+  DNSType        = "public"
+  Purpose        = "production-workload"
+  Monitoring     = "enabled"
+  DNSSEC         = "enabled"
+  Delegation     = "enabled"
+  RecordTypes    = "comprehensive"
+  AlertsEnabled  = "true"
+  BackupEnabled  = "true"
+  SecurityLevel  = "high"
+  ComplianceSOX  = "required"
+  AuditEnabled   = "true"
+}

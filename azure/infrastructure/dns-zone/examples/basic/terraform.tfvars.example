@@ -1,0 +1,123 @@
+# Basic DNS Zone Configuration Example
+# Copy this file to terraform.tfvars and modify the values as needed
+
+# DNS Zone Configuration
+zone_name           = "example-basic.com"
+resource_group_name = "dns-basic-rg"
+
+# A Records Configuration
+a_records = [
+  {
+    name    = "www"
+    ttl     = 3600
+    records = ["1.2.3.4"]
+  },
+  {
+    name    = "api"
+    ttl     = 300
+    records = ["5.6.7.8"]
+  }
+]
+
+# CNAME Records Configuration
+cname_records = [
+  {
+    name   = "blog"
+    ttl    = 3600
+    record = "www.example-basic.com"
+  }
+]
+
+# Tagging
+common_tags = {
+  Environment = "development"
+  Project     = "my-project"
+  Owner       = "my-team"
+  CostCenter  = "engineering"
+  ManagedBy   = "Terraform"
+}
+
+dns_zone_tags = {
+  DNSType    = "public"
+  Purpose    = "basic-example"
+  Monitoring = "disabled"
+  Records    = "minimal"
+}
+
+# Additional configurations available but not used in basic example:
+
+# AAAA Records (IPv6)
+# aaaa_records = [
+#   {
+#     name    = "www"
+#     ttl     = 3600
+#     records = ["2001:db8::1"]
+#   }
+# ]
+
+# MX Records (Mail Exchange)
+# mx_records = [
+#   {
+#     name = "@"
+#     ttl  = 3600
+#     records = [
+#       {
+#         preference = 10
+#         exchange   = "mail.example.com"
+#       }
+#     ]
+#   }
+# ]
+
+# TXT Records
+# txt_records = [
+#   {
+#     name    = "@"
+#     ttl     = 3600
+#     records = ["v=spf1 include:_spf.google.com ~all"]
+#   }
+# ]
+
+# SRV Records
+# srv_records = [
+#   {
+#     name = "_sip._tcp"
+#     ttl  = 3600
+#     records = [
+#       {
+#         priority = 10
+#         weight   = 5
+#         port     = 5060
+#         target   = "sip.example.com"
+#       }
+#     ]
+#   }
+# ]
+
+# PTR Records (Reverse DNS)
+# ptr_records = [
+#   {
+#     name    = "1"
+#     ttl     = 3600
+#     records = ["www.example.com"]
+#   }
+# ]
+
+# Delegation Configuration
+# enable_delegation = false
+# parent_zone_name  = "example.com"
+
+# Virtual Network Integration
+# virtual_network_id       = "/subscriptions/.../virtualNetworks/main-vnet"
+# enable_auto_registration = false
+
+# Monitoring and Alerting
+# enable_monitoring         = false
+# action_group_id          = "/subscriptions/.../actionGroups/dns-alerts"
+# query_volume_threshold   = 1000
+# record_set_count_threshold = 10000
+
+# Naming Convention
+# use_naming_convention = false
+# environment          = "dev"
+# domain_suffix        = "local"

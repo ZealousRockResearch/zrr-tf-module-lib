@@ -1,0 +1,213 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Infrastructure - DNS Zone
+
+  This module manages Azure DNS Zones with comprehensive enterprise features including advanced record management, delegation support, DNSSEC capabilities, virtual network integration, and monitoring.
+
+  ## Features
+
+  - **Complete DNS Record Support**: A, AAAA, CNAME, MX, TXT, SRV, PTR records with validation
+  - **DNS Delegation**: Automated delegation setup with parent zone NS record creation
+  - **Virtual Network Integration**: Private DNS zone linking with auto-registration
+  - **Enterprise Monitoring**: Query volume and record count alerting with Azure Monitor
+  - **DNSSEC Support**: Zone signing capabilities for enhanced security
+  - **Flexible Naming**: ZRR naming convention support with environment-based naming
+  - **Record Management**: Bulk record creation with comprehensive validation
+  - **Parent Zone Integration**: Seamless delegation with parent zone verification
+  - **Auto-Registration**: VM record auto-registration in private zones
+  - **Resource Tagging**: Comprehensive tagging strategy for resource management
+  - **SOA Configuration**: Custom SOA record configuration for zone authority
+  - **Multi-Environment**: Environment-specific domain suffix support
+
+  ## Usage
+
+  ### Basic DNS Zone
+
+  ```hcl
+  module "dns_zone" {
+    source = "../../azure/infrastructure/dns-zone"
+
+    name                = "example.com"
+    resource_group_name = "dns-rg"
+
+    common_tags = {
+      Environment = "production"
+      Project     = "web-platform"
+    }
+  }
+  ```
+
+  ### Advanced DNS Zone with Records and Delegation
+
+  ```hcl
+  module "dns_zone_advanced" {
+    source = "../../azure/infrastructure/dns-zone"
+
+    name                = "subdomain.example.com"
+    resource_group_name = "dns-rg"
+
+    # DNS Records
+    a_records = [
+      {
+        name    = "www"
+        ttl     = 3600
+        records = ["1.2.3.4", "5.6.7.8"]
+      },
+      {
+        name    = "api"
+        ttl     = 300
+        records = ["10.0.1.100"]
+      }
+    ]
+
+    cname_records = [
+      {
+        name   = "blog"
+        ttl    = 3600
+        record = "www.example.com"
+      }
+    ]
+
+    mx_records = [
+      {
+        name = "@"
+        ttl  = 3600
+        records = [
+          {
+            preference = 10
+            exchange   = "mail.example.com"
+          }
+        ]
+      }
+    ]
+
+    # Delegation
+    enable_delegation = true
+    parent_zone_name  = "example.com"
+
+    # Monitoring
+    enable_monitoring         = true
+    action_group_id          = "/subscriptions/.../actionGroups/dns-alerts"
+    query_volume_threshold   = 10000
+
+    common_tags = {
+      Environment = "production"
+      Project     = "web-platform"
+    }
+  }
+  ```
+
+  ### Private DNS Zone with VNet Integration
+
+  ```hcl
+  module "private_dns_zone" {
+    source = "../../azure/infrastructure/dns-zone"
+
+    name                = "private.local"
+    resource_group_name = "dns-rg"
+
+    # VNet Integration
+    virtual_network_id      = "/subscriptions/.../virtualNetworks/main-vnet"
+    enable_auto_registration = true
+
+    # Internal records
+    a_records = [
+      {
+        name    = "db"
+        ttl     = 300
+        records = ["10.0.2.100"]
+      }
+    ]
+
+    common_tags = {
+      Environment = "production"
+      Project     = "internal-platform"
+    }
+  }
+  ```
+
+  ## Record Types Supported
+
+  | Record Type | Description | Configuration |
+  |-------------|-------------|---------------|
+  | A | IPv4 address records | Multiple IPs supported per record |
+  | AAAA | IPv6 address records | Multiple IPv6 addresses supported |
+  | CNAME | Canonical name records | Single target per record |
+  | MX | Mail exchange records | Priority and exchange configuration |
+  | TXT | Text records | Multiple text values supported |
+  | SRV | Service records | Priority, weight, port, target configuration |
+  | PTR | Pointer records | Reverse DNS lookup support |
+
+  ## Delegation Configuration
+
+  DNS delegation is automatically configured when `enable_delegation = true` and `parent_zone_name` is specified. The module will:
+
+  1. Create the child DNS zone
+  2. Retrieve the name servers from the child zone
+  3. Create NS records in the parent zone pointing to the child zone name servers
+  4. Verify parent zone exists (if `verify_delegation = true`)
+
+  ## Monitoring and Alerting
+
+  When monitoring is enabled, the module creates:
+
+  - **Query Volume Alert**: Triggers when DNS queries exceed the specified threshold
+  - **Record Count Alert**: Triggers when record set count exceeds the limit
+  - **Action Group Integration**: Sends alerts to configured Azure Monitor action groups
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
