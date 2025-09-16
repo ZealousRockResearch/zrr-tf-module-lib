@@ -1,0 +1,81 @@
+# Basic DNS Record Example Configuration
+
+# DNS Record Configuration
+record_name = "www"
+record_type = "A"
+records     = ["203.0.113.1", "203.0.113.2"]
+ttl         = 3600
+
+# DNS Zone Configuration
+dns_zone_name               = "example.com"
+dns_zone_resource_group_name = "my-dns-rg"
+
+# Optional: Private DNS Zone (comment out dns_zone_* above if using)
+# private_dns_zone_name               = "internal.company.local"
+# private_dns_zone_resource_group_name = "private-dns-rg"
+
+# Optional: DNS Zone ID (comment out other zone references if using)
+# dns_zone_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/dns-rg/providers/Microsoft.Network/dnsZones/example.com"
+
+# Environment Configuration
+environment = "dev"
+criticality = "low"
+
+# Common Tags
+common_tags = {
+  Environment = "dev"
+  Project     = "my-project"
+  Owner       = "dns-team"
+  CostCenter  = "engineering"
+}
+
+# Examples for different record types:
+
+# CNAME Record Example
+# record_name = "blog"
+# record_type = "CNAME"
+# records     = ["blog.example.org."]
+
+# TXT Record Example
+# record_name = "@"
+# record_type = "TXT"
+# records     = ["v=spf1 include:_spf.google.com ~all", "google-site-verification=abc123"]
+
+# AAAA Record Example (IPv6)
+# record_name = "ipv6"
+# record_type = "AAAA"
+# records     = ["2001:db8::1", "2001:db8::2"]
+
+# Optional: Additional configuration
+# dns_record_tags = {
+#   Purpose = "website"
+#   Backup  = "daily"
+# }
+
+# Optional: Enterprise features (commented out for basic example)
+# enable_monitoring = false
+# health_check_enabled = false
+# alert_on_changes = false
+
+# compliance_requirements = []
+
+# security_config = {
+#   access_restrictions   = []
+#   change_protection    = false
+#   audit_logging       = true
+#   encryption_in_transit = true
+# }
+
+# record_lifecycle = {
+#   auto_delete_after_days    = null
+#   backup_enabled           = false
+#   change_approval_required = false
+#   scheduled_updates        = false
+# }
+
+# validation_rules = {
+#   strict_format_checking = true
+#   allow_wildcard_records = false
+#   max_record_count      = 100
+#   forbidden_values      = []
+# }
