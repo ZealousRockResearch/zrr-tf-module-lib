@@ -753,6 +753,77 @@
         "tagging",
         "enterprise-standards"
       ]
+    },
+    {
+      "name": "mysql-firewall-rule",
+      "cloud": "azure",
+      "layer": "security",
+      "path": "azure/security/mysql-firewall-rule",
+      "version": "1.0.0",
+      "description": "Manages Azure MySQL Firewall Rules with comprehensive security features, IP range management, and enterprise governance capabilities following ZRR standards",
+      "features": [
+        "Dual Server Support compatible with both MySQL Single Server and MySQL Flexible Server deployments",
+        "Flexible Server Reference supporting server identification via ID, name-based lookup, or direct flexible server reference",
+        "Comprehensive IP Management with support for individual IPs, IP ranges, CIDR blocks, and predefined access patterns",
+        "Azure Services Integration with optional access for Azure services using the special 0.0.0.0-0.0.0.0 rule",
+        "Office and Developer Access with predefined variables for common access scenarios including office IPs and developer workstations",
+        "Application Network Access with support for application subnet CIDR blocks and comprehensive validation",
+        "Security Validation with comprehensive IP address validation, range checking, and environment-specific controls",
+        "Enterprise Governance including compliance tags, justification requirements, and monitoring capabilities",
+        "Environment-Aware Configuration with environment-specific validation and rule naming conventions",
+        "Monitoring Ready with built-in support for monitoring and alerting on firewall rule changes",
+        "Rule Limit Management with configurable limits to prevent Azure service limits from being exceeded",
+        "Comprehensive Outputs providing detailed information about created rules, security configuration, and compliance status",
+        "Advanced Access Patterns supporting office networks, developer workstations, application tiers, and partner networks"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0",
+        "null": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-14",
+      "updated": "2025-09-14",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "mysql-firewall-rule",
+        "mysql-firewall",
+        "firewall-rule",
+        "security",
+        "enterprise",
+        "mysql",
+        "database-security",
+        "network-security",
+        "ip-management",
+        "access-control",
+        "azure-services",
+        "office-networks",
+        "developer-access",
+        "application-subnets",
+        "cidr-blocks",
+        "ip-validation",
+        "range-checking",
+        "environment-aware",
+        "monitoring",
+        "alerting",
+        "compliance",
+        "governance",
+        "justification",
+        "rule-limits",
+        "single-server",
+        "flexible-server",
+        "server-reference",
+        "enterprise-governance",
+        "security-validation",
+        "partner-networks",
+        "data-center-access",
+        "backup-services",
+        "comprehensive-outputs"
+      ]
     }
   ]
 }
