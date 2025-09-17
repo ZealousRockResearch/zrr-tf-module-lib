@@ -1,0 +1,188 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Infrastructure - DNS Record
+
+  This module manages Azure DNS Records with comprehensive record type support, validation, monitoring, and enterprise governance capabilities following ZRR standards.
+
+  ## Features
+
+  - **Comprehensive Record Type Support**: Full support for A, AAAA, CNAME, MX, NS, PTR, SOA, SRV, TXT, and CAA records
+  - **Dual Zone Support**: Compatible with both public DNS zones and private DNS zones
+  - **Flexible Zone Reference**: Supports zone identification via ID, name-based lookup, or direct zone reference
+  - **Advanced Record Validation**: Comprehensive validation for all record types with format checking and constraints
+  - **TTL Management**: Configurable Time-to-Live with default values and validation
+  - **MX and SRV Record Support**: Specialized support for complex record types with priority, weight, and preference
+  - **Enterprise Governance**: Compliance requirements, criticality levels, and audit logging
+  - **Security Controls**: Access restrictions, change protection, and encryption in transit
+  - **Lifecycle Management**: Automated cleanup, backup, and scheduled updates
+  - **Monitoring Integration**: Health checks, change alerts, and comprehensive monitoring
+  - **Validation Rules**: Strict format checking, wildcard support, and forbidden value constraints
+  - **Environment Awareness**: Environment-specific validation and governance controls
+  - **Comprehensive Outputs**: Detailed information about records, compliance status, and management capabilities
+
+  ## Usage
+
+  ### Basic Example - A Record
+
+  ```hcl
+  module "dns_a_record" {
+    source = "../../azure/infrastructure/dns-record"
+
+    name        = "www"
+    record_type = "A"
+    records     = ["203.0.113.1", "203.0.113.2"]
+    ttl         = 3600
+
+    dns_zone_name               = "example.com"
+    dns_zone_resource_group_name = "dns-rg"
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "website"
+      Owner       = "platform-team"
+    }
+  }
+  ```
+
+  ### Advanced Example - MX Record with Enterprise Features
+
+  ```hcl
+  module "dns_mx_record" {
+    source = "../../azure/infrastructure/dns-record"
+
+    name        = "@"
+    record_type = "MX"
+    ttl         = 3600
+
+    dns_zone_name               = "enterprise.com"
+    dns_zone_resource_group_name = "enterprise-dns-rg"
+
+    mx_records = [
+      {
+        preference = 10
+        exchange   = "mail1.enterprise.com."
+      },
+      {
+        preference = 20
+        exchange   = "mail2.enterprise.com."
+      }
+    ]
+
+    # Enterprise features
+    environment = "prod"
+    criticality = "high"
+    compliance_requirements = ["SOX", "SOC2"]
+
+    enable_monitoring    = true
+    health_check_enabled = true
+    alert_on_changes    = true
+
+    security_config = {
+      access_restrictions   = ["admin-group", "dns-team"]
+      change_protection    = true
+      audit_logging       = true
+      encryption_in_transit = true
+    }
+
+    record_lifecycle = {
+      backup_enabled           = true
+      change_approval_required = true
+      scheduled_updates       = false
+    }
+
+    validation_rules = {
+      strict_format_checking = true
+      allow_wildcard_records = false
+      max_record_count      = 10
+      forbidden_values      = ["blacklisted.domain.com"]
+    }
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "enterprise-mail"
+      Owner       = "infrastructure-team"
+      CostCenter  = "IT"
+    }
+  }
+  ```
+
+  ### Private DNS Zone Example
+
+  ```hcl
+  module "private_dns_record" {
+    source = "../../azure/infrastructure/dns-record"
+
+    name        = "internal-api"
+    record_type = "A"
+    records     = ["10.0.1.100"]
+
+    private_dns_zone_name               = "internal.company.local"
+    private_dns_zone_resource_group_name = "private-dns-rg"
+
+    environment = "prod"
+    criticality = "medium"
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "internal-services"
+      Owner       = "platform-team"
+    }
+  }
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

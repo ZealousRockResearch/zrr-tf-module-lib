@@ -1,0 +1,160 @@
+# Advanced DNS Record Example Configuration
+# This example demonstrates enterprise-grade DNS record management with
+# comprehensive monitoring, compliance, and security features
+
+# DNS Record Configuration
+record_name = "api"
+record_type = "A"
+records     = ["203.0.113.10", "203.0.113.11", "203.0.113.12"]
+ttl         = 300  # Lower TTL for production API endpoints
+
+# Private DNS Zone Configuration (recommended for internal services)
+private_dns_zone_name               = "internal.company.local"
+private_dns_zone_resource_group_name = "private-dns-rg"
+
+# Public DNS Zone Configuration (comment out if using private)
+# dns_zone_name               = "api.company.com"
+# dns_zone_resource_group_name = "public-dns-rg"
+
+# Advanced Record Types Examples
+
+# MX Records Example (for mail.company.com)
+# record_name = "mail"
+# record_type = "MX"
+# records     = []  # Not used for MX records
+# mx_records = [
+#   {
+#     preference = 10
+#     exchange   = "mail1.company.com."
+#   },
+#   {
+#     preference = 20
+#     exchange   = "mail2.company.com."
+#   }
+# ]
+
+# SRV Records Example (for service discovery)
+# record_name = "_sip._tcp"
+# record_type = "SRV"
+# records     = []  # Not used for SRV records
+# srv_records = [
+#   {
+#     priority = 10
+#     weight   = 60
+#     port     = 5060
+#     target   = "sip1.company.com."
+#   },
+#   {
+#     priority = 10
+#     weight   = 40
+#     port     = 5060
+#     target   = "sip2.company.com."
+#   }
+# ]
+
+# Environment Configuration
+environment = "prod"
+criticality = "high"
+
+# Enterprise Monitoring & Alerting
+enable_monitoring = true
+health_check_enabled = true
+alert_on_changes = true
+
+# Compliance Requirements
+compliance_requirements = [
+  "SOX",
+  "PCI-DSS",
+  "ISO27001",
+  "GDPR",
+  "HIPAA"
+]
+
+# Security Configuration
+security_config = {
+  access_restrictions   = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+  change_protection    = true
+  audit_logging       = true
+  encryption_in_transit = true
+}
+
+# Record Lifecycle Management
+record_lifecycle = {
+  auto_delete_after_days    = null  # Never auto-delete production records
+  backup_enabled           = true
+  change_approval_required = true
+  scheduled_updates        = false
+}
+
+# Validation Rules
+validation_rules = {
+  strict_format_checking = true
+  allow_wildcard_records = false
+  max_record_count      = 10
+  forbidden_values      = ["127.0.0.1", "localhost", "0.0.0.0"]
+}
+
+# Enterprise Tags
+common_tags = {
+  Environment     = "prod"
+  Project         = "enterprise-infrastructure"
+  Owner           = "platform-team"
+  CostCenter      = "engineering"
+  BusinessUnit    = "technology"
+  Application     = "core-services"
+  DataClass       = "internal"
+  Compliance      = "required"
+  BackupSchedule  = "daily"
+  MonitoringTier  = "platinum"
+  SLA             = "99.99"
+  ContactEmail    = "platform-team@company.com"
+  ChangeWindow    = "weekend-maintenance"
+}
+
+# DNS Record Specific Tags
+dns_record_tags = {
+  Purpose         = "api-endpoint"
+  ServiceTier     = "critical"
+  Monitoring      = "enabled"
+  Backup          = "daily"
+  LoadBalanced    = "true"
+  HealthCheck     = "enabled"
+  TrafficPattern  = "high-volume"
+  GeoDNS          = "enabled"
+  CDN             = "cloudflare"
+  SecurityScan    = "weekly"
+  PerformanceTest = "daily"
+  Failover        = "automatic"
+}
+
+# Alternative configurations for different scenarios:
+
+# High-availability web service
+# record_name = "web-ha"
+# record_type = "A"
+# records     = ["203.0.113.20", "203.0.113.21", "203.0.113.22", "203.0.113.23"]
+# ttl         = 60  # Very low TTL for fast failover
+
+# CDN CNAME record
+# record_name = "cdn"
+# record_type = "CNAME"
+# records     = ["d1234567890.cloudfront.net."]
+# ttl         = 86400  # Higher TTL for CDN endpoints
+
+# TXT record for domain verification
+# record_name = "_acme-challenge"
+# record_type = "TXT"
+# records     = ["abc123def456ghi789"]
+# ttl         = 60  # Low TTL for quick verification
+
+# Load balancer endpoint
+# record_name = "lb"
+# record_type = "A"
+# records     = ["203.0.113.100"]
+# ttl         = 300
+# dns_record_tags = {
+#   Purpose = "load-balancer"
+#   ServiceTier = "critical"
+#   HealthCheck = "tcp-443"
+#   FailoverMode = "active-passive"
+# }
