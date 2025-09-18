@@ -1,0 +1,357 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Application - Container Instance
+
+  This module manages Azure Container Instances with comprehensive enterprise features including multi-container support, advanced networking, persistent storage, monitoring, and security configurations.
+
+  ## Features
+
+  - **Multi-Container Support**: Deploy multiple containers in a single container group with shared networking and storage
+  - **Advanced Networking**: Support for public, private, and hybrid network configurations with VNet integration
+  - **Persistent Storage**: Azure Files, Git repositories, secrets, and empty directory volume mounting capabilities
+  - **Container Registry Integration**: Seamless integration with Azure Container Registry and external registries
+  - **Health Monitoring**: Configurable liveness and readiness probes for container health management
+  - **Enterprise Monitoring**: Log Analytics integration with CPU and memory alerting through Azure Monitor
+  - **Identity Management**: Support for both system-assigned and user-assigned managed identities
+  - **DNS Configuration**: Custom DNS settings and automatic DNS name generation for public endpoints
+  - **Security Controls**: Secure environment variables, private networking, and access control mechanisms
+  - **GPU Support**: NVIDIA GPU acceleration for machine learning and compute-intensive workloads
+  - **Flexible Deployment**: Support for Linux and Windows containers with configurable restart policies
+  - **Resource Management**: Comprehensive resource allocation and monitoring with cost optimization features
+
+  ## Usage
+
+  ### Basic Container Deployment
+
+  ```hcl
+  module "container_instance" {
+    source = "../../azure/application/container-instance"
+
+    name                = "my-app"
+    location            = "East US"
+    resource_group_name = "my-rg"
+
+    containers = [
+      {
+        name   = "web-app"
+        image  = "nginx:latest"
+        cpu    = 1
+        memory = 1.5
+        ports = [
+          {
+            port     = 80
+            protocol = "TCP"
+          }
+        ]
+      }
+    ]
+
+    ip_address_type = "Public"
+    exposed_ports = [
+      {
+        port     = 80
+        protocol = "TCP"
+      }
+    ]
+
+    common_tags = {
+      Environment = "production"
+      Project     = "web-platform"
+    }
+  }
+  ```
+
+  ### Advanced Multi-Container Deployment
+
+  ```hcl
+  module "container_instance_advanced" {
+    source = "../../azure/application/container-instance"
+
+    name                = "microservices-app"
+    location            = "East US"
+    resource_group_name = "microservices-rg"
+
+    # Multi-container configuration
+    containers = [
+      {
+        name   = "frontend"
+        image  = "myregistry.azurecr.io/frontend:v1.0"
+        cpu    = 1
+        memory = 2
+        ports = [
+          {
+            port     = 3000
+            protocol = "TCP"
+          }
+        ]
+        environment_variables = {
+          NODE_ENV = "production"
+          API_URL  = "http://localhost:8080"
+        }
+        liveness_probe = {
+          http_get = [
+            {
+              path = "/health"
+              port = 3000
+            }
+          ]
+          initial_delay_seconds = 30
+          period_seconds       = 10
+        }
+      },
+      {
+        name   = "backend"
+        image  = "myregistry.azurecr.io/backend:v1.0"
+        cpu    = 0.5
+        memory = 1
+        ports = [
+          {
+            port     = 8080
+            protocol = "TCP"
+          }
+        ]
+        secure_environment_variables = {
+          DATABASE_PASSWORD = "secure-password"
+          API_KEY          = "secret-api-key"
+        }
+        volume_mounts = [
+          {
+            name       = "data-volume"
+            mount_path = "/app/data"
+            read_only  = false
+          }
+        ]
+      }
+    ]
+
+    # Private networking
+    ip_address_type = "Private"
+    subnet_id       = "/subscriptions/.../subnets/container-subnet"
+
+    # Container registry
+    container_registry_name = "myregistry"
+
+    # Volumes
+    volumes = [
+      {
+        name                 = "data-volume"
+        storage_account_name = "mystorageaccount"
+        storage_account_key  = "storage-key"
+        share_name          = "data-share"
+      }
+    ]
+
+    # Monitoring
+    enable_monitoring = true
+    action_group_id   = "/subscriptions/.../actionGroups/container-alerts"
+
+    # Managed identity
+    managed_identity = {
+      type = "SystemAssigned"
+    }
+
+    common_tags = {
+      Environment = "production"
+      Project     = "microservices"
+    }
+  }
+  ```
+
+  ### GPU-Enabled Container
+
+  ```hcl
+  module "ml_container" {
+    source = "../../azure/application/container-instance"
+
+    name                = "ml-training"
+    location            = "East US"
+    resource_group_name = "ml-rg"
+
+    containers = [
+      {
+        name   = "tensorflow"
+        image  = "tensorflow/tensorflow:latest-gpu"
+        cpu    = 2
+        memory = 8
+        gpu = {
+          count = 1
+          sku   = "K80"
+        }
+        environment_variables = {
+          CUDA_VISIBLE_DEVICES = "0"
+        }
+      }
+    ]
+
+    common_tags = {
+      Environment = "development"
+      Project     = "machine-learning"
+    }
+  }
+  ```
+
+  ## Container Configuration
+
+  Each container in the `containers` list supports the following configuration:
+
+  | Setting | Description | Required |
+  |---------|-------------|----------|
+  | `name` | Container name | Yes |
+  | `image` | Container image | Yes |
+  | `cpu` | CPU allocation (0.1-4 cores) | Yes |
+  | `memory` | Memory allocation (0.1-16 GB) | Yes |
+  | `ports` | Exposed ports configuration | No |
+  | `environment_variables` | Environment variables | No |
+  | `secure_environment_variables` | Secure environment variables | No |
+  | `commands` | Override container commands | No |
+  | `volume_mounts` | Volume mount points | No |
+  | `liveness_probe` | Health check configuration | No |
+  | `readiness_probe` | Readiness check configuration | No |
+  | `gpu` | GPU resource allocation | No |
+
+  ## Volume Types
+
+  The module supports multiple volume types:
+
+  ### Azure Files Share
+  ```hcl
+  volumes = [
+    {
+      name                 = "shared-storage"
+      storage_account_name = "mystorageaccount"
+      storage_account_key  = "storage-key"
+      share_name          = "container-share"
+    }
+  ]
+  ```
+
+  ### Git Repository
+  ```hcl
+  volumes = [
+    {
+      name = "source-code"
+      git_repo = {
+        url       = "https://github.com/user/repo.git"
+        directory = "app"
+        revision  = "main"
+      }
+    }
+  ]
+  ```
+
+  ### Secret Volume
+  ```hcl
+  volumes = [
+    {
+      name = "app-secrets"
+      secret = {
+        "config.json" = base64encode(jsonencode({
+          database_url = "connection-string"
+        }))
+      }
+    }
+  ]
+  ```
+
+  ## Networking Options
+
+  ### Public IP with DNS
+  ```hcl
+  ip_address_type = "Public"
+  dns_name_label  = "my-unique-app-name"
+  exposed_ports = [
+    {
+      port     = 80
+      protocol = "TCP"
+    }
+  ]
+  ```
+
+  ### Private VNet Integration
+  ```hcl
+  ip_address_type = "Private"
+  subnet_id       = "/subscriptions/.../subnets/container-subnet"
+  ```
+
+  ### Custom DNS Configuration
+  ```hcl
+  dns_config = {
+    nameservers    = ["8.8.8.8", "8.8.4.4"]
+    search_domains = ["example.com"]
+    options        = ["ndots:2", "edns0"]
+  }
+  ```
+
+  ## Monitoring and Alerting
+
+  When monitoring is enabled, the module creates:
+
+  - **Log Analytics Workspace**: Centralized logging for all containers
+  - **CPU Usage Alerts**: Configurable threshold-based CPU alerting
+  - **Memory Usage Alerts**: Memory consumption monitoring
+  - **Container Logs**: Structured logging with Azure Monitor integration
+
+  ## Security Features
+
+  - **Managed Identity**: Support for Azure AD authentication
+  - **Private Networking**: VNet integration for secure deployments
+  - **Secure Variables**: Encrypted environment variable storage
+  - **Registry Authentication**: Secure container image access
+  - **Network Isolation**: Subnet-level network segmentation
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

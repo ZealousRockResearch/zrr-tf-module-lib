@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2025-09-14",
+  "updated": "2025-09-16",
   "modules": [
     {
       "name": "resource-group",
@@ -983,6 +983,86 @@
         "network-security",
         "encryption",
         "tagging"
+      ]
+    },
+    {
+      "name": "container-instance",
+      "cloud": "azure",
+      "layer": "application",
+      "path": "azure/application/container-instance",
+      "version": "1.0.0",
+      "description": "Manages Azure Container Instance with comprehensive enterprise features including multi-container support, advanced networking, monitoring, and security capabilities following ZRR standards",
+      "features": [
+        "Multi-Container Support with up to 60 containers per group with flexible resource allocation",
+        "Advanced Networking with public, private, and VNet integration for secure deployments",
+        "Container Registry Integration with Azure Container Registry and external registry authentication",
+        "Health Monitoring with liveness and readiness probes for application health verification",
+        "Enterprise Monitoring with Log Analytics integration and configurable metric alerts",
+        "Managed Identity Support with system-assigned and user-assigned identity management",
+        "DNS Configuration with custom DNS settings and automatic FQDN assignment",
+        "Security Features including secure environment variables and network isolation",
+        "Restart Policies with configurable restart behavior for different deployment scenarios",
+        "OS Support for both Linux and Windows containers with appropriate configurations",
+        "Comprehensive Tagging with automatic application of common and resource-specific tags",
+        "Variable Validation with extensive input validation ensuring Azure naming conventions",
+        "Test Coverage with comprehensive unit and integration tests using Terratest",
+        "Enterprise Governance with compliance features and comprehensive monitoring capabilities"
+      ],
+      "examples": [
+        "basic",
+        "advanced"
+      ],
+      "required_providers": {
+        "azurerm": "~> 3.0",
+        "random": "~> 3.0"
+      },
+      "terraform_version": ">= 1.0",
+      "created": "2025-09-16",
+      "updated": "2025-09-16",
+      "author": "ZRR Platform Team",
+      "tags": [
+        "azure",
+        "container-instance",
+        "container",
+        "aci",
+        "application",
+        "enterprise",
+        "multi-container",
+        "container-group",
+        "networking",
+        "public-ip",
+        "private-ip",
+        "vnet-integration",
+        "container-registry",
+        "acr",
+        "health-monitoring",
+        "liveness-probe",
+        "readiness-probe",
+        "monitoring",
+        "log-analytics",
+        "metric-alerts",
+        "managed-identity",
+        "dns-configuration",
+        "security",
+        "environment-variables",
+        "secure-variables",
+        "restart-policies",
+        "linux-containers",
+        "windows-containers",
+        "resource-allocation",
+        "cpu-limits",
+        "memory-limits",
+        "port-configuration",
+        "network-isolation",
+        "compliance",
+        "governance",
+        "validation",
+        "tagging",
+        "terratest",
+        "unit-tests",
+        "integration-tests",
+        "enterprise-features",
+        "application-layer"
       ]
     }
   ]

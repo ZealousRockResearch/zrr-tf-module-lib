@@ -1,0 +1,319 @@
+# Advanced Container Instance Configuration Example
+# Copy this file to terraform.tfvars and modify the values as needed
+
+# Container group configuration
+container_name      = "advanced-microservices-app"
+location            = "East US"
+resource_group_name = "container-advanced-rg"
+
+# Multi-container configuration with frontend, backend, and sidecar
+containers = [
+  {
+    name   = "frontend"
+    image  = "myregistry.azurecr.io/frontend:v2.1.0"
+    cpu    = 1
+    memory = 2
+    ports = [
+      {
+        port     = 3000
+        protocol = "TCP"
+      }
+    ]
+    environment_variables = {
+      NODE_ENV = "production"
+      API_URL  = "http://localhost:8080"
+      PORT     = "3000"
+      LOG_LEVEL = "info"
+    }
+    liveness_probe = {
+      http_get = [
+        {
+          path = "/health"
+          port = 3000
+        }
+      ]
+      initial_delay_seconds = 30
+      period_seconds       = 10
+      failure_threshold    = 3
+    }
+    readiness_probe = {
+      http_get = [
+        {
+          path = "/ready"
+          port = 3000
+        }
+      ]
+      initial_delay_seconds = 5
+      period_seconds       = 5
+      failure_threshold    = 3
+    }
+    volume_mounts = [
+      {
+        name       = "shared-config"
+        mount_path = "/app/config"
+        read_only  = true
+      }
+    ]
+  },
+  {
+    name   = "backend"
+    image  = "myregistry.azurecr.io/backend:v1.8.2"
+    cpu    = 0.5
+    memory = 1
+    ports = [
+      {
+        port     = 8080
+        protocol = "TCP"
+      }
+    ]
+    environment_variables = {
+      NODE_ENV = "production"
+      PORT     = "8080"
+      DB_HOST  = "db.internal.company.com"
+      REDIS_HOST = "redis.internal.company.com"
+    }
+    secure_environment_variables = {
+      DATABASE_PASSWORD = "super-secure-db-password"
+      API_SECRET_KEY   = "ultra-secret-api-key"
+      JWT_SECRET       = "jwt-signing-secret-key"
+      REDIS_PASSWORD   = "redis-auth-password"
+    }
+    commands = ["node", "server.js"]
+    volume_mounts = [
+      {
+        name       = "app-data"
+        mount_path = "/app/data"
+        read_only  = false
+      },
+      {
+        name       = "shared-config"
+        mount_path = "/app/config"
+        read_only  = true
+      },
+      {
+        name       = "app-secrets"
+        mount_path = "/app/secrets"
+        read_only  = true
+      }
+    ]
+    liveness_probe = {
+      http_get = [
+        {
+          path = "/api/health"
+          port = 8080
+        }
+      ]
+      initial_delay_seconds = 45
+      period_seconds       = 15
+      failure_threshold    = 3
+    }
+  },
+  {
+    name   = "sidecar-logger"
+    image  = "fluent/fluent-bit:2.0"
+    cpu    = 0.1
+    memory = 0.25
+    environment_variables = {
+      FLUENT_CONF = "fluent-bit.conf"
+      LOG_LEVEL   = "info"
+      OUTPUT_HOST = "logs.company.com"
+    }
+    volume_mounts = [
+      {
+        name       = "log-config"
+        mount_path = "/fluent-bit/etc"
+        read_only  = true
+      },
+      {
+        name       = "app-logs"
+        mount_path = "/var/log/app"
+        read_only  = true
+      }
+    ]
+  }
+]
+
+# Advanced network configuration
+ip_address_type = "Private"
+# subnet_id     = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/network-rg/providers/Microsoft.Network/virtualNetworks/main-vnet/subnets/container-subnet"
+
+exposed_ports = [
+  {
+    port     = 3000
+    protocol = "TCP"
+  },
+  {
+    port     = 8080
+    protocol = "TCP"
+  }
+]
+
+# Custom DNS configuration
+dns_config = {
+  nameservers    = ["10.0.0.4", "10.0.0.5"]
+  search_domains = ["internal.company.com", "services.company.com"]
+  options        = ["ndots:2", "edns0", "timeout:5"]
+}
+
+# OS and runtime configuration
+os_type        = "Linux"
+restart_policy = "Always"
+
+# Container registry configuration
+container_registry_name           = "mycompanyregistry"
+container_registry_resource_group = "container-registry-rg"
+# container_registry_username     = "registry-service-principal"
+# container_registry_password     = "service-principal-password"
+
+# Additional registries (Docker Hub, private registries)
+additional_image_registries = [
+  {
+    server   = "docker.io"
+    username = "dockerhub-username"
+    password = "dockerhub-access-token"
+  },
+  {
+    server   = "private-registry.company.com"
+    username = "company-registry-user"
+    password = "company-registry-token"
+  }
+]
+
+# Advanced volume configuration
+volumes = [
+  # Persistent Azure Files storage
+  {
+    name                 = "app-data"
+    storage_account_name = "mycompanystorage"
+    storage_account_key  = "storage-account-access-key"
+    share_name          = "microservices-data"
+  },
+  # Shared configuration (empty directory)
+  {
+    name      = "shared-config"
+    empty_dir = true
+  },
+  # Application source code from Git
+  {
+    name = "app-source"
+    git_repo = {
+      url       = "https://github.com/mycompany/microservices-config.git"
+      directory = "production-config"
+      revision  = "v2.1.0"
+    }
+  },
+  # Application secrets
+  {
+    name = "app-secrets"
+    secret = {
+      "database.json" = "base64-encoded-database-config"
+      "api-keys.json" = "base64-encoded-api-keys"
+      "certificates.pem" = "base64-encoded-ssl-certificates"
+    }
+  },
+  # Logging configuration
+  {
+    name = "log-config"
+    secret = {
+      "fluent-bit.conf" = "base64-encoded-fluent-bit-config"
+      "parsers.conf"   = "base64-encoded-log-parsers"
+    }
+  },
+  # Application logs (shared between containers)
+  {
+    name      = "app-logs"
+    empty_dir = true
+  }
+]
+
+# Managed identity configuration
+managed_identity = {
+  type = "SystemAssigned"
+  # For user-assigned identity:
+  # type         = "UserAssigned"
+  # identity_ids = ["/subscriptions/.../userAssignedIdentities/container-identity"]
+}
+
+# Comprehensive monitoring and alerting
+enable_monitoring = true
+log_analytics_sku = "PerGB2018"
+log_retention_days = 90
+
+# action_group_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/monitoring-rg/providers/microsoft.insights/actionGroups/container-alerts"
+
+cpu_alert_threshold    = 80
+memory_alert_threshold = 85
+
+# ZRR naming convention
+use_naming_convention = true
+environment          = "prod"
+location_short       = "eus"
+
+# Comprehensive tagging strategy
+common_tags = {
+  Environment = "production"
+  Project     = "microservices-platform"
+  Owner       = "platform-team"
+  CostCenter  = "engineering"
+  Compliance  = "SOX"
+  DataClass   = "internal"
+  Backup      = "enabled"
+  Monitoring  = "enhanced"
+  ManagedBy   = "Terraform"
+}
+
+container_instance_tags = {
+  Application    = "microservices"
+  Purpose        = "production-workload"
+  Monitoring     = "enabled"
+  Network        = "private"
+  Storage        = "persistent"
+  Identity       = "managed"
+  Registry       = "private"
+  HealthChecks   = "enabled"
+  Logging        = "centralized"
+  Architecture   = "multi-container"
+  Scalability    = "horizontal"
+  Security       = "enhanced"
+  LoadBalancing  = "internal"
+  ServiceMesh    = "enabled"
+  ConfigManagement = "git-ops"
+  SecretManagement = "azure-keyvault"
+  Compliance     = "sox-compliant"
+  DisasterRecovery = "cross-region"
+}
+
+# Additional advanced configurations:
+
+# GPU-enabled container example (uncomment for ML workloads)
+# {
+#   name   = "ml-processor"
+#   image  = "myregistry.azurecr.io/ml-model:v1.0"
+#   cpu    = 2
+#   memory = 8
+#   gpu = {
+#     count = 1
+#     sku   = "K80"
+#   }
+#   environment_variables = {
+#     CUDA_VISIBLE_DEVICES = "0"
+#     MODEL_PATH = "/app/models"
+#   }
+# }
+
+# Windows container example (uncomment for .NET workloads)
+# os_type = "Windows"
+# containers = [
+#   {
+#     name   = "dotnet-app"
+#     image  = "mcr.microsoft.com/dotnet/aspnet:6.0"
+#     cpu    = 1
+#     memory = 2
+#     ports = [
+#       {
+#         port     = 80
+#         protocol = "TCP"
+#       }
+#     ]
+#   }
+# ]
