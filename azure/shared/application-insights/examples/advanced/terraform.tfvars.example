@@ -1,0 +1,346 @@
+# Advanced Application Insights Example Configuration
+# This example demonstrates enterprise-grade Application Insights deployment with
+# comprehensive monitoring, alerting, analytics, and governance features
+
+# Application Insights Configuration
+name                = "enterprise-insights"
+location            = "East US"
+resource_group_name = "rg-enterprise-monitoring"
+application_type    = "web"
+
+# Log Analytics Workspace Integration (using workspace ID for enterprise scenarios)
+workspace_id = "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-enterprise-monitoring/providers/Microsoft.OperationalInsights/workspaces/law-enterprise"
+
+# Environment Configuration
+environment = "prod"
+criticality = "critical"
+
+# Data Management (Enterprise Settings)
+retention_in_days                      = 730  # 2 years for compliance
+daily_data_cap_gb                      = 10   # Higher cap for critical workloads
+daily_data_cap_notifications_disabled = false # Keep notifications enabled
+sampling_percentage                    = 100  # Full sampling for critical apps
+
+# Security Configuration
+disable_ip_masking                      = false # Enable IP masking for privacy
+local_authentication_disabled          = true  # Force Azure AD authentication
+internet_ingestion_enabled             = true  # Allow internet ingestion
+internet_query_enabled                 = true  # Allow internet queries
+force_customer_storage_for_profiler    = false # Use Azure-managed storage
+
+# Advanced Monitoring and Alerting
+enable_standard_alerts         = true
+alert_severity                = 1     # High severity for enterprise
+server_response_time_threshold = 3000  # 3 seconds (stricter than default)
+failure_rate_threshold        = 5     # Lower threshold for critical apps
+exception_rate_threshold      = 3     # Lower threshold for exceptions
+
+# Action Groups for Alert Notifications
+action_group_ids = [
+  "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-monitoring/providers/Microsoft.Insights/actionGroups/ag-enterprise-critical",
+  "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/rg-monitoring/providers/Microsoft.Insights/actionGroups/ag-platform-team"
+]
+
+# Web Tests for Availability Monitoring
+web_tests = {
+  homepage = {
+    kind          = "ping"
+    frequency     = 300  # 5 minutes
+    timeout       = 30
+    enabled       = true
+    retry_enabled = true
+    geo_locations = ["us-il-ch1-azr", "us-ca-sjc-azr", "us-va-ash-azr", "emea-nl-ams-azr"]
+    description   = "Homepage availability test from multiple regions"
+    configuration = <<-EOT
+      <WebTest Name="Homepage Test" Id="12345678-1234-1234-1234-123456789012" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="30" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="Test homepage availability" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="">
+        <Items>
+          <Request Method="GET" Guid="a5f10126-e4cd-570d-961c-cea43999a200" Version="1.1" Url="https://myapp.company.com" ThinkTime="0" Timeout="30" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="200" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+        </Items>
+      </WebTest>
+    EOT
+  }
+
+  api_health = {
+    kind          = "ping"
+    frequency     = 300
+    timeout       = 30
+    enabled       = true
+    retry_enabled = true
+    geo_locations = ["us-il-ch1-azr", "us-ca-sjc-azr"]
+    description   = "API health endpoint monitoring"
+    configuration = <<-EOT
+      <WebTest Name="API Health Test" Id="87654321-4321-4321-4321-210987654321" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="30" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="Test API health endpoint" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="">
+        <Items>
+          <Request Method="GET" Guid="b6f20237-f5de-681e-072e-dfb54aaa311" Version="1.1" Url="https://api.company.com/health" ThinkTime="0" Timeout="30" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="200" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+        </Items>
+      </WebTest>
+    EOT
+  }
+
+  user_journey = {
+    kind          = "multistep"
+    frequency     = 600  # 10 minutes for complex tests
+    timeout       = 120
+    enabled       = true
+    retry_enabled = false
+    geo_locations = ["us-il-ch1-azr"]
+    description   = "Critical user journey end-to-end test"
+    configuration = <<-EOT
+      <WebTest Name="User Journey Test" Id="abcdef12-3456-7890-abcd-ef1234567890" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="120" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="Test critical user journey" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="">
+        <Items>
+          <Request Method="GET" Guid="c7f30348-g6ef-792f-183f-efc65bbb412" Version="1.1" Url="https://myapp.company.com/login" ThinkTime="0" Timeout="30" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="200" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+          <Request Method="POST" Guid="d8f40459-h7fg-803g-294g-fgd76ccc523" Version="1.1" Url="https://myapp.company.com/api/authenticate" ThinkTime="2000" Timeout="30" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="200" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+        </Items>
+      </WebTest>
+    EOT
+  }
+}
+
+# Custom Alerts for Application-Specific Metrics
+custom_alerts = {
+  high_cpu_usage = {
+    description      = "High CPU usage alert for application performance monitoring"
+    severity         = 1
+    frequency        = "PT1M"
+    window_size      = "PT5M"
+    enabled          = true
+    metric_namespace = "Microsoft.Insights/components"
+    metric_name      = "performanceCounters/processCpuPercentage"
+    aggregation      = "Average"
+    operator         = "GreaterThan"
+    threshold        = 80
+    dimensions       = []
+  }
+
+  memory_usage = {
+    description      = "High memory usage alert for resource monitoring"
+    severity         = 2
+    frequency        = "PT5M"
+    window_size      = "PT10M"
+    enabled          = true
+    metric_namespace = "Microsoft.Insights/components"
+    metric_name      = "performanceCounters/memoryAvailableBytes"
+    aggregation      = "Average"
+    operator         = "LessThan"
+    threshold        = 1073741824  # 1GB in bytes
+    dimensions       = []
+  }
+
+  database_connections = {
+    description      = "Database connection pool monitoring"
+    severity         = 1
+    frequency        = "PT1M"
+    window_size      = "PT5M"
+    enabled          = true
+    metric_namespace = "Microsoft.Insights/components"
+    metric_name      = "dependencies/duration"
+    aggregation      = "Average"
+    operator         = "GreaterThan"
+    threshold        = 5000  # 5 seconds
+    dimensions = [
+      {
+        name     = "dependency/type"
+        operator = "Include"
+        values   = ["SQL"]
+      }
+    ]
+  }
+}
+
+# Smart Detection Rules with Enterprise Email Distribution
+smart_detection_rules = {
+  "Slow page load time" = {
+    enabled                            = true
+    send_emails_to_subscription_owners = false
+    additional_email_recipients        = ["ops-team@company.com", "dev-team@company.com"]
+  }
+
+  "Slow server response time" = {
+    enabled                            = true
+    send_emails_to_subscription_owners = false
+    additional_email_recipients        = ["platform-team@company.com", "sre-team@company.com"]
+  }
+
+  "Degradation in server response time" = {
+    enabled                            = true
+    send_emails_to_subscription_owners = false
+    additional_email_recipients        = ["sre-team@company.com"]
+  }
+
+  "Potential memory leak detected" = {
+    enabled                            = true
+    send_emails_to_subscription_owners = false
+    additional_email_recipients        = ["dev-team@company.com", "platform-team@company.com"]
+  }
+}
+
+# Analytics Items for Business Intelligence and Troubleshooting
+analytics_items = {
+  error_analysis = {
+    type           = "query"
+    scope          = "shared"
+    content        = "exceptions | where timestamp > ago(24h) | summarize count() by type, outerMessage, operation_Name | order by count_ desc | take 20"
+    function_alias = ""
+  }
+
+  performance_overview = {
+    type           = "query"
+    scope          = "shared"
+    content        = "requests | where timestamp > ago(1h) | summarize avg(duration), percentile(duration, 95), percentile(duration, 99) by bin(timestamp, 5m) | render timechart"
+    function_alias = ""
+  }
+
+  user_flow_analysis = {
+    type           = "query"
+    scope          = "shared"
+    content        = "pageViews | where timestamp > ago(24h) | summarize count() by name | order by count_ desc | take 10"
+    function_alias = ""
+  }
+
+  get_error_rate = {
+    type           = "function"
+    scope          = "shared"
+    content        = "let timespan = 1h; requests | where timestamp > ago(timespan) | summarize total = count(), errors = countif(success == false) | extend error_rate = todouble(errors) / todouble(total) * 100"
+    function_alias = "GetErrorRate"
+  }
+
+  performance_percentiles = {
+    type           = "function"
+    scope          = "shared"
+    content        = "let timespan = 1h; requests | where timestamp > ago(timespan) | summarize p50 = percentile(duration, 50), p95 = percentile(duration, 95), p99 = percentile(duration, 99)"
+    function_alias = "GetPerformancePercentiles"
+  }
+}
+
+# API Keys for External Integrations
+api_keys = {
+  monitoring_service = {
+    read_permissions  = ["aggregate", "api", "search"]
+    write_permissions = ["annotations"]
+  }
+
+  external_dashboard = {
+    read_permissions  = ["api", "search"]
+    write_permissions = []
+  }
+
+  ci_cd_pipeline = {
+    read_permissions  = ["api"]
+    write_permissions = ["annotations"]
+  }
+}
+
+# Workbook Templates for Enterprise Dashboards
+workbook_templates = {
+  performance_dashboard = {
+    author           = "Platform Engineering Team"
+    priority         = 1
+    gallery_category = "Application Insights"
+    gallery_name     = "Enterprise Performance Monitoring"
+    gallery_order    = 1
+    template_items = [
+      {
+        type = "1"
+        content = {
+          json = "{\"version\":\"KqlItem/1.0\",\"query\":\"requests | summarize count() by bin(timestamp, 5m) | render timechart\",\"size\":0,\"title\":\"Request Volume Over Time\"}"
+        }
+      },
+      {
+        type = "1"
+        content = {
+          json = "{\"version\":\"KqlItem/1.0\",\"query\":\"requests | summarize avg(duration), percentile(duration, 95) by bin(timestamp, 15m) | render timechart\",\"size\":0,\"title\":\"Response Time Trends\"}"
+        }
+      }
+    ]
+  }
+
+  error_dashboard = {
+    author           = "DevOps Team"
+    priority         = 2
+    gallery_category = "Application Insights"
+    gallery_name     = "Error Analysis"
+    gallery_order    = 2
+    template_items = [
+      {
+        type = "1"
+        content = {
+          json = "{\"version\":\"KqlItem/1.0\",\"query\":\"exceptions | summarize count() by type | render piechart\",\"size\":0,\"title\":\"Exception Types Distribution\"}"
+        }
+      }
+    ]
+  }
+}
+
+# Continuous Export for Long-term Data Retention and Analysis
+enable_continuous_export = true
+
+continuous_export_config = {
+  destination_type = "storage"
+  destination_config = {
+    storage_account_name = "enterpriseappdatastorage"
+    container_name      = "applicationinsights-export"
+    sas_token          = "?sv=2021-06-08&ss=b&srt=co&sp=rwdlacupx&se=2025-12-31T23:59:59Z&st=2024-01-01T00:00:00Z&spr=https&sig=..."
+  }
+  export_types = [
+    "Request",
+    "Exception",
+    "CustomEvent",
+    "Trace",
+    "Dependency",
+    "PageView",
+    "PerformanceCounter"
+  ]
+}
+
+# Enterprise Compliance Requirements
+compliance_requirements = [
+  "SOX",      # Sarbanes-Oxley Act
+  "PCI-DSS",  # Payment Card Industry Data Security Standard
+  "ISO27001", # Information Security Management
+  "GDPR",     # General Data Protection Regulation
+  "HIPAA",    # Health Insurance Portability and Accountability Act
+  "SOC2"      # Service Organization Control 2
+]
+
+# Data Governance Configuration
+data_governance = {
+  data_classification   = "confidential"  # confidential data classification
+  data_retention_policy = "extended"      # extended retention for compliance
+  pii_detection_enabled = true           # enable PII detection
+  data_masking_enabled  = true           # enable data masking for privacy
+}
+
+# Enterprise Tags
+common_tags = {
+  Environment     = "prod"
+  Project         = "enterprise-platform"
+  Owner           = "platform-team"
+  CostCenter      = "engineering"
+  BusinessUnit    = "technology"
+  Application     = "core-services"
+  DataClass       = "confidential"
+  Compliance      = "required"
+  Backup          = "enabled"
+  Monitoring      = "comprehensive"
+  SLA             = "99.9"
+  ContactEmail    = "platform-team@company.com"
+  ChangeWindow    = "weekend-maintenance"
+  DR              = "enabled"
+}
+
+# Application Insights Specific Tags
+application_insights_tags = {
+  Component         = "monitoring"
+  Service           = "application-insights"
+  MonitoringTier    = "enterprise"
+  AlertLevel        = "critical"
+  DataRetention     = "long-term"
+  ExportEnabled     = "true"
+  AnalyticsReady    = "true"
+  DashboardReady    = "true"
+  SmartDetection    = "enabled"
+  WebTestsEnabled   = "true"
+  CustomAlertsCount = "3"
+  APIKeysCount      = "3"
+  WorkbooksCount    = "2"
+}

@@ -1,0 +1,337 @@
+formatter: "markdown table"
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  # Azure Shared Application Insights Module
+
+  A comprehensive Terraform module for managing Azure Application Insights with enterprise-grade monitoring, alerting, analytics, and governance features for shared infrastructure services.
+
+  ## Features
+
+  ### 🔍 **Comprehensive Monitoring**
+  - **Application Performance Monitoring (APM)** with detailed performance metrics and distributed tracing
+  - **Real User Monitoring (RUM)** for actual user experience tracking and performance insights
+  - **Synthetic Monitoring** with configurable web tests for availability and performance validation
+  - **Custom Metrics and Events** with analytics items and custom queries for business insights
+
+  ### 🚨 **Advanced Alerting**
+  - **Standard Alert Rules** for response time, failure rate, and exception monitoring
+  - **Custom Alert Rules** with flexible metric criteria and multi-dimensional filtering
+  - **Smart Detection** with AI-powered anomaly detection and proactive alerts
+  - **Action Group Integration** for notifications via email, SMS, webhooks, and ITSM tools
+
+  ### 📊 **Analytics and Insights**
+  - **Workbook Templates** for customizable monitoring dashboards and operational views
+  - **Analytics Items** with saved queries and functions for recurring analysis
+  - **API Access** with configurable API keys for programmatic data access
+  - **Continuous Export** for long-term data retention and external analytics platforms
+
+  ### 🔐 **Enterprise Security**
+  - **Access Control** with local authentication management and internet access controls
+  - **Data Protection** with IP masking, customer-managed storage, and data governance
+  - **Compliance Support** for SOX, PCI-DSS, HIPAA, ISO27001, GDPR, and other frameworks
+  - **Audit Capabilities** with comprehensive logging and change tracking
+
+  ### 🏢 **Enterprise Governance**
+  - **Data Classification** with configurable data governance policies and retention management
+  - **Compliance Framework** support with automated compliance validation and reporting
+  - **Resource Tagging** with comprehensive enterprise tagging standards and governance
+  - **Environment Management** with environment-specific configurations and criticality levels
+
+  ## Usage
+
+  ### Basic Example
+
+  ```hcl
+  module "application_insights" {
+    source = "../../azure/shared/application-insights"
+
+    name                = "myapp-insights"
+    location            = "East US"
+    resource_group_name = "my-rg"
+    application_type    = "web"
+    workspace_name      = "my-log-analytics"
+    workspace_resource_group_name = "my-rg"
+
+    environment = "prod"
+    criticality = "high"
+
+    common_tags = {
+      Environment = "prod"
+      Project     = "myapp"
+      Owner       = "platform-team"
+    }
+  }
+  ```
+
+  ### Advanced Example with Enterprise Features
+
+  ```hcl
+  module "application_insights_enterprise" {
+    source = "../../azure/shared/application-insights"
+
+    name                = "enterprise-insights"
+    location            = "East US"
+    resource_group_name = "enterprise-rg"
+    application_type    = "web"
+    workspace_id        = "/subscriptions/.../workspaces/enterprise-workspace"
+
+    # Enterprise configuration
+    environment = "prod"
+    criticality = "critical"
+
+    # Data management
+    retention_in_days   = 730
+    daily_data_cap_gb   = 10
+    sampling_percentage = 100
+
+    # Security
+    local_authentication_disabled = true
+    disable_ip_masking            = false
+
+    # Monitoring and alerting
+    enable_standard_alerts = true
+    action_group_ids = [
+      "/subscriptions/.../actionGroups/enterprise-alerts"
+    ]
+
+    # Web tests for availability monitoring
+    web_tests = {
+      homepage = {
+        kind          = "ping"
+        frequency     = 300
+        timeout       = 30
+        enabled       = true
+        retry_enabled = true
+        geo_locations = ["us-il-ch1-azr", "us-ca-sjc-azr"]
+        description   = "Homepage availability test"
+        configuration = "<WebTest>...</WebTest>"
+      }
+    }
+
+    # Custom alerts
+    custom_alerts = {
+      high_cpu = {
+        description      = "High CPU usage alert"
+        severity         = 1
+        frequency        = "PT1M"
+        window_size      = "PT5M"
+        enabled          = true
+        metric_namespace = "Microsoft.Web/sites"
+        metric_name      = "CpuPercentage"
+        aggregation      = "Average"
+        operator         = "GreaterThan"
+        threshold        = 80
+        dimensions       = []
+      }
+    }
+
+    # Smart detection
+    smart_detection_rules = {
+      "Slow page load time" = {
+        enabled                            = true
+        send_emails_to_subscription_owners = true
+        additional_email_recipients        = ["ops-team@company.com"]
+      }
+    }
+
+    # API keys for external integrations
+    api_keys = {
+      monitoring_service = {
+        read_permissions  = ["aggregate", "api", "search"]
+        write_permissions = ["annotations"]
+      }
+    }
+
+    # Enterprise governance
+    compliance_requirements = ["SOX", "PCI-DSS", "ISO27001"]
+    data_governance = {
+      data_classification   = "confidential"
+      data_retention_policy = "extended"
+      pii_detection_enabled = true
+      data_masking_enabled  = true
+    }
+
+    common_tags = {
+      Environment    = "prod"
+      Project        = "enterprise-platform"
+      Owner          = "platform-team"
+      CostCenter     = "engineering"
+      BusinessUnit   = "technology"
+      DataClass      = "confidential"
+      Compliance     = "required"
+    }
+  }
+  ```
+
+  ### Integration with App Services
+
+  ```hcl
+  # Use Application Insights with App Service
+  module "app_service" {
+    source = "../../azure/application/app-service"
+
+    # App Service configuration...
+
+    # Application Insights integration
+    application_insights_connection_string = module.application_insights.connection_string
+    application_insights_instrumentation_key = module.application_insights.instrumentation_key
+  }
+  ```
+
+  ## Web Tests Configuration
+
+  Configure availability monitoring with web tests:
+
+  ```hcl
+  web_tests = {
+    api_health = {
+      kind          = "ping"
+      frequency     = 300  # 5 minutes
+      timeout       = 30
+      enabled       = true
+      retry_enabled = true
+      geo_locations = [
+        "us-il-ch1-azr",  # Chicago
+        "us-ca-sjc-azr",  # San Jose
+        "us-va-ash-azr"   # Virginia
+      ]
+      description   = "API health check"
+      configuration = "<WebTest Name=\"API Health\" ...></WebTest>"
+    }
+
+    user_journey = {
+      kind          = "multistep"
+      frequency     = 600  # 10 minutes
+      timeout       = 120
+      enabled       = true
+      retry_enabled = false
+      geo_locations = ["us-il-ch1-azr"]
+      description   = "Critical user journey test"
+      configuration = "<WebTest Name=\"User Journey\" ...></WebTest>"
+    }
+  }
+  ```
+
+  ## Custom Alerts Configuration
+
+  Create custom monitoring alerts:
+
+  ```hcl
+  custom_alerts = {
+    database_connections = {
+      description      = "Database connection pool exhaustion"
+      severity         = 1
+      frequency        = "PT1M"
+      window_size      = "PT5M"
+      enabled          = true
+      metric_namespace = "Microsoft.Insights/components"
+      metric_name      = "performanceCounters/requestsPerSecond"
+      aggregation      = "Average"
+      operator         = "GreaterThan"
+      threshold        = 1000
+      dimensions = [
+        {
+          name     = "cloud/roleInstance"
+          operator = "Include"
+          values   = ["*"]
+        }
+      ]
+    }
+  }
+  ```
+
+  ## Smart Detection Rules
+
+  Configure AI-powered anomaly detection:
+
+  ```hcl
+  smart_detection_rules = {
+    "Slow page load time" = {
+      enabled                            = true
+      send_emails_to_subscription_owners = false
+      additional_email_recipients        = ["devops@company.com"]
+    }
+    "Slow server response time" = {
+      enabled                            = true
+      send_emails_to_subscription_owners = false
+      additional_email_recipients        = ["platform-team@company.com"]
+    }
+  }
+  ```
+
+  ## Data Governance
+
+  Configure enterprise data governance:
+
+  ```hcl
+  data_governance = {
+    data_classification   = "confidential"  # public, internal, confidential, restricted
+    data_retention_policy = "extended"      # minimal, standard, extended, maximum
+    pii_detection_enabled = true
+    data_masking_enabled  = true
+  }
+
+  compliance_requirements = [
+    "SOX",      # Sarbanes-Oxley
+    "PCI-DSS",  # Payment Card Industry
+    "HIPAA",    # Health Insurance Portability
+    "ISO27001", # Information Security Management
+    "GDPR"      # General Data Protection Regulation
+  ]
+  ```
+
+  ## Requirements
+
+  {{ .Requirements }}
+
+  ## Providers
+
+  {{ .Providers }}
+
+  ## Resources
+
+  {{ .Resources }}
+
+  ## Inputs
+
+  {{ .Inputs }}
+
+  ## Outputs
+
+  {{ .Outputs }}
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

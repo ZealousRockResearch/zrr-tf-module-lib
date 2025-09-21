@@ -1,0 +1,106 @@
+# Basic Application Insights Example Configuration
+
+# Application Insights Configuration
+name                = "myapp-insights"
+location            = "East US"
+resource_group_name = "my-app-rg"
+application_type    = "web"
+
+# Log Analytics Workspace Integration
+workspace_name                    = "my-log-analytics"
+workspace_resource_group_name     = "my-app-rg"
+
+# Environment Configuration
+environment = "dev"
+criticality = "medium"
+
+# Data Retention
+retention_in_days = 90
+
+# Basic Monitoring
+enable_standard_alerts = true
+
+# Tags
+common_tags = {
+  Environment = "dev"
+  Project     = "my-application"
+  Owner       = "development-team"
+  CostCenter  = "engineering"
+  Purpose     = "application-monitoring"
+}
+
+# Optional: Additional Application Insights specific tags
+# application_insights_tags = {
+#   Component = "frontend"
+#   Service   = "web-api"
+#   Version   = "1.0.0"
+# }
+
+# Optional: Data management settings
+# daily_data_cap_gb = 1
+# sampling_percentage = 50
+# daily_data_cap_notifications_disabled = false
+
+# Optional: Security settings
+# local_authentication_disabled = true
+# disable_ip_masking = false
+# internet_ingestion_enabled = true
+# internet_query_enabled = true
+
+# Optional: Alert thresholds (only used if enable_standard_alerts = true)
+# server_response_time_threshold = 5000  # milliseconds
+# failure_rate_threshold = 10           # count
+# exception_rate_threshold = 5          # count
+
+# Optional: Action groups for alert notifications
+# action_group_ids = [
+#   "/subscriptions/12345678-1234-1234-1234-123456789012/resourceGroups/my-rg/providers/Microsoft.Insights/actionGroups/my-alerts"
+# ]
+
+# Optional: Data governance (for enterprise compliance)
+# data_governance = {
+#   data_classification   = "internal"
+#   data_retention_policy = "standard"
+#   pii_detection_enabled = true
+#   data_masking_enabled  = true
+# }
+
+# Optional: Compliance requirements
+# compliance_requirements = ["ISO27001", "SOC2"]
+
+# Examples for different application types:
+
+# For .NET Web Application:
+# application_type = "web"
+
+# For Java Application:
+# application_type = "java"
+
+# For Mobile App (iOS):
+# application_type = "ios"
+
+# For Android App:
+# application_type = "android"
+
+# For Other/Custom Applications:
+# application_type = "other"
+
+# Examples for different environments:
+
+# Development Environment:
+# environment = "dev"
+# criticality = "low"
+# retention_in_days = 30
+# daily_data_cap_gb = 0.5
+
+# Staging Environment:
+# environment = "staging"
+# criticality = "medium"
+# retention_in_days = 90
+# daily_data_cap_gb = 2
+
+# Production Environment:
+# environment = "prod"
+# criticality = "high"
+# retention_in_days = 365
+# daily_data_cap_gb = 10
