@@ -20,10 +20,10 @@ resource "azurerm_container_app_environment" "main" {
   resource_group_name        = var.resource_group_name
   log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  # Infrastructure subnet (optional)
+  # Infrastructure subnet (optional - required for internal load balancer and zone redundancy)
   infrastructure_subnet_id         = var.infrastructure_subnet_id
-  internal_load_balancer_enabled   = var.internal_load_balancer_enabled
-  zone_redundancy_enabled          = var.zone_redundancy_enabled
+  internal_load_balancer_enabled   = var.infrastructure_subnet_id != null ? var.internal_load_balancer_enabled : false
+  zone_redundancy_enabled          = var.infrastructure_subnet_id != null ? var.zone_redundancy_enabled : false
 
   # Workload profiles (optional - for dedicated environments)
   dynamic "workload_profile" {
