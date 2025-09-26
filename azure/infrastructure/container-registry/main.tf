@@ -102,13 +102,8 @@ resource "null_resource" "import_images" {
   for_each = var.images_to_import
 
   provisioner "local-exec" {
-    command = <<-EOT
-      az acr import \
-        --name ${azurerm_container_registry.main.name} \
-        --source ${each.value.source} \
-        --image ${each.value.target != null ? each.value.target : each.value.source} \
-        --force
-    EOT
+    command = "az acr import --name ${azurerm_container_registry.main.name} --source ${each.value.source} --image ${each.value.target != null ? each.value.target : each.value.source} --force"
+    interpreter = ["PowerShell", "-Command"]
   }
 
   triggers = {

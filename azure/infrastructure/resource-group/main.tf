@@ -18,6 +18,10 @@ locals {
 
   # Construct resource group name with naming convention
   resource_group_name = var.use_naming_convention ? "rg-${var.environment}-${var.name}-${var.location_short}" : var.name
+
+  # Default budget start date (first day of current month, or user-specified)
+  # Uses a fixed date when budget_start_date is not provided to ensure idempotency
+  budget_start_date = var.budget_start_date != "" ? var.budget_start_date : "2025-09-01T00:00:00Z"
 }
 
 # Resources
@@ -55,7 +59,7 @@ resource "azurerm_consumption_budget_resource_group" "budget" {
   time_grain = var.budget_time_grain
 
   time_period {
-    start_date = var.budget_start_date != "" ? var.budget_start_date : formatdate("YYYY-MM-01'T'00:00:00Z", timestamp())
+    start_date = local.budget_start_date
   }
 
   notification {
@@ -66,4 +70,5 @@ resource "azurerm_consumption_budget_resource_group" "budget" {
 
     contact_emails = var.budget_contact_emails
   }
+
 }
