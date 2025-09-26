@@ -70,7 +70,6 @@ resource "azurerm_container_app" "main" {
             interval_seconds             = liveness_probe.value.interval_seconds
             timeout                      = liveness_probe.value.timeout
             failure_count_threshold      = liveness_probe.value.failure_count_threshold
-            success_count_threshold      = liveness_probe.value.success_count_threshold
             initial_delay                = liveness_probe.value.initial_delay
 
             dynamic "header" {
@@ -181,12 +180,8 @@ resource "azurerm_container_app" "main" {
         name                = http_scale_rule.value.name
         concurrent_requests = http_scale_rule.value.concurrent_requests
 
-        dynamic "metadata" {
-          for_each = http_scale_rule.value.metadata
-          content {
-            name  = metadata.value.name
-            value = metadata.value.value
-          }
+        metadata = {
+          for k, v in { for item in http_scale_rule.value.metadata : item.name => item.value } : k => v
         }
       }
     }
@@ -198,12 +193,8 @@ resource "azurerm_container_app" "main" {
         name             = custom_scale_rule.value.name
         custom_rule_type = custom_scale_rule.value.custom_rule_type
 
-        dynamic "metadata" {
-          for_each = custom_scale_rule.value.metadata
-          content {
-            name  = metadata.value.name
-            value = metadata.value.value
-          }
+        metadata = {
+          for k, v in { for item in custom_scale_rule.value.metadata : item.name => item.value } : k => v
         }
 
         dynamic "authentication" {
@@ -223,12 +214,8 @@ resource "azurerm_container_app" "main" {
         name                = tcp_scale_rule.value.name
         concurrent_requests = tcp_scale_rule.value.concurrent_requests
 
-        dynamic "metadata" {
-          for_each = tcp_scale_rule.value.metadata
-          content {
-            name  = metadata.value.name
-            value = metadata.value.value
-          }
+        metadata = {
+          for k, v in { for item in tcp_scale_rule.value.metadata : item.name => item.value } : k => v
         }
 
         dynamic "authentication" {
@@ -287,7 +274,6 @@ resource "azurerm_container_app" "main" {
         for_each = ingress.value.custom_domains
         content {
           name           = custom_domain.value.name
-          binding_type   = custom_domain.value.binding_type
           certificate_id = custom_domain.value.certificate_id
         }
       }

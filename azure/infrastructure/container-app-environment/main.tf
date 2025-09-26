@@ -48,7 +48,7 @@ resource "azurerm_container_app_environment" "main" {
 
 # Container App Environment Storage (optional)
 resource "azurerm_container_app_environment_storage" "storage" {
-  for_each = var.storage_accounts
+  for_each = nonsensitive(var.storage_accounts)
 
   name                         = each.key
   container_app_environment_id = azurerm_container_app_environment.main.id
@@ -60,7 +60,7 @@ resource "azurerm_container_app_environment_storage" "storage" {
 
 # Container App Environment Certificate (optional)
 resource "azurerm_container_app_environment_certificate" "certificates" {
-  for_each = var.certificates
+  for_each = nonsensitive(var.certificates)
 
   name                         = each.key
   container_app_environment_id = azurerm_container_app_environment.main.id
@@ -78,7 +78,7 @@ resource "azurerm_container_app_environment_certificate" "certificates" {
 
 # Container App Environment Dapr Component (optional)
 resource "azurerm_container_app_environment_dapr_component" "dapr_components" {
-  for_each = var.dapr_components
+  for_each = nonsensitive(var.dapr_components)
 
   name                         = each.key
   container_app_environment_id = azurerm_container_app_environment.main.id
