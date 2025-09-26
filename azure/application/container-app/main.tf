@@ -180,71 +180,10 @@ resource "azurerm_container_app" "main" {
         name                = http_scale_rule.value.name
         concurrent_requests = http_scale_rule.value.concurrent_requests
 
-        metadata = {
-          for k, v in { for item in http_scale_rule.value.metadata : item.name => item.value } : k => v
-        }
       }
     }
 
-    # Custom scaling rules
-    dynamic "custom_scale_rule" {
-      for_each = var.custom_scale_rules
-      content {
-        name             = custom_scale_rule.value.name
-        custom_rule_type = custom_scale_rule.value.custom_rule_type
 
-        metadata = {
-          for k, v in { for item in custom_scale_rule.value.metadata : item.name => item.value } : k => v
-        }
-
-        dynamic "authentication" {
-          for_each = custom_scale_rule.value.authentication
-          content {
-            secret_name       = authentication.value.secret_name
-            trigger_parameter = authentication.value.trigger_parameter
-          }
-        }
-      }
-    }
-
-    # TCP scaling rules
-    dynamic "tcp_scale_rule" {
-      for_each = var.tcp_scale_rules
-      content {
-        name                = tcp_scale_rule.value.name
-        concurrent_requests = tcp_scale_rule.value.concurrent_requests
-
-        metadata = {
-          for k, v in { for item in tcp_scale_rule.value.metadata : item.name => item.value } : k => v
-        }
-
-        dynamic "authentication" {
-          for_each = tcp_scale_rule.value.authentication
-          content {
-            secret_name       = authentication.value.secret_name
-            trigger_parameter = authentication.value.trigger_parameter
-          }
-        }
-      }
-    }
-
-    # Azure Queue scaling rules
-    dynamic "azure_queue_scale_rule" {
-      for_each = var.azure_queue_scale_rules
-      content {
-        name         = azure_queue_scale_rule.value.name
-        queue_name   = azure_queue_scale_rule.value.queue_name
-        queue_length = azure_queue_scale_rule.value.queue_length
-
-        dynamic "authentication" {
-          for_each = azure_queue_scale_rule.value.authentication
-          content {
-            secret_name       = authentication.value.secret_name
-            trigger_parameter = authentication.value.trigger_parameter
-          }
-        }
-      }
-    }
 
     # Revision suffix
     revision_suffix = var.revision_suffix

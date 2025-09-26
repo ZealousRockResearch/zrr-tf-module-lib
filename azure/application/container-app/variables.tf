@@ -179,61 +179,10 @@ variable "http_scale_rules" {
   type = list(object({
     name                = string
     concurrent_requests = number
-    metadata = optional(list(object({
-      name  = string
-      value = string
-    })), [])
   }))
   default = []
 }
 
-variable "custom_scale_rules" {
-  description = "List of custom scaling rules"
-  type = list(object({
-    name             = string
-    custom_rule_type = string
-    metadata = list(object({
-      name  = string
-      value = string
-    }))
-    authentication = optional(list(object({
-      secret_name       = string
-      trigger_parameter = string
-    })), [])
-  }))
-  default = []
-}
-
-variable "tcp_scale_rules" {
-  description = "List of TCP scaling rules"
-  type = list(object({
-    name                = string
-    concurrent_requests = number
-    metadata = optional(list(object({
-      name  = string
-      value = string
-    })), [])
-    authentication = optional(list(object({
-      secret_name       = string
-      trigger_parameter = string
-    })), [])
-  }))
-  default = []
-}
-
-variable "azure_queue_scale_rules" {
-  description = "List of Azure Queue scaling rules"
-  type = list(object({
-    name         = string
-    queue_name   = string
-    queue_length = number
-    authentication = list(object({
-      secret_name       = string
-      trigger_parameter = string
-    }))
-  }))
-  default = []
-}
 
 variable "revision_suffix" {
   description = "The revision suffix"
